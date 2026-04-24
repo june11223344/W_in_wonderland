@@ -1,97 +1,250 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { FallingAlice } from "@/components/ui/FallingAlice";
 
 // ── Tenniel SVGs ──────────────────────────────────────────────────────────
 
-/** Rabbit hopping — pocket watch in hand, mid-jump */
-function RabbitHoppingSVG({ className }: { className?: string }) {
+
+// ── Rose stage icons (idea cards) ────────────────────────────────────────
+// PLACEHOLDER: replace src with actual image paths once assets are ready.
+// e.g. <img src="/assets/rose-bud.png" …/>
+
+type RoseStage = "bud" | "half" | "full";
+
+/** Tight, closed rosebud */
+function RoseBudIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      {/* Ears — perked forward (running) */}
-      <path d="M34 52 Q28 18 30 2 Q36 20 38 52" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-      <path d="M30 2 Q33 14 36 52" stroke="currentColor" strokeWidth="0.7" fill="none" opacity="0.4"/>
-      <path d="M52 50 Q58 16 56 2 Q50 20 48 50" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
-      <path d="M56 2 Q53 14 50 50" stroke="currentColor" strokeWidth="0.7" fill="none" opacity="0.4"/>
-      {/* Head — tilted (looking back/up urgently) */}
-      <ellipse cx="43" cy="62" rx="18" ry="16" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-      {/* Worried eyes */}
-      <circle cx="36" cy="58" r="2.5" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <circle cx="50" cy="56" r="2.5" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <circle cx="36" cy="58" r="1" fill="currentColor"/>
-      <circle cx="50" cy="56" r="1" fill="currentColor"/>
-      {/* Eyebrow — furrowed */}
-      <path d="M33 54 Q36 52 40 54" stroke="currentColor" strokeWidth="0.8" fill="none"/>
-      <path d="M47 52 Q50 50 54 52" stroke="currentColor" strokeWidth="0.8" fill="none"/>
-      {/* Nose */}
-      <path d="M41 65 L43 68 L45 65" stroke="currentColor" strokeWidth="1" fill="none"/>
-      {/* Whiskers */}
-      <path d="M22 62 L38 65" stroke="currentColor" strokeWidth="0.7"/>
-      <path d="M22 66 L38 66" stroke="currentColor" strokeWidth="0.7"/>
-      <path d="M64 62 L48 65" stroke="currentColor" strokeWidth="0.7"/>
-      <path d="M64 66 L48 66" stroke="currentColor" strokeWidth="0.7"/>
-      {/* Open mouth — panting */}
-      <path d="M38 70 Q43 74 48 70" stroke="currentColor" strokeWidth="1" fill="none"/>
-      {/* Body */}
-      <path d="M28 76 Q20 94 22 116 Q43 126 64 116 Q66 94 58 76" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-      {/* Waistcoat */}
-      <path d="M32 80 L36 106 L43 108 L50 106 L54 80" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <path d="M43 80 L43 108" stroke="currentColor" strokeWidth="0.7"/>
-      <circle cx="43" cy="88" r="1.2" stroke="currentColor" strokeWidth="0.7" fill="none"/>
-      <circle cx="43" cy="96" r="1.2" stroke="currentColor" strokeWidth="0.7" fill="none"/>
-      {/* Arm holding watch — raised high */}
-      <path d="M28 82 Q14 68 8 54" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      {/* Pocket watch */}
-      <circle cx="8" cy="50" r="9" stroke="currentColor" strokeWidth="1.3" fill="none"/>
-      <path d="M8 43 L8 50 L13 50" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round"/>
-      <path d="M8 41 Q10 38 12 40" stroke="currentColor" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      {/* Watch chain */}
-      <path d="M17 50 Q22 52 26 54 Q30 56 32 60" stroke="currentColor" strokeWidth="0.7" strokeDasharray="2 1.5"/>
-      {/* Other arm — pumping back */}
-      <path d="M58 82 Q72 72 78 62" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      {/* Legs — mid-hop, both bent */}
-      <path d="M28 114 Q18 128 14 144" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      <path d="M58 114 Q68 124 72 138" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      {/* Feet pushing off / landing */}
-      <path d="M8 144 Q14 150 24 146" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
-      <path d="M66 138 Q72 144 80 140" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
+    <svg viewBox="0 0 24 36" fill="none" className={className}>
+      <line x1="12" y1="36" x2="12" y2="24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M12 24 Q8 20 9 16" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M12 24 Q16 20 15 16" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M9 16 Q8 6 12 3 Q16 6 15 16" stroke="currentColor" strokeWidth="1.1" fill="none" strokeLinecap="round"/>
+      <path d="M10.5 16 Q10 9 12 6 Q14 9 13.5 16" stroke="currentColor" strokeWidth="0.75" fill="none"/>
     </svg>
   );
 }
 
-function CardSoldierSVG({ className }: { className?: string }) {
+/** Partially open half-bloom */
+function RoseHalfBloomIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      <rect x="8" y="10" width="64" height="120" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-      <text x="14" y="26" fontSize="10" fill="currentColor" fontFamily="serif" opacity="0.5">♠</text>
-      <text x="54" y="122" fontSize="10" fill="currentColor" fontFamily="serif" opacity="0.5" transform="rotate(180 62 117)">♠</text>
-      <ellipse cx="40" cy="52" rx="13" ry="14" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <path d="M27 44 Q40 36 53 44" stroke="currentColor" strokeWidth="1.1" fill="none"/>
-      <path d="M30 38 L31 44" stroke="currentColor" strokeWidth="1"/>
-      <path d="M40 35 L40 44" stroke="currentColor" strokeWidth="1"/>
-      <path d="M50 38 L49 44" stroke="currentColor" strokeWidth="1"/>
-      <line x1="34" y1="51" x2="37" y2="51" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="43" y1="51" x2="46" y2="51" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-      <path d="M35 59 Q40 62 45 59" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <path d="M27 66 L27 96 L53 96 L53 66" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-      <text x="33" y="85" fontSize="13" fill="currentColor" fontFamily="serif" opacity="0.4">♣</text>
-      <path d="M27 72 L16 78 L17 88" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
-      <path d="M53 72 L64 78 L63 88" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
-      <line x1="17" y1="88" x2="17" y2="124" stroke="currentColor" strokeWidth="1.1"/>
-      <path d="M13 92 L17 83 L21 92" stroke="currentColor" strokeWidth="1" fill="none"/>
-      <path d="M30 96 L28 124" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      <path d="M50 96 L52 124" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      <path d="M22 124 L36 124" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M46 124 L60 124" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+    <svg viewBox="0 0 30 36" fill="none" className={className}>
+      <line x1="15" y1="36" x2="15" y2="25" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M15 25 Q10 22 11 18" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M15 25 Q20 22 19 18" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M8 17 Q6 7 11 3 Q15 1 19 3 Q24 7 22 17" stroke="currentColor" strokeWidth="1.1" fill="none" strokeLinecap="round"/>
+      <path d="M10 18 Q9 10 12 7 Q15 5 18 7 Q21 10 20 18" stroke="currentColor" strokeWidth="0.9" fill="none"/>
+      <path d="M12 18 Q12 12 15 10 Q18 12 18 18" stroke="currentColor" strokeWidth="0.75" fill="none"/>
+      <path d="M8 17 Q4 20 6 25" stroke="currentColor" strokeWidth="0.85" fill="none" strokeLinecap="round"/>
+      <path d="M22 17 Q26 20 24 25" stroke="currentColor" strokeWidth="0.85" fill="none" strokeLinecap="round"/>
     </svg>
   );
 }
 
-// ── Sample investor idea cards ───────────────────────────────────────────
+/** Fully open rose in bloom */
+function RoseFullBloomIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 34 36" fill="none" className={className}>
+      <line x1="17" y1="36" x2="17" y2="26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M14 26 Q9 24 11 20" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M20 26 Q25 24 23 20" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M4 15 Q2 5 10 2 Q17 0 24 2 Q32 5 30 15" stroke="currentColor" strokeWidth="1.15" fill="none" strokeLinecap="round"/>
+      <path d="M7 16 Q6 8 11 5 Q17 2 23 5 Q28 8 27 16" stroke="currentColor" strokeWidth="0.9" fill="none"/>
+      <path d="M10 17 Q9 11 13 8 Q17 6 21 8 Q25 11 24 17" stroke="currentColor" strokeWidth="0.75" fill="none"/>
+      <path d="M13 17 Q13 12 17 11 Q21 12 21 17" stroke="currentColor" strokeWidth="0.65" fill="none"/>
+      <circle cx="17" cy="17" r="2.2" stroke="currentColor" strokeWidth="0.6" fill="none"/>
+      <path d="M4 15 Q0 19 2 24 Q7 20 9 17" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M30 15 Q34 19 32 24 Q27 20 25 17" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+      <path d="M10 18 Q8 23 12 26 Q17 28 22 26 Q26 23 24 18" stroke="currentColor" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+/** Animated rose that blooms through stages */
+function RoseStageIcon({ stage, className }: { stage: RoseStage; className?: string }) {
+  return (
+    <div className={className} style={{ position: "relative" }}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={stage}
+          initial={{ scale: 0.2, rotate: -30, opacity: 0, y: 6 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1, y: 0 }}
+          exit={{ scale: 2, rotate: 20, opacity: 0, y: -6 }}
+          transition={{ type: "spring", stiffness: 500, damping: 26 }}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          {stage === "bud"  && <RoseBudIcon  className="w-full h-full" />}
+          {stage === "half" && <RoseHalfBloomIcon className="w-full h-full" />}
+          {stage === "full" && <RoseFullBloomIcon className="w-full h-full" />}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+const QUEEN_CROQUET_SRC = "/assets/queen-croquet.jpg";
+
+/** Croquet scene chopped into a grid — each cell shows a different crop of the same art */
+function QueenCroquetMosaic({ cardIndex }: { cardIndex: number }) {
+  const cols = 4;
+  const rows = 3;
+  const total = cols * rows;
+  return (
+    <div
+      className="absolute inset-0 grid overflow-hidden pointer-events-none z-0"
+      style={{
+        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+      }}
+      aria-hidden
+    >
+      {Array.from({ length: total }, (_, i) => {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const seed = cardIndex * 97 + i * 41;
+        const jx = ((seed % 23) - 11) * 0.35;
+        const jy = (((seed >> 2) % 19) - 9) * 0.35;
+        const denomX = Math.max(1, cols - 1);
+        const denomY = Math.max(1, rows - 1);
+        const posX = Math.max(0, Math.min(100, (col / denomX) * 100 + jx));
+        const posY = Math.max(0, Math.min(100, (row / denomY) * 100 + jy));
+        return (
+          <div
+            key={i}
+            style={{
+              minWidth: 0,
+              minHeight: 0,
+              backgroundImage: `url(${QUEEN_CROQUET_SRC})`,
+              backgroundSize: `${cols * 110}% ${rows * 110}%`,
+              backgroundPosition: `${posX}% ${posY}%`,
+              backgroundRepeat: "no-repeat",
+              opacity: 0.26,
+              mixBlendMode: "multiply",
+              filter: "grayscale(100%) contrast(1.12)",
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+const ROSE_BLOOM_PNG = [
+  "/assets/rose-bloom-1.png",
+  "/assets/rose-bloom-2.png",
+  "/assets/rose-bloom-3.png",
+] as const;
+
+/** One fixed bloom stage (0=bud, 1=opening, 2=full) — no frame cycling */
+function QueenGardenRoseFixed({ stage, w }: { stage: 0 | 1 | 2; w: number }) {
+  return (
+    <div
+      className="relative shrink-0 select-none"
+      style={{ width: w, height: w * 1.28 }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={ROSE_BLOOM_PNG[stage]}
+        alt=""
+        draggable={false}
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{
+          opacity: 0.5,
+          mixBlendMode: "multiply",
+          filter: "grayscale(100%) contrast(1.12)",
+        }}
+      />
+    </div>
+  );
+}
+
+const QUEEN_GARDEN_ROSE_W: Record<0 | 1 | 2, number> = { 0: 64, 1: 72, 2: 80 };
+
+/** Each rose fades in at its own fixed position, one by one left→right */
+const QUEEN_GARDEN_STEP_IN_MS = 900;
+const QUEEN_GARDEN_HOLD_ALL_MS = 2200;
+const QUEEN_GARDEN_FADE_OUT_MS = 700;
+const QUEEN_GARDEN_PAUSE_EMPTY_MS = 600;
+
+function QueenGardenCyclingRose() {
+  const reduceMotion = useReducedMotion();
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(wrapRef, { amount: 0.35 });
+  /** How many roses visible: 0, 1, 2, 3 */
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) setVisibleCount(0);
+  }, [inView]);
+
+  useEffect(() => {
+    if (reduceMotion || !inView) return;
+
+    let cancelled = false;
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => { window.setTimeout(() => resolve(), ms); });
+
+    (async () => {
+      while (!cancelled) {
+        setVisibleCount(0);
+        await wait(400);
+        if (cancelled) break;
+        setVisibleCount(1);
+        await wait(QUEEN_GARDEN_STEP_IN_MS);
+        if (cancelled) break;
+        setVisibleCount(2);
+        await wait(QUEEN_GARDEN_STEP_IN_MS);
+        if (cancelled) break;
+        setVisibleCount(3);
+        await wait(QUEEN_GARDEN_HOLD_ALL_MS);
+        if (cancelled) break;
+        setVisibleCount(0);
+        await wait(QUEEN_GARDEN_FADE_OUT_MS + QUEEN_GARDEN_PAUSE_EMPTY_MS);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [reduceMotion, inView]);
+
+  const maxW = QUEEN_GARDEN_ROSE_W[2];
+  const boxH = maxW * 1.28;
+
+  return (
+    <div
+      ref={wrapRef}
+      className="flex items-end justify-start gap-1.5 sm:gap-2 md:justify-end"
+      style={{ minHeight: boxH }}
+      aria-hidden
+    >
+      {([0, 1, 2] as const).map((stage) => (
+        <motion.div
+          key={stage}
+          animate={reduceMotion || visibleCount > stage
+            ? { opacity: 1, scale: 1 }
+            : { opacity: 0, scale: 0.82 }
+          }
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-end origin-bottom"
+        >
+          <QueenGardenRoseFixed stage={stage} w={QUEEN_GARDEN_ROSE_W[stage]} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+
+// ── Tag → initial rose stage ──────────────────────────────────────────────
+const TAG_TO_STAGE: Record<string, RoseStage> = {
+  Hot: "full", Featured: "full",
+  Emerging: "half",
+  New: "bud",
+};
+
+// ── Sample investor idea cards ─────────────────────────────────────────────
 const SAMPLE_IDEAS = [
   { title: "AI-native legal review for SMBs", category: "SaaS / B2B", score: 87, trend: "Rising", tag: "Hot" },
   { title: "Carbon credit marketplace for SE Asia", category: "Marketplace", score: 74, trend: "Rising", tag: "Emerging" },
@@ -101,46 +254,277 @@ const SAMPLE_IDEAS = [
   { title: "B2B procurement for restaurants", category: "SaaS / B2B", score: 79, trend: "Stable", tag: null },
 ];
 
+const PLAYING_CARD_RANKS = ["A", "Q", "A", "Q", "A", "Q"] as const;
+const PLAYING_CARD_SUITS_BLACK = ["♠", "♣"] as const;
+const PLAYING_CARD_SUITS_RED   = ["♥", "♦"] as const;
+
+function playingCardPip(index: number) {
+  const isRed = index % 2 === 1;
+  const suits = isRed ? PLAYING_CARD_SUITS_RED : PLAYING_CARD_SUITS_BLACK;
+  return {
+    rank: PLAYING_CARD_RANKS[index % PLAYING_CARD_RANKS.length],
+    suit: suits[Math.floor(index / 2) % suits.length],
+  };
+}
+
+/** Top-left / bottom-right index like a standard playing card */
+function PlayingCardCornerPip({
+  rank,
+  suit,
+  flip,
+}: {
+  rank: string;
+  suit: string;
+  flip?: boolean;
+}) {
+  const redSuit = suit === "♥" || suit === "♦";
+  return (
+    <div
+      className={`pointer-events-none absolute z-[4] flex flex-col items-center gap-0.5 select-none ${
+        flip ? "bottom-3 right-3 rotate-180 sm:bottom-4 sm:right-4" : "top-3 left-3 sm:top-4 sm:left-4"
+      }`}
+      style={{ fontFamily: "'Playfair Display', serif" }}
+      aria-hidden
+    >
+      <span
+        className={`text-[17px] font-bold tracking-tight sm:text-[19px] ${redSuit ? "text-red-900/80" : "text-black/80"}`}
+      >
+        {rank}
+      </span>
+      <span
+        className={`text-[26px] leading-none sm:text-[30px] ${redSuit ? "text-red-900/75" : "text-black/60"}`}
+      >
+        {suit}
+      </span>
+    </div>
+  );
+}
+
 function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const initStage: RoseStage = TAG_TO_STAGE[idea.tag ?? ""] ?? "bud";
+  const [stage, setStage] = useState<RoseStage>(initStage);
+  const [bloomed, setBloomed] = useState(false);
+
+  const handleClick = () => {
+    // 뒷면일 때 클릭하면 장미 단계 진행
+    if (flipped) {
+      if (stage === "bud")  setStage("half");
+      else if (stage === "half") { setStage("full"); setBloomed(true); }
+    }
+  };
+
+  const scrim = bloomed
+    ? "linear-gradient(180deg, rgba(242,252,238,0.82) 0%, rgba(232,246,228,0.9) 100%)"
+    : hovered
+      ? "linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(250,251,248,0.88) 100%)"
+      : "linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(247,249,245,0.86) 100%)";
+
+  const pip = playingCardPip(index);
+
+  // Deck-spread: each card originates from the grid center
+  // col offset from center col (1): cols 0→+1, 1→0, 2→-1
+  // row offset from center: row 0→+0.5, row 1→-0.5  (approximated for 2 rows)
+  const CARD_W = 330;
+  const CARD_H = 370;
+  const GAP = 28;
+  const col = index % 3;
+  const row = Math.floor(index / 3);
+  const deckX = (1 - col) * (CARD_W + GAP);    // +358, 0, -358
+  const deckY = (0.5 - row) * (CARD_H + GAP);  // +199, -199
+  const deckRot = (index - 2.5) * 4.5;          // fan: -11.25° … +11.25°
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.07, duration: 0.5 }}
-      viewport={{ once: true }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      className="p-6 border cursor-pointer transition-all duration-300 relative overflow-hidden"
-      style={{
-        borderColor: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)",
-        background: hovered ? "rgba(0,0,0,0.03)" : "white",
+      initial={{ opacity: 0, scale: 0.62, rotate: deckRot, x: deckX, y: deckY }}
+      whileInView={{ opacity: 1, scale: 1, rotate: 0, x: 0, y: 0 }}
+      transition={{
+        delay: index * 0.07,
+        duration: 0.65,
+        type: "spring",
+        stiffness: 80,
+        damping: 15,
       }}
+      viewport={{ once: true, amount: 0.1 }}
+      onHoverStart={() => { setHovered(true); setFlipped(f => !f); }}
+      onHoverEnd={() => { setHovered(false); }}
+      onClick={handleClick}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className="relative select-none"
+      style={{ cursor: "inherit", perspective: 1200 }}
     >
-      <span className="absolute top-3 right-4 text-black/10 font-serif text-xl select-none">♠</span>
-      {idea.tag && (
-        <span className="inline-block text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 mb-3 border border-black/15 text-black/35">
-          {idea.tag}
-        </span>
-      )}
-      <h3 className="font-serif text-black/80 text-sm leading-snug mb-3"
-        style={{ fontFamily: "'Playfair Display', serif" }}>
-        "{idea.title}"
-      </h3>
-      <p className="text-black/30 text-[11px] uppercase tracking-wider mb-4">{idea.category}</p>
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-black/10">
-          <motion.div className="h-px bg-black/50"
-            initial={{ width: 0 }}
-            whileInView={{ width: `${idea.score}%` }}
-            transition={{ delay: index * 0.07 + 0.3, duration: 0.9 }}
-            viewport={{ once: true }} />
+      {/* ── 3D flip container ── */}
+      <motion.div
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.55, type: "spring", stiffness: 70, damping: 14 }}
+        style={{ transformStyle: "preserve-3d", position: "relative" }}
+      >
+
+        {/* ════ FRONT FACE ════ */}
+        <div
+          className="overflow-hidden rounded-2xl border"
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            borderColor: hovered && !flipped ? "rgba(0,0,0,0.22)" : "rgba(0,0,0,0.12)",
+            boxShadow: hovered && !flipped
+              ? "0 10px 28px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.6)"
+              : "0 4px 18px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.5)",
+            background: "linear-gradient(145deg, #fbfbf9 0%, #f2f2ee 100%)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/card-soldier.jpg"
+            alt="" aria-hidden draggable={false}
+            className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
+            style={{ objectPosition: "center top", opacity: 0.14, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.25)" }}
+          />
+
+          <div
+            className="relative z-[1] m-2 overflow-hidden rounded-xl ring-1 ring-black/10 sm:m-2.5"
+            style={{
+              border: "1px solid rgba(0,0,0,0.14)",
+              boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.65), inset 0 0 0 2px rgba(0,0,0,0.04)",
+              minHeight: 288,
+            }}
+          >
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
+
+            <div className="relative flex min-h-[288px] flex-col bg-[rgb(247,249,245)] px-5 pb-5 pt-11 sm:px-6 sm:pb-6 sm:pt-12">
+              <QueenCroquetMosaic cardIndex={index} />
+              <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
+
+              <AnimatePresence>
+                {bloomed && (
+                  <motion.div
+                    key="bloom-flash"
+                    initial={{ opacity: 0.5, scale: 0.5 }}
+                    animate={{ opacity: 0, scale: 2.5 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.7, ease: "easeOut" }}
+                    className="absolute inset-0 z-[3] rounded-[50%]"
+                    style={{ background: "radial-gradient(circle, rgba(180,220,150,0.5) 0%, transparent 70%)", pointerEvents: "none" }}
+                  />
+                )}
+              </AnimatePresence>
+
+              <div className="relative z-[2] flex flex-1 flex-col items-center text-center">
+                <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+                  <div className="relative h-7 w-5 shrink-0 text-black/40">
+                    <RoseStageIcon stage={stage} className="absolute inset-0" />
+                  </div>
+                  {idea.tag ? (
+                    <span className="border border-black/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/35">{idea.tag}</span>
+                  ) : null}
+
+                  {stage === "full" && (
+                    <motion.span initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }}
+                      className="text-[10px] italic tracking-wider text-black/30" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      in bloom
+                    </motion.span>
+                  )}
+                </div>
+
+                <h3 className="mb-3 max-w-[98%] font-serif text-sm leading-snug text-black/80 sm:text-[15px]"
+                  style={{ fontFamily: "'Playfair Display', serif" }}>
+                  &ldquo;{idea.title}&rdquo;
+                </h3>
+                <p className="mb-5 text-[11px] uppercase tracking-wider text-black/30">{idea.category}</p>
+
+                <div className="mt-auto w-full max-w-[220px]">
+                  <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-wider text-black/25">
+                    <span>signal</span>
+                    <span className="font-mono text-black/40">{idea.score}</span>
+                  </div>
+                  <div className="h-px w-full bg-black/10">
+                    <motion.div className="h-px bg-black/50"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${idea.score}%` }}
+                      transition={{ delay: index * 0.07 + 0.3, duration: 0.9 }}
+                      viewport={{ once: true }} />
+                  </div>
+                </div>
+
+                <p className="mt-4 text-[9px] uppercase tracking-wider text-black/18">
+                  {stage === "full" ? "✦" : "click to reveal"}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <span className="text-black/40 text-xs font-mono">{idea.score}</span>
-      </div>
+
+        {/* ════ BACK FACE ════ */}
+        <div
+          className="absolute inset-0 overflow-hidden rounded-2xl border"
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            borderColor: "rgba(0,0,0,0.15)",
+            boxShadow: "0 10px 32px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.5)",
+            background: "linear-gradient(145deg, #f5f3ee 0%, #ede9e2 100%)",
+          }}
+        >
+          {/* Card back pattern — tiled card-soldier */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/card-soldier.jpg"
+            alt="" aria-hidden draggable={false}
+            className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover rounded-2xl"
+            style={{ opacity: 0.09, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.3)" }}
+          />
+
+          {/* Inner frame */}
+          <div className="absolute inset-2 sm:inset-2.5 z-[1] rounded-xl"
+            style={{ border: "1px solid rgba(0,0,0,0.12)",
+              boxShadow: "inset 0 0 0 4px rgba(0,0,0,0.04), inset 0 0 0 5px rgba(255,255,255,0.5)" }}>
+
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
+
+            <div className="flex h-full flex-col items-center justify-center gap-5 px-6 py-10">
+              {/* Decorative diamond centre */}
+              <div className="flex flex-col items-center gap-1 opacity-20">
+                {["♠", "♥", "♦", "♣"].map(s => (
+                  <span key={s} className="text-lg leading-none" style={{ fontFamily: "serif" }}>{s}</span>
+                ))}
+              </div>
+
+              {/* Score — large display */}
+              <div className="text-center">
+                <p className="text-[9px] tracking-[0.35em] uppercase text-black/30 mb-1">AI Signal</p>
+                <p className="font-mono text-5xl font-light text-black/70">{idea.score}</p>
+                <p className="text-[9px] tracking-widest text-black/20 mt-1">/ 100</p>
+              </div>
+
+              {/* Trend */}
+              <p className="text-[10px] tracking-[0.3em] uppercase text-black/35 border-t border-black/10 pt-4 w-full text-center">
+                {idea.trend} &nbsp;·&nbsp; {idea.category}
+              </p>
+
+              {/* Hint */}
+              <p className="text-[9px] uppercase tracking-wider text-black/20 italic"
+                style={{ fontFamily: "'Playfair Display', serif" }}>
+                click to cultivate
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </motion.div>
     </motion.div>
   );
 }
+
+// ── Shared font constant ──────────────────────────────────────────────────
+const SERIF = "'Cormorant Garamond', 'Playfair Display', serif";
+
+/** Static site — no auth. Edit for your intro page. */
+const CONTACT_MAILTO = "mailto:you@example.com";
+const GITHUB_URL = "https://github.com/june11223344";
 
 // ══════════════════════════════════════════════════════════════════════════
 export default function HomePage() {
@@ -157,16 +541,15 @@ export default function HomePage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/rabbit.png" alt="Rabbit Hole" style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }} />
           <span className="font-serif text-black/80 tracking-wide text-lg"
-            style={{ fontFamily: "'Playfair Display', serif" }}>Rabbit Hole</span>
+            style={{ fontFamily: SERIF }}>Rabbit Hole</span>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="/explore" className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">Trends</Link>
-          <Link href="/login" className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">Sign in</Link>
-          <Link href="/submit"
+          <a href={CONTACT_MAILTO} className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">Contact</a>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
             className="text-sm px-5 py-2 border text-black/70 hover:bg-black hover:text-white transition-all tracking-wider"
             style={{ borderColor: "rgba(0,0,0,0.2)" }}>
-            Submit Idea
-          </Link>
+            GitHub
+          </a>
         </div>
       </nav>
 
@@ -174,25 +557,26 @@ export default function HomePage() {
           HERO
       ══════════════════════════════════════════ */}
       <section className="pt-32 pb-0 px-6 text-center relative">
-        <motion.p
-          initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-black/30 text-xs tracking-[0.4em] uppercase mb-6"
-        >Where ideas fall into something real</motion.p>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <motion.p
+            initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-black/30 text-xs tracking-[0.4em] uppercase mb-6"
+          >Where ideas fall into something real</motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.35 }}
-          className="text-5xl md:text-8xl font-serif leading-none tracking-tight mb-2"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Step into the
-        </motion.h1>
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
-          className="text-5xl md:text-8xl font-serif italic leading-none tracking-tight mb-10"
-          style={{ fontFamily: "'Playfair Display', serif", color: "rgba(0,0,0,0.4)" }}
-        >
-          Rabbit Hole.
-        </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.35 }}
+            className="text-5xl md:text-8xl font-serif leading-none tracking-tight mb-2"
+            style={{ fontFamily: SERIF, fontWeight: 300 }}
+          >
+            Step into the
+          </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
+            className="text-5xl md:text-8xl font-serif italic leading-none tracking-tight mb-10"
+            style={{ fontFamily: SERIF, color: "rgba(0,0,0,0.38)", fontWeight: 400 }}
+          >
+            Rabbit Hole.
+          </motion.h1>
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
@@ -206,20 +590,21 @@ export default function HomePage() {
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
           className="flex items-center justify-center gap-4 mb-4"
         >
-          <Link href="/submit">
+          <a href={CONTACT_MAILTO}>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border border-black/80 bg-black text-white hover:bg-black/80">
-              Submit anonymously — free
+              Say hello
             </motion.button>
-          </Link>
-          <Link href="/explore">
+          </a>
+          <Link href="#garden">
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border text-black/60 hover:border-black/40"
               style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-              Browse ideas →
+              Explore the garden →
             </motion.button>
           </Link>
         </motion.div>
+        </div>{/* /relative zIndex wrapper */}
 
       </section>
 
@@ -227,16 +612,74 @@ export default function HomePage() {
           LANDING — Process section
       ══════════════════════════════════════════ */}
       <section className="relative py-40 px-6 overflow-hidden"
-        style={{ borderTop: "1px solid rgba(0,0,0,0.07)", background: "#ffffff" }}>
+        style={{ background: "#ffffff" }}>
 
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }} viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <p className="text-black/25 text-xs tracking-[0.4em] uppercase">The Process</p>
-          </motion.div>
+
+          {/* ── "Follow the Rabbit" header ─────────────────────────────── */}
+          <div className="relative flex flex-col items-center mb-0">
+
+            {/* Label */}
+            <motion.p
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.7 }} viewport={{ once: true }}
+              className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-6"
+            >
+              Follow the rabbit
+            </motion.p>
+
+            {/* White Rabbit only — book spread (1book29) removed; it showed Alice/croquet */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }} viewport={{ once: true }}
+              className="flex items-center justify-center w-full max-w-3xl"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/rabbit.png"
+                alt="White Rabbit"
+                draggable={false}
+                style={{
+                  width: "clamp(200px, 42vw, 340px)",
+                  height: "auto",
+                  filter: "grayscale(100%) contrast(1.5)",
+                  mixBlendMode: "multiply",
+                  userSelect: "none",
+                }}
+              />
+            </motion.div>
+
+            {/* Title below */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.25 }} viewport={{ once: true }}
+              className="text-center mt-8 mb-4"
+            >
+              <h2 className="text-3xl md:text-4xl font-serif text-black/70"
+                style={{ fontFamily: "'Playfair Display', serif" }}>
+                How it <em>works.</em>
+              </h2>
+              <p className="text-black/30 text-sm mt-3 tracking-wide">
+                You fall in. It gets questioned. The right one finds it.
+              </p>
+            </motion.div>
+
+            {/* Dotted trail — rabbit's path leading down to the steps */}
+            <motion.div
+              initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }} viewport={{ once: true }}
+              style={{ originY: 0 }}
+              className="flex flex-col items-center gap-1.5 my-6"
+            >
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} style={{
+                  width: 3, height: 3, borderRadius: "50%",
+                  background: "rgba(0,0,0,0.15)",
+                  opacity: 1 - i * 0.1,
+                }} />
+              ))}
+            </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-0">
             {[
@@ -244,7 +687,7 @@ export default function HomePage() {
                 num: "I.",
                 title: "You fall in.",
                 desc: "Drop your idea anonymously. No pitch deck. No network. No name. Just the raw idea.",
-                svg: <img src="/alice.png" alt="Alice" style={{ width: 160, margin: "0 auto", filter: "grayscale(100%) contrast(1.4) opacity(0.75)", mixBlendMode: "multiply" }} />,
+                svg: <img src="/alice_door.png" alt="Alice door" style={{ width: 160, margin: "0 auto", filter: "grayscale(100%) contrast(1.4) opacity(0.75)", mixBlendMode: "multiply" }} />,
               },
               {
                 num: "II.",
@@ -285,44 +728,138 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          INVESTOR GRID
+          RED QUEEN ENTRANCE
       ══════════════════════════════════════════ */}
-      <section className="relative py-40 px-6 overflow-hidden"
-        style={{ background: "#ffffff", borderTop: "1px solid rgba(0,0,0,0.07)" }}>
+      <section className="relative z-30" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-20 flex flex-col md:flex-row items-end gap-8 md:gap-12">
 
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }} viewport={{ once: true }}>
-              <p className="text-black/25 text-xs tracking-[0.4em] uppercase mb-3">For Investors</p>
-              <h2 className="text-4xl md:text-5xl font-serif"
-                style={{ fontFamily: "'Playfair Display', serif" }}>
-                The Queen's<br /><em>Garden of Ideas.</em>
-              </h2>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }} viewport={{ once: true }}
-              className="flex gap-3 items-end">
-              {[0, 1, 2].map(i => <CardSoldierSVG key={i} className="w-10 h-16 text-black/15" />)}
-            </motion.div>
+          {/* ── Left: Queen ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="shrink-0 self-end"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/redqueen.png"
+              alt="The Red Queen"
+              draggable={false}
+              style={{
+                width: "clamp(90px, 12vw, 160px)",
+                height: "auto",
+                display: "block",
+                filter: "grayscale(100%) contrast(1.35)",
+                mixBlendMode: "multiply",
+                opacity: 0.88,
+                userSelect: "none",
+              }}
+            />
+          </motion.div>
+
+          {/* ── Centre: Text ── */}
+          <div className="flex-1 min-w-0">
+            <motion.p
+              initial={{ opacity: 0, y: -6 }} whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }} viewport={{ once: true }}
+              className="text-[10px] tracking-[0.45em] uppercase mb-4"
+              style={{ color: "rgba(0,0,0,0.25)" }}
+            >
+              For Investors
+            </motion.p>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }} viewport={{ once: true }}
+              className="font-serif leading-none tracking-tight mb-5"
+              style={{
+                fontFamily: SERIF,
+                fontSize: "clamp(2.2rem, 4.5vw, 4.2rem)",
+                fontWeight: 300,
+                color: "rgba(0,0,0,0.82)",
+              }}
+            >
+              The Queen&apos;s<br />
+              <em style={{ fontWeight: 400, color: "rgba(0,0,0,0.42)" }}>Garden of Ideas.</em>
+            </motion.h2>
+
+            <motion.div
+              initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }}
+              transition={{ duration: 0.7, delay: 0.3 }} viewport={{ once: true }}
+              style={{ originX: 0 }}
+              className="h-px bg-black/10 max-w-xs mb-6"
+            />
+
+            <motion.p
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }} viewport={{ once: true }}
+              className="text-black/35 text-sm leading-relaxed max-w-xs"
+            >
+              Investors browse AI-validated ideas.<br />
+              No cold emails. No warm intros.<br />
+              <em style={{ fontFamily: SERIF, fontSize: "1.05em" }}>Just signal.</em>
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px"
-            style={{ background: "rgba(0,0,0,0.07)" }}>
+          {/* ── Right: Card Soldiers ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 12 }} whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+            viewport={{ once: true }}
+            className="shrink-0 self-end"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/card-soldiers.jpg"
+              alt="Card Soldiers"
+              draggable={false}
+              style={{
+                height: "clamp(140px, 18vw, 240px)",
+                width: "auto",
+                display: "block",
+                filter: "grayscale(100%) contrast(1.2)",
+                mixBlendMode: "multiply",
+                opacity: 0.7,
+                userSelect: "none",
+              }}
+            />
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          INVESTOR GRID — Queen's Garden
+      ══════════════════════════════════════════ */}
+      <section
+        id="garden"
+        className="relative z-30 px-6 pb-20 pt-0 overflow-hidden scroll-mt-24"
+        style={{
+          background: "#ffffff",
+          cursor: "url('/assets/brush-cursor.png') 4 28, crosshair",
+        }}
+      >
+        <div className="relative z-10 mx-auto max-w-6xl">
+          {/* Divider */}
+          <div className="mb-10 flex items-center gap-4">
+            <div className="flex-1 h-px" style={{ background: "rgba(0,0,0,0.09)" }} />
+            <QueenGardenCyclingRose />
+            <div className="flex-1 h-px" style={{ background: "rgba(0,0,0,0.09)" }} />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-8">
             {SAMPLE_IDEAS.map((idea, i) => (
-              <div key={idea.title} style={{ background: "#ffffff" }}>
-                <IdeaCard idea={idea} index={i} />
-              </div>
+              <IdeaCard key={idea.title} idea={idea} index={i} />
             ))}
           </div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }} viewport={{ once: true }}
-            className="text-center mt-10">
-            <Link href="/explore"
+            className="text-center mt-12">
+            <Link href="#garden"
               className="inline-flex items-center gap-2 text-sm text-black/35 hover:text-black/70 transition-colors tracking-wider border-b pb-0.5"
               style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-              View all validated ideas <ArrowRight className="w-4 h-4" />
+              Back to the garden <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>
@@ -347,28 +884,41 @@ export default function HomePage() {
             The best ideas always sound a little mad at first.<br />
             That's exactly why they need a place to be heard.
           </p>
-          <Link href="/submit">
+          <a href={CONTACT_MAILTO}>
             <motion.button whileHover={{ scale: 1.03, background: "#1a1a1a" }} whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-3 px-10 py-4 border border-black/20 text-black/70 text-sm tracking-widest transition-all hover:text-white hover:border-black">
-              <RabbitHoppingSVG className="w-6 h-9 text-current" />
-              Submit your idea — it's free
+              Get in touch
             </motion.button>
-          </Link>
+          </a>
         </motion.div>
       </section>
 
       {/* ── Footer ── */}
       <footer className="py-10 px-8" style={{ borderTop: "1px solid rgba(0,0,0,0.07)", background: "#ffffff" }}>
+        {/* Classical colophon */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.1)" }} />
+            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.1)" }} />
+          </div>
+          <p className="text-black/20 text-xs tracking-widest"
+            style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", letterSpacing: "0.18em" }}>
+            This Garden is carefully cultivated by
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-1.5">
+            <span className="text-black/25 text-xs font-serif tracking-widest"
+              style={{ fontFamily: "'Playfair Display', serif" }}>Rabbit Hole</span>
+          </div>
+        </div>
+
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <RabbitHoppingSVG className="w-6 h-9 text-black/25" />
             <span className="text-black/30 text-sm font-serif"
               style={{ fontFamily: "'Playfair Display', serif" }}>Rabbit Hole</span>
           </div>
           <div className="flex items-center gap-8">
-            <Link href="/explore" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Trends</Link>
-            <Link href="/submit" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Submit</Link>
-            <Link href="/login" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Sign in</Link>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">GitHub</a>
+            <a href={CONTACT_MAILTO} className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Email</a>
           </div>
           <p className="text-black/15 text-xs">© 2026 Rabbit Hole</p>
         </div>
