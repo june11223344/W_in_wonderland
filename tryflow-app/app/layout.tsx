@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { NavigationProgress } from "@/components/layout/NavigationProgress";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Rabbit Hole — Where Ideas Fall Into Something Real",
-  description:
-    "Test your product before you build it. Measure real user reactions with a landing page before you launch.",
+  title: site.meta.title,
+  description: site.meta.description,
 };
 
 export default function RootLayout({
@@ -23,10 +22,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
-        <NavigationProgress />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

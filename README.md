@@ -57,7 +57,7 @@ Creator  → submits project  → shares link    → reads analytics dashboard
 ```bash
 # Clone and enter the app directory
 git clone https://github.com/your-org/trywepp.git
-cd trywepp/tryflow-app
+cd alice_in/site
 
 # Install dependencies
 npm install
@@ -109,7 +109,7 @@ db/seed.sql             # (Optional) Seeds 4 sample projects using the first sig
 ## Project Structure
 
 ```
-tryflow-app/
+site/
 ├── app/
 │   ├── layout.tsx                    # Root layout — sidebar + auth check
 │   ├── page.tsx                      # Marketing landing page

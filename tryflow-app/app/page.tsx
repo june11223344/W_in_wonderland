@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { FallingAlice } from "@/components/ui/FallingAlice";
+import { site, type SpotlightItem } from "@/lib/site";
 
 // ── Tenniel SVGs ──────────────────────────────────────────────────────────
 
@@ -239,20 +240,19 @@ function QueenGardenCyclingRose() {
 
 // ── Tag → initial rose stage ──────────────────────────────────────────────
 const TAG_TO_STAGE: Record<string, RoseStage> = {
-  Hot: "full", Featured: "full",
+  Hot: "full",
+  Featured: "full",
   Emerging: "half",
   New: "bud",
+  Daily: "full",
+  Growing: "half",
+  Building: "half",
+  Always: "full",
+  Steady: "bud",
+  Open: "half",
 };
 
-// ── Sample investor idea cards ─────────────────────────────────────────────
-const SAMPLE_IDEAS = [
-  { title: "AI-native legal review for SMBs", category: "SaaS / B2B", score: 87, trend: "Rising", tag: "Hot" },
-  { title: "Carbon credit marketplace for SE Asia", category: "Marketplace", score: 74, trend: "Rising", tag: "Emerging" },
-  { title: "Micro-pension app for gig workers", category: "Fintech", score: 91, trend: "Rising", tag: "Featured" },
-  { title: "Voice-first coding for non-engineers", category: "Dev Tools", score: 68, trend: "Stable", tag: null },
-  { title: "Sleep health sub for remote teams", category: "Health", score: 82, trend: "Rising", tag: "New" },
-  { title: "B2B procurement for restaurants", category: "SaaS / B2B", score: 79, trend: "Stable", tag: null },
-];
+const SPOTLIGHT = site.spotlight;
 
 const PLAYING_CARD_RANKS = ["A", "Q", "A", "Q", "A", "Q"] as const;
 const PLAYING_CARD_SUITS_BLACK = ["♠", "♣"] as const;
@@ -300,7 +300,7 @@ function PlayingCardCornerPip({
   );
 }
 
-function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number }) {
+function IdeaCard({ idea, index }: { idea: SpotlightItem; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const initStage: RoseStage = TAG_TO_STAGE[idea.tag ?? ""] ?? "bud";
@@ -423,7 +423,7 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
                   {stage === "full" && (
                     <motion.span initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }}
                       className="text-[10px] italic tracking-wider text-black/30" style={{ fontFamily: "'Playfair Display', serif" }}>
-                      in bloom
+                      {site.cardUi.inBloom}
                     </motion.span>
                   )}
                 </div>
@@ -436,7 +436,7 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
 
                 <div className="mt-auto w-full max-w-[220px]">
                   <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-wider text-black/25">
-                    <span>signal</span>
+                    <span>{site.cardUi.barLabel}</span>
                     <span className="font-mono text-black/40">{idea.score}</span>
                   </div>
                   <div className="h-px w-full bg-black/10">
@@ -449,7 +449,7 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
                 </div>
 
                 <p className="mt-4 text-[9px] uppercase tracking-wider text-black/18">
-                  {stage === "full" ? "✦" : "click to reveal"}
+                  {stage === "full" ? "✦" : site.cardUi.hintClosed}
                 </p>
               </div>
             </div>
@@ -495,9 +495,9 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
 
               {/* Score — large display */}
               <div className="text-center">
-                <p className="text-[9px] tracking-[0.35em] uppercase text-black/30 mb-1">AI Signal</p>
+                <p className="text-[9px] tracking-[0.35em] uppercase text-black/30 mb-1">{site.cardUi.backMetricTitle}</p>
                 <p className="font-mono text-5xl font-light text-black/70">{idea.score}</p>
-                <p className="text-[9px] tracking-widest text-black/20 mt-1">/ 100</p>
+                <p className="text-[9px] tracking-widest text-black/20 mt-1">{site.cardUi.backMetricSuffix}</p>
               </div>
 
               {/* Trend */}
@@ -508,7 +508,7 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
               {/* Hint */}
               <p className="text-[9px] uppercase tracking-wider text-black/20 italic"
                 style={{ fontFamily: "'Playfair Display', serif" }}>
-                click to cultivate
+                {site.cardUi.hintBack}
               </p>
             </div>
           </div>
@@ -522,12 +522,143 @@ function IdeaCard({ idea, index }: { idea: typeof SAMPLE_IDEAS[0]; index: number
 // ── Shared font constant ──────────────────────────────────────────────────
 const SERIF = "'Cormorant Garamond', 'Playfair Display', serif";
 
-/** Static site — no auth. Edit for your intro page. */
-const CONTACT_MAILTO = "mailto:you@example.com";
-const GITHUB_URL = "https://github.com/june11223344";
+const BOARD_SUITS = ["♠", "♥", "♦", "♣"] as const;
+
+function BoardGameSection({
+  boardGame,
+}: {
+  boardGame: (typeof site)["boardGame"];
+}) {
+  return (
+    <section
+      id="board"
+      className="relative scroll-mt-24 border-t px-6 py-20 md:py-28"
+      style={{
+        borderColor: "rgba(0,0,0,0.07)",
+        background: "linear-gradient(168deg, #f4f1ea 0%, #ffffff 42%, #f9f7f2 100%)",
+      }}
+    >
+      <div className="relative z-[1] mx-auto max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75 }}
+          viewport={{ once: true }}
+          className="mb-10 text-center md:mb-14"
+        >
+          <p
+            className="mb-4 text-[10px] uppercase tracking-[0.45em] text-black/30"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            {boardGame.eyebrow}
+          </p>
+          <h2
+            className="font-serif leading-[1.08] tracking-tight text-black/80"
+            style={{
+              fontFamily: SERIF,
+              fontSize: "clamp(1.85rem, 4vw, 3rem)",
+              fontWeight: 300,
+            }}
+          >
+            {boardGame.titleLine1}
+            <br />
+            <em className="not-italic" style={{ fontWeight: 400, color: "rgba(0,0,0,0.42)" }}>
+              {boardGame.titleItalic}
+            </em>
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-black/38">{boardGame.sub}</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, delay: 0.08 }}
+          viewport={{ once: true, amount: 0.15 }}
+          className="relative rounded-[2rem] border bg-white/70 p-5 shadow-sm sm:p-8 md:p-10"
+          style={{
+            borderColor: "rgba(0,0,0,0.12)",
+            boxShadow:
+              "0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 40px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.04)",
+          }}
+        >
+          <span
+            className="pointer-events-none absolute left-5 top-5 select-none font-serif text-2xl text-black/[0.07] sm:left-8 sm:top-8"
+            aria-hidden
+          >
+            ♠
+          </span>
+          <span
+            className="pointer-events-none absolute bottom-5 right-5 select-none font-serif text-2xl text-black/[0.07] sm:bottom-8 sm:right-8"
+            aria-hidden
+          >
+            ♣
+          </span>
+
+          <div className="relative mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 lg:gap-5">
+            {boardGame.projects.map((project, i) => (
+              <motion.article
+                key={project.title}
+                initial={{ opacity: 0, y: 16, rotate: -0.8 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ delay: i * 0.08, duration: 0.55, type: "spring", stiffness: 120, damping: 18 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="group relative overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-[#fdfcf8] to-[#f3f0e8] px-5 pb-5 pt-8 transition-shadow hover:shadow-md"
+              >
+                <span className="absolute left-4 top-3 font-mono text-[10px] tracking-widest text-black/25">
+                  SPACE {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className="absolute right-4 top-2 text-xl leading-none text-black/[0.12] transition-colors group-hover:text-black/20"
+                  style={{ fontFamily: "serif" }}
+                  aria-hidden
+                >
+                  {BOARD_SUITS[i % BOARD_SUITS.length]}
+                </span>
+                <h3
+                  className="pr-8 font-serif text-lg leading-snug text-black/80 sm:text-xl"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  {project.title}
+                </h3>
+                <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-black/30">
+                  {project.year}
+                  <span className="mx-2 text-black/15">·</span>
+                  {project.tag}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-black/40">{project.blurb}</p>
+                {project.href ? (
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-1.5 border-b border-black/20 pb-0.5 text-xs tracking-wider text-black/45 transition-colors hover:border-black/50 hover:text-black/75"
+                  >
+                    {project.linkLabel ?? boardGame.linkLabel}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                ) : (
+                  <p className="mt-5 text-[10px] uppercase tracking-wider text-black/20">Token reserved — add a link in site.ts</p>
+                )}
+              </motion.article>
+            ))}
+          </div>
+
+          <p
+            className="mt-8 text-center text-[10px] uppercase tracking-[0.35em] text-black/25"
+            style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          >
+            {boardGame.footnote}
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
 // ══════════════════════════════════════════════════════════════════════════
 export default function HomePage() {
+  const { links, brand, nav, hero, processIntro, steps, queenSection, garden, boardGame, cheshire, footer } = site;
+
   return (
     <div
       className="overflow-x-hidden"
@@ -539,16 +670,17 @@ export default function HomePage() {
         style={{ borderBottom: "1px solid rgba(0,0,0,0.07)", backdropFilter: "blur(16px)", background: "rgba(255,255,255,0.92)" }}>
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/rabbit.png" alt="Rabbit Hole" style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }} />
+          <img src="/rabbit.png" alt={brand.rabbitAlt} style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }} />
           <span className="font-serif text-black/80 tracking-wide text-lg"
-            style={{ fontFamily: SERIF }}>Rabbit Hole</span>
+            style={{ fontFamily: SERIF }}>{brand.navTitle}</span>
         </div>
         <div className="flex items-center gap-6">
-          <a href={CONTACT_MAILTO} className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">Contact</a>
-          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+          <Link href="#board" className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">Board</Link>
+          <a href={links.contactMailto} className="text-black/40 hover:text-black text-sm transition-colors tracking-wide">{nav.contact}</a>
+          <a href={links.github} target="_blank" rel="noopener noreferrer"
             className="text-sm px-5 py-2 border text-black/70 hover:bg-black hover:text-white transition-all tracking-wider"
             style={{ borderColor: "rgba(0,0,0,0.2)" }}>
-            GitHub
+            {nav.github}
           </a>
         </div>
       </nav>
@@ -561,46 +693,44 @@ export default function HomePage() {
           <motion.p
             initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
             className="text-black/30 text-xs tracking-[0.4em] uppercase mb-6"
-          >Where ideas fall into something real</motion.p>
+          >{hero.eyebrow}</motion.p>
 
           <motion.h1
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.35 }}
             className="text-5xl md:text-8xl font-serif leading-none tracking-tight mb-2"
             style={{ fontFamily: SERIF, fontWeight: 300 }}
           >
-            Step into the
+            {hero.line1}
           </motion.h1>
           <motion.h1
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
             className="text-5xl md:text-8xl font-serif italic leading-none tracking-tight mb-10"
             style={{ fontFamily: SERIF, color: "rgba(0,0,0,0.38)", fontWeight: 400 }}
           >
-            Rabbit Hole.
+            {hero.nameLine}
           </motion.h1>
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
           className="text-black/40 text-base max-w-md mx-auto mb-12 leading-relaxed"
-        >
-          Submit your idea anonymously.<br/>
-          AI validates it. The right investor finds it.
-        </motion.p>
+          dangerouslySetInnerHTML={{ __html: hero.subHtml }}
+        />
 
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
           className="flex items-center justify-center gap-4 mb-4"
         >
-          <a href={CONTACT_MAILTO}>
+          <a href={links.contactMailto}>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border border-black/80 bg-black text-white hover:bg-black/80">
-              Say hello
+              {hero.primaryCta}
             </motion.button>
           </a>
           <Link href="#garden">
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border text-black/60 hover:border-black/40"
               style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-              Explore the garden →
+              {hero.secondaryCta}
             </motion.button>
           </Link>
         </motion.div>
@@ -625,7 +755,7 @@ export default function HomePage() {
               transition={{ duration: 0.7 }} viewport={{ once: true }}
               className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-6"
             >
-              Follow the rabbit
+              {processIntro.eyebrow}
             </motion.p>
 
             {/* White Rabbit only — book spread (1book29) removed; it showed Alice/croquet */}
@@ -656,11 +786,11 @@ export default function HomePage() {
               className="text-center mt-8 mb-4"
             >
               <h2 className="text-3xl md:text-4xl font-serif text-black/70"
-                style={{ fontFamily: "'Playfair Display', serif" }}>
-                How it <em>works.</em>
-              </h2>
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                dangerouslySetInnerHTML={{ __html: processIntro.titleHtml }}
+              />
               <p className="text-black/30 text-sm mt-3 tracking-wide">
-                You fall in. It gets questioned. The right one finds it.
+                {processIntro.sub}
               </p>
             </motion.div>
 
@@ -682,26 +812,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-0">
-            {[
-              {
-                num: "I.",
-                title: "You fall in.",
-                desc: "Drop your idea anonymously. No pitch deck. No network. No name. Just the raw idea.",
-                svg: <img src="/alice_door.png" alt="Alice door" style={{ width: 160, margin: "0 auto", filter: "grayscale(100%) contrast(1.4) opacity(0.75)", mixBlendMode: "multiply" }} />,
-              },
-              {
-                num: "II.",
-                title: "It's questioned.",
-                desc: "8 AI agents run in parallel — market size, competition, timing, moat, defensibility. Ruthlessly.",
-                svg: <img src="/cata.png" alt="Caterpillar" style={{ width: 200, margin: "0 auto", filter: "grayscale(100%) contrast(1.4) opacity(0.85)", mixBlendMode: "multiply" }} />,
-              },
-              {
-                num: "III.",
-                title: "The right one finds it.",
-                desc: "Investors browse AI-validated ideas. No cold emails. No warm intros. Just signal.",
-                svg: <img src="/tea-party.png" alt="Tea Party" style={{ width: 240, margin: "0 auto", filter: "grayscale(100%) contrast(1.4) opacity(0.85)", mixBlendMode: "multiply" }} />,
-              },
-            ].map((step, i) => (
+            {steps.map((step, i) => (
               <motion.div key={step.num}
                 initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.15, duration: 0.7 }} viewport={{ once: true }}
@@ -712,7 +823,17 @@ export default function HomePage() {
                 }}
               >
                 <div style={{ height: 260, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {step.svg}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={step.imageSrc}
+                    alt={step.imageAlt}
+                    style={{
+                      width: step.imageWidth,
+                      margin: "0 auto",
+                      filter: "grayscale(100%) contrast(1.4) opacity(0.85)",
+                      mixBlendMode: "multiply",
+                    }}
+                  />
                 </div>
                 <div className="mt-6 mb-2">
                   <span className="text-black/20 text-xs font-serif tracking-widest"
@@ -765,7 +886,7 @@ export default function HomePage() {
               className="text-[10px] tracking-[0.45em] uppercase mb-4"
               style={{ color: "rgba(0,0,0,0.25)" }}
             >
-              For Investors
+              {queenSection.eyebrow}
             </motion.p>
 
             <motion.h2
@@ -779,8 +900,8 @@ export default function HomePage() {
                 color: "rgba(0,0,0,0.82)",
               }}
             >
-              The Queen&apos;s<br />
-              <em style={{ fontWeight: 400, color: "rgba(0,0,0,0.42)" }}>Garden of Ideas.</em>
+              {queenSection.titleLine1}<br />
+              <em style={{ fontWeight: 400, color: "rgba(0,0,0,0.42)" }}>{queenSection.titleItalic}</em>
             </motion.h2>
 
             <motion.div
@@ -794,11 +915,8 @@ export default function HomePage() {
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }} viewport={{ once: true }}
               className="text-black/35 text-sm leading-relaxed max-w-xs"
-            >
-              Investors browse AI-validated ideas.<br />
-              No cold emails. No warm intros.<br />
-              <em style={{ fontFamily: SERIF, fontSize: "1.05em" }}>Just signal.</em>
-            </motion.p>
+              dangerouslySetInnerHTML={{ __html: queenSection.bodyHtml }}
+            />
           </div>
 
           {/* ── Right: Card Soldiers ── */}
@@ -836,7 +954,7 @@ export default function HomePage() {
         className="relative z-30 px-6 pb-20 pt-0 overflow-hidden scroll-mt-24"
         style={{
           background: "#ffffff",
-          cursor: "url('/assets/brush-cursor.png') 4 28, crosshair",
+          cursor: "crosshair",
         }}
       >
         <div className="relative z-10 mx-auto max-w-6xl">
@@ -848,7 +966,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-8">
-            {SAMPLE_IDEAS.map((idea, i) => (
+            {SPOTLIGHT.map((idea, i) => (
               <IdeaCard key={idea.title} idea={idea} index={i} />
             ))}
           </div>
@@ -859,11 +977,13 @@ export default function HomePage() {
             <Link href="#garden"
               className="inline-flex items-center gap-2 text-sm text-black/35 hover:text-black/70 transition-colors tracking-wider border-b pb-0.5"
               style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-              Back to the garden <ArrowRight className="w-4 h-4" />
+              {garden.linkBack} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>
       </section>
+
+      <BoardGameSection boardGame={boardGame} />
 
       {/* ══════════════════════════════════════════
           CHESHIRE QUOTE — CTA
@@ -877,17 +997,16 @@ export default function HomePage() {
           <img src="/chat.png" alt="Cheshire Cat" style={{ width: 200, margin: "0 auto 3rem", filter: "grayscale(100%) contrast(1.4) opacity(0.82)", mixBlendMode: "multiply" }} />
           <blockquote className="text-3xl md:text-5xl font-serif italic leading-tight text-black/50 mb-6"
             style={{ fontFamily: "'Playfair Display', serif" }}>
-            "We're all mad here."
+            {cheshire.quote}
           </blockquote>
-          <p className="text-black/25 text-sm tracking-wider mb-14">— The Cheshire Cat</p>
-          <p className="text-black/40 text-base leading-relaxed max-w-lg mx-auto mb-12">
-            The best ideas always sound a little mad at first.<br />
-            That's exactly why they need a place to be heard.
-          </p>
-          <a href={CONTACT_MAILTO}>
+          <p className="text-black/25 text-sm tracking-wider mb-14">{cheshire.attribution}</p>
+          <p className="text-black/40 text-base leading-relaxed max-w-lg mx-auto mb-12"
+            dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
+          />
+          <a href={links.contactMailto}>
             <motion.button whileHover={{ scale: 1.03, background: "#1a1a1a" }} whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-3 px-10 py-4 border border-black/20 text-black/70 text-sm tracking-widest transition-all hover:text-white hover:border-black">
-              Get in touch
+              {cheshire.cta}
             </motion.button>
           </a>
         </motion.div>
@@ -903,24 +1022,24 @@ export default function HomePage() {
           </div>
           <p className="text-black/20 text-xs tracking-widest"
             style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", letterSpacing: "0.18em" }}>
-            This Garden is carefully cultivated by
+            {footer.colophonLine1}
           </p>
           <div className="flex items-center justify-center gap-2 mt-1.5">
             <span className="text-black/25 text-xs font-serif tracking-widest"
-              style={{ fontFamily: "'Playfair Display', serif" }}>Rabbit Hole</span>
+              style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
         </div>
 
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-black/30 text-sm font-serif"
-              style={{ fontFamily: "'Playfair Display', serif" }}>Rabbit Hole</span>
+              style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
           <div className="flex items-center gap-8">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">GitHub</a>
-            <a href={CONTACT_MAILTO} className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Email</a>
+            <a href={links.github} target="_blank" rel="noopener noreferrer" className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">{nav.github}</a>
+            <a href={links.contactMailto} className="text-black/20 hover:text-black/50 text-xs tracking-wider transition-colors">Email</a>
           </div>
-          <p className="text-black/15 text-xs">© 2026 Rabbit Hole</p>
+          <p className="text-black/15 text-xs">{footer.copyright}</p>
         </div>
       </footer>
     </div>
