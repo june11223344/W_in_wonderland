@@ -139,50 +139,66 @@ const ROSE_BLOOM_PNG = [
   "/assets/rose-bloom-3.png",
 ] as const;
 
-/** One fixed bloom stage (0=bud, 1=opening, 2=full) — no frame cycling */
-function QueenGardenRoseFixed({ stage, w }: { stage: 0 | 1 | 2; w: number }) {
+const QUEEN_GARDEN_ROSE_COUNT = 5;
+/** Per rose: 0 = not started, 1 = bud, 2 = opening, 3 = full bloom */
+const QUEEN_GARDEN_PHASE_MS: Record<1 | 2 | 3, number> = { 1: 480, 2: 480, 3: 620 };
+const QUEEN_GARDEN_GAP_BETWEEN_ROSES_MS = 140;
+const QUEEN_GARDEN_HOLD_ALL_FULL_MS = 2400;
+const QUEEN_GARDEN_RESET_MS = 900;
+
+/** One rose slot: shows bloom PNGs 1→2→3 by phase (only highest stage visible). */
+function QueenGardenRoseSlot({ phase }: { phase: 0 | 1 | 2 | 3 }) {
+  const w = 56;
+  const h = 72;
   return (
     <div
       className="relative shrink-0 select-none"
-      style={{ width: w, height: w * 1.28 }}
+      style={{ width: w, height: h }}
+      aria-hidden
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={ROSE_BLOOM_PNG[stage]}
-        alt=""
-        draggable={false}
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{
-          opacity: 0.5,
-          mixBlendMode: "multiply",
-          filter: "grayscale(100%) contrast(1.12)",
-        }}
-      />
+      {([1, 2, 3] as const).map((p) => (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          key={p}
+          src={ROSE_BLOOM_PNG[p - 1]}
+          alt=""
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-contain"
+          style={{
+            opacity: phase >= p ? 0.88 : 0,
+            transform: phase >= p ? "scale(1)" : "scale(0.9)",
+            transition: "opacity 0.5s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)",
+            mixBlendMode: "multiply",
+            filter: "grayscale(100%) contrast(1.08)",
+            pointerEvents: "none",
+          }}
+        />
+      ))}
     </div>
   );
 }
 
-const QUEEN_GARDEN_ROSE_W: Record<0 | 1 | 2, number> = { 0: 64, 1: 72, 2: 80 };
-
-/** Each rose fades in at its own fixed position, one by one left→right */
-const QUEEN_GARDEN_STEP_IN_MS = 900;
-const QUEEN_GARDEN_HOLD_ALL_MS = 2200;
-const QUEEN_GARDEN_FADE_OUT_MS = 700;
-const QUEEN_GARDEN_PAUSE_EMPTY_MS = 600;
-
+/** Roses in a row: each flower blooms bud→half→full one after another, then loop. */
 function QueenGardenCyclingRose() {
   const reduceMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(wrapRef, { amount: 0.35 });
-  /** How many roses visible: 0, 1, 2, 3 */
-  const [visibleCount, setVisibleCount] = useState(0);
+  const inView = useInView(wrapRef, { amount: 0.3 });
+  const [phases, setPhases] = useState<(0 | 1 | 2 | 3)[]>(() =>
+    Array(QUEEN_GARDEN_ROSE_COUNT).fill(0) as (0 | 1 | 2 | 3)[],
+  );
 
   useEffect(() => {
-    if (!inView) setVisibleCount(0);
+    if (!inView) {
+      setPhases(Array(QUEEN_GARDEN_ROSE_COUNT).fill(0) as (0 | 1 | 2 | 3)[]);
+    }
   }, [inView]);
 
   useEffect(() => {
-    if (reduceMotion || !inView) return;
+    if (reduceMotion) {
+      setPhases(Array(QUEEN_GARDEN_ROSE_COUNT).fill(3) as (0 | 1 | 2 | 3)[]);
+      return;
+    }
+    if (!inView) return;
 
     let cancelled = false;
     const wait = (ms: number) =>
@@ -190,48 +206,48 @@ function QueenGardenCyclingRose() {
 
     (async () => {
       while (!cancelled) {
-        setVisibleCount(0);
-        await wait(400);
+        setPhases(Array(QUEEN_GARDEN_ROSE_COUNT).fill(0) as (0 | 1 | 2 | 3)[]);
+        await wait(380);
         if (cancelled) break;
-        setVisibleCount(1);
-        await wait(QUEEN_GARDEN_STEP_IN_MS);
+
+        for (let i = 0; i < QUEEN_GARDEN_ROSE_COUNT; i++) {
+          for (const p of [1, 2, 3] as const) {
+            setPhases((prev) => {
+              const next = [...prev] as (0 | 1 | 2 | 3)[];
+              next[i] = p;
+              return next;
+            });
+            await wait(QUEEN_GARDEN_PHASE_MS[p]);
+            if (cancelled) return;
+          }
+          await wait(QUEEN_GARDEN_GAP_BETWEEN_ROSES_MS);
+          if (cancelled) return;
+        }
+
+        await wait(QUEEN_GARDEN_HOLD_ALL_FULL_MS);
         if (cancelled) break;
-        setVisibleCount(2);
-        await wait(QUEEN_GARDEN_STEP_IN_MS);
-        if (cancelled) break;
-        setVisibleCount(3);
-        await wait(QUEEN_GARDEN_HOLD_ALL_MS);
-        if (cancelled) break;
-        setVisibleCount(0);
-        await wait(QUEEN_GARDEN_FADE_OUT_MS + QUEEN_GARDEN_PAUSE_EMPTY_MS);
+
+        setPhases(Array(QUEEN_GARDEN_ROSE_COUNT).fill(0) as (0 | 1 | 2 | 3)[]);
+        await wait(QUEEN_GARDEN_RESET_MS);
       }
     })();
 
     return () => { cancelled = true; };
   }, [reduceMotion, inView]);
 
-  const maxW = QUEEN_GARDEN_ROSE_W[2];
-  const boxH = maxW * 1.28;
+  const boxH = 78;
 
   return (
     <div
       ref={wrapRef}
-      className="flex items-end justify-start gap-1.5 sm:gap-2 md:justify-end"
+      className="flex flex-wrap items-end justify-center gap-2 sm:gap-3 md:justify-center"
       style={{ minHeight: boxH }}
       aria-hidden
     >
-      {([0, 1, 2] as const).map((stage) => (
-        <motion.div
-          key={stage}
-          animate={reduceMotion || visibleCount > stage
-            ? { opacity: 1, scale: 1 }
-            : { opacity: 0, scale: 0.82 }
-          }
-          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-end origin-bottom"
-        >
-          <QueenGardenRoseFixed stage={stage} w={QUEEN_GARDEN_ROSE_W[stage]} />
-        </motion.div>
+      {phases.map((phase, i) => (
+        <div key={i} className="flex items-end origin-bottom">
+          <QueenGardenRoseSlot phase={phase} />
+        </div>
       ))}
     </div>
   );
