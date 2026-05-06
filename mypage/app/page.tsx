@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -122,7 +121,7 @@ function QueenCroquetMosaic({ cardIndex }: { cardIndex: number }) {
               backgroundSize: `${cols * 110}% ${rows * 110}%`,
               backgroundPosition: `${posX}% ${posY}%`,
               backgroundRepeat: "no-repeat",
-              opacity: 0.26,
+              opacity: 0.1,
               mixBlendMode: "multiply",
               filter: "grayscale(100%) contrast(1.12)",
             }}
@@ -150,15 +149,19 @@ const TAG_TO_STAGE: Record<string, RoseStage> = {
 const SPOTLIGHT = site.spotlight;
 
 const PLAYING_CARD_RANKS = ["A", "Q", "A", "Q", "A", "Q"] as const;
-const PLAYING_CARD_SUITS_BLACK = ["♠", "♣"] as const;
-const PLAYING_CARD_SUITS_RED   = ["♥", "♦"] as const;
 
-function playingCardPip(index: number) {
-  const isRed = index % 2 === 1;
-  const suits = isRed ? PLAYING_CARD_SUITS_RED : PLAYING_CARD_SUITS_BLACK;
+/** Corner pip matches the suit row the visitor picked (♠ ♥ ♦ ♣). */
+const GARDEN_SUIT_GLYPH: Record<SpotlightItem["suit"], string> = {
+  spade: "♠",
+  heart: "♥",
+  diamond: "♦",
+  club: "♣",
+};
+
+function playingCardPipForSelectedSuit(selectedSuit: SpotlightItem["suit"], cardIndex: number) {
   return {
-    rank: PLAYING_CARD_RANKS[index % PLAYING_CARD_RANKS.length],
-    suit: suits[Math.floor(index / 2) % suits.length],
+    rank: PLAYING_CARD_RANKS[cardIndex % PLAYING_CARD_RANKS.length],
+    suit: GARDEN_SUIT_GLYPH[selectedSuit],
   };
 }
 
@@ -167,35 +170,45 @@ function PlayingCardCornerPip({
   rank,
   suit,
   flip,
+  size = "sm",
 }: {
   rank: string;
   suit: string;
   flip?: boolean;
+  size?: "sm" | "lg";
 }) {
   const redSuit = suit === "♥" || suit === "♦";
+  const pos =
+    size === "lg"
+      ? flip
+        ? "bottom-3 right-3 rotate-180 sm:bottom-3.5 sm:right-3.5"
+        : "top-3 left-3 sm:top-3.5 sm:left-3.5"
+      : flip
+        ? "bottom-2 right-2 rotate-180 sm:bottom-2.5 sm:right-2.5"
+        : "top-2 left-2 sm:top-2.5 sm:left-2.5";
+  const rankCls = size === "lg" ? "text-[15px] sm:text-[16px]" : "text-[12px] sm:text-[13px]";
+  const suitCls = size === "lg" ? "text-[22px] sm:text-[24px]" : "text-[17px] sm:text-[19px]";
   return (
     <div
-      className={`pointer-events-none absolute z-[4] flex flex-col items-center gap-0.5 select-none ${
-        flip ? "bottom-3 right-3 rotate-180 sm:bottom-4 sm:right-4" : "top-3 left-3 sm:top-4 sm:left-4"
-      }`}
+      className={`pointer-events-none absolute z-[4] flex flex-col items-center gap-0 select-none ${pos}`}
       style={{ fontFamily: "'Playfair Display', serif" }}
       aria-hidden
     >
-      <span
-        className={`text-[17px] font-bold tracking-tight sm:text-[19px] ${redSuit ? "text-red-900/80" : "text-black/80"}`}
-      >
-        {rank}
-      </span>
-      <span
-        className={`text-[26px] leading-none sm:text-[30px] ${redSuit ? "text-red-900/75" : "text-black/60"}`}
-      >
-        {suit}
-      </span>
+      <span className={`font-bold tracking-tight ${rankCls} ${redSuit ? "text-red-900" : "text-neutral-900"}`}>{rank}</span>
+      <span className={`leading-none ${suitCls} ${redSuit ? "text-red-900/90" : "text-neutral-800"}`}>{suit}</span>
     </div>
   );
 }
 
-function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: number; pipIndex?: number }) {
+function IdeaCard({
+  idea,
+  index,
+  selectedSuit,
+}: {
+  idea: SpotlightItem;
+  index: number;
+  selectedSuit: SpotlightItem["suit"];
+}) {
   const reduceMotion = useReducedMotion();
   const [hovered, setHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -204,12 +217,12 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
   const [bloomed, setBloomed] = useState(false);
 
   const scrim = bloomed
-    ? "linear-gradient(180deg, rgba(242,252,238,0.82) 0%, rgba(232,246,228,0.9) 100%)"
+    ? "linear-gradient(180deg, rgba(250,252,248,0.94) 0%, rgba(236,244,230,0.97) 100%)"
     : hovered
-      ? "linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(250,251,248,0.88) 100%)"
-      : "linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(247,249,245,0.86) 100%)";
+      ? "linear-gradient(180deg, rgba(255,255,255,0.88) 0%, rgba(252,252,250,0.96) 100%)"
+      : "linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(250,250,248,0.94) 100%)";
 
-  const pip = playingCardPip(pipIndex ?? index);
+  const pip = playingCardPipForSelectedSuit(selectedSuit, index);
 
   const advanceRose = () => {
     if (stage === "bud") setStage("half");
@@ -237,14 +250,14 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
     };
   }, [expanded]);
 
-  const borderFront = hovered ? "rgba(0,0,0,0.22)" : "rgba(0,0,0,0.12)";
+  const borderFront = hovered ? "rgba(0,0,0,0.32)" : "rgba(0,0,0,0.2)";
   const shadowFront = hovered
-    ? "0 10px 28px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.6)"
-    : "0 4px 18px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.5)";
+    ? "0 12px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.75)"
+    : "0 6px 22px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.65)";
 
   const stripFace = (
     <div
-      className="relative overflow-hidden rounded-2xl border"
+      className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border"
       style={{
         borderColor: borderFront,
         boxShadow: shadowFront,
@@ -256,31 +269,31 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
         src="/card-soldier.jpg"
         alt="" aria-hidden draggable={false}
         className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
-        style={{ objectPosition: "center top", opacity: 0.14, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.25)" }}
+        style={{ objectPosition: "center top", opacity: 0.07, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.25)" }}
       />
 
       <div
-        className="relative z-[1] m-2 overflow-hidden rounded-xl ring-1 ring-black/10 sm:m-2.5"
+        className="relative z-[1] m-2 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl ring-1 ring-black/18 sm:m-2.5"
         style={{
-          border: "1px solid rgba(0,0,0,0.14)",
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.65), inset 0 0 0 2px rgba(0,0,0,0.04)",
-          minHeight: 288,
+          border: "1px solid rgba(0,0,0,0.22)",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.8), inset 0 0 0 2px rgba(0,0,0,0.05)",
         }}
       >
         <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
         <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
 
-        <div className="relative flex min-h-[288px] flex-col bg-[rgb(247,249,245)] px-5 pb-5 pt-11 sm:px-6 sm:pb-6 sm:pt-12">
+        <div className="relative flex h-full min-h-0 flex-1 flex-col bg-[#f6f5f2] px-5 pb-4 pt-10 sm:px-6 sm:pb-5 sm:pt-11">
           <QueenCroquetMosaic cardIndex={index} />
+          <div className="pointer-events-none absolute inset-0 z-[1] bg-white/50" aria-hidden />
           <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
 
-          <div className="relative z-[2] flex flex-1 flex-col items-center text-center">
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-              <div className="relative h-7 w-5 shrink-0 text-black/40">
+          <div className="relative z-[2] flex min-h-0 flex-1 flex-col items-center text-center">
+            <div className="mb-3 flex shrink-0 flex-wrap items-center justify-center gap-2">
+              <div className="relative h-7 w-5 shrink-0 text-black/55">
                 <RoseStageIcon stage={stage} className="absolute inset-0" />
               </div>
               {idea.tag ? (
-                <span className="border border-black/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/35">{idea.tag}</span>
+                <span className="border border-black/25 bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-neutral-800 shadow-sm">{idea.tag}</span>
               ) : null}
 
               {stage === "full" && (
@@ -288,7 +301,7 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.25 }}
-                  className="text-[10px] italic tracking-wider text-black/30"
+                  className="text-[10px] italic tracking-wider text-black/45"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {site.cardUi.inBloom}
@@ -297,30 +310,28 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
             </div>
 
             <h3
-              className="mb-3 max-w-[98%] font-serif text-sm leading-snug text-black/80 sm:text-[15px]"
+              className="mb-2 line-clamp-3 max-w-[98%] min-h-0 shrink font-serif text-sm leading-snug text-neutral-900 sm:text-[15px]"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               &ldquo;{idea.title}&rdquo;
             </h3>
-            <p className="mb-5 text-[11px] uppercase tracking-wider text-black/30">{idea.category}</p>
-
-            <div className="mt-auto w-full max-w-[220px]">
-              <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-wider text-black/25">
-                <span>{site.cardUi.barLabel}</span>
-                <span className="font-mono text-black/40">{idea.score}</span>
+            <p className="mb-2 shrink-0 text-[11px] font-medium uppercase tracking-wider text-neutral-600">{idea.category}</p>
+            <div className="mb-3 min-h-0 w-full max-w-[95%] flex-1 space-y-2 overflow-hidden border-t border-black/18 pt-2.5 text-left">
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.22em] text-black/40">{site.cardUi.roleLabel}</p>
+                <p className="mt-0.5 line-clamp-2 font-serif text-[10px] leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {idea.roleLine}
+                </p>
               </div>
-              <div className="h-px w-full bg-black/10">
-                <motion.div
-                  className="h-px bg-black/50"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${idea.score}%` }}
-                  transition={{ delay: index * 0.04 + 0.12, duration: 0.55, ease: "easeOut" }}
-                  viewport={{ once: true }}
-                />
+              <div className="border-t border-black/10 pt-2">
+                <p className="text-[8px] uppercase tracking-[0.22em] text-black/40">{site.cardUi.impactLabel}</p>
+                <p className="mt-0.5 line-clamp-2 font-serif text-[10px] leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {idea.impactLine}
+                </p>
               </div>
             </div>
 
-            <p className="mt-4 text-[9px] uppercase tracking-wider text-black/18">{site.cardUi.hintClosed}</p>
+            <p className="mt-auto shrink-0 pt-1 text-[9px] font-semibold uppercase tracking-wider text-neutral-600">{site.cardUi.hintClosed}</p>
           </div>
         </div>
       </div>
@@ -365,103 +376,61 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
                       className="min-h-[min(88vh,560px)]"
                       style={{ transformStyle: "preserve-3d", position: "relative" }}
                     >
-                      {/* Modal front — same card, enlarged feel via container scale above */}
+                      {/* Modal front — minimal flip preview */}
                       <div
-                        className="h-full min-h-[min(88vh,560px)] overflow-hidden rounded-2xl border bg-[linear-gradient(145deg,#fbfbf9_0%,#f2f2ee_100%)]"
+                        className="flex h-full min-h-[min(88vh,560px)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
                         style={{
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
-                          borderColor: "rgba(0,0,0,0.14)",
-                          boxShadow: "0 24px 48px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.55)",
+                          boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                         }}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src="/card-soldier.jpg"
-                          alt="" aria-hidden draggable={false}
-                          className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
-                          style={{ objectPosition: "center top", opacity: 0.14, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.25)" }}
-                        />
-                        <div
-                          className="relative z-[1] m-2 overflow-hidden rounded-xl ring-1 ring-black/10 sm:m-2.5"
-                          style={{
-                            border: "1px solid rgba(0,0,0,0.14)",
-                            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.65), inset 0 0 0 2px rgba(0,0,0,0.04)",
-                            minHeight: 260,
-                          }}
-                        >
-                          <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
-                          <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
-                          <div className="relative flex min-h-[260px] flex-col bg-[rgb(247,249,245)] px-5 pb-5 pt-10 sm:px-6 sm:pb-6 sm:pt-11">
-                            <QueenCroquetMosaic cardIndex={index} />
-                            <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
-                            <div className="relative z-[2] flex flex-1 flex-col items-center text-center">
-                              <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
-                                <div className="relative h-7 w-5 shrink-0 text-black/40">
-                                  <RoseStageIcon stage={stage} className="absolute inset-0" />
-                                </div>
-                                {idea.tag ? (
-                                  <span className="border border-black/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/35">{idea.tag}</span>
-                                ) : null}
+                        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} size="sm" />
+                        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip size="sm" />
+                        <div className="relative flex min-h-[260px] flex-1 flex-col px-6 pb-6 pt-12 sm:px-8 sm:pb-8 sm:pt-14">
+                          <div className="relative z-[2] flex flex-1 flex-col items-center justify-center text-center">
+                            <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
+                              <div className="relative h-7 w-5 shrink-0 text-neutral-600">
+                                <RoseStageIcon stage={stage} className="absolute inset-0" />
                               </div>
-                              <h3 className="mb-2 max-w-[98%] font-serif text-base leading-snug text-black/80" style={{ fontFamily: "'Playfair Display', serif" }}>
-                                &ldquo;{idea.title}&rdquo;
-                              </h3>
-                              <p className="mb-4 text-[11px] uppercase tracking-wider text-black/30">{idea.category}</p>
-                              <div className="mt-auto w-full max-w-[240px]">
-                                <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-wider text-black/25">
-                                  <span>{site.cardUi.barLabel}</span>
-                                  <span className="font-mono text-black/40">{idea.score}</span>
-                                </div>
-                                <div className="h-px w-full bg-black/10">
-                                  <div className="h-px bg-black/50" style={{ width: `${idea.score}%` }} />
-                                </div>
-                              </div>
+                              {idea.tag ? (
+                                <span className="border border-black/15 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-neutral-700">
+                                  {idea.tag}
+                                </span>
+                              ) : null}
                             </div>
+                            <h3 className="mb-2 max-w-[98%] font-serif text-base leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
+                              &ldquo;{idea.title}&rdquo;
+                            </h3>
+                            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-neutral-500">{idea.category}</p>
                           </div>
                         </div>
                       </div>
 
-                      {/* Modal back — detail + rose */}
+                      {/* Modal back — minimal reading panel (no imagery / watermark) */}
                       <div
-                        className="absolute inset-0 min-h-[min(88vh,560px)] overflow-y-auto overflow-x-hidden rounded-2xl border [&::-webkit-scrollbar]:hidden"
+                        className="absolute inset-0 flex min-h-[min(88vh,560px)] flex-col overflow-y-auto overflow-x-hidden rounded-2xl border border-black/10 bg-[#fafaf9] [&::-webkit-scrollbar]:hidden"
                         style={{
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
                           transform: "rotateY(180deg)",
-                          borderColor: "rgba(0,0,0,0.16)",
-                          boxShadow: "0 24px 48px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.45)",
-                          background: "linear-gradient(145deg, #f5f3ee 0%, #ede9e2 100%)",
+                          boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                           scrollbarWidth: "none",
                           msOverflowStyle: "none",
                         }}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src="/card-soldier.jpg"
-                          alt="" aria-hidden draggable={false}
-                          className="pointer-events-none absolute inset-0 h-full min-h-full w-full select-none object-cover rounded-2xl"
-                          style={{ opacity: 0.09, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.3)" }}
-                        />
-                        <div
-                          className="relative z-[1] m-2 rounded-xl sm:m-2.5"
-                          style={{
-                            border: "1px solid rgba(0,0,0,0.12)",
-                            boxShadow: "inset 0 0 0 4px rgba(0,0,0,0.04), inset 0 0 0 5px rgba(255,255,255,0.5)",
-                          }}
+                        <button
+                          type="button"
+                          onClick={() => setExpanded(false)}
+                          className="absolute right-4 top-4 z-30 text-[11px] font-medium tracking-wide text-neutral-500 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-900 hover:decoration-neutral-500"
                         >
-                          <button
-                            type="button"
-                            onClick={() => setExpanded(false)}
-                            className="absolute right-3 top-3 z-20 rounded border border-black/15 bg-white/80 px-2.5 py-1 text-[10px] uppercase tracking-wider text-black/45 transition-colors hover:border-black/25 hover:text-black/70"
-                          >
-                            {site.cardUi.closeDetail}
-                          </button>
+                          {site.cardUi.closeDetail}
+                        </button>
 
-                          <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
-                          <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
+                        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} size="sm" />
+                        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip size="sm" />
 
-                          <div className="relative flex flex-col gap-4 px-5 pb-8 pt-12 sm:px-7 sm:pb-10 sm:pt-14">
+                        <div className="relative z-10 flex flex-1 flex-col px-6 pb-10 pt-14 sm:px-10 sm:pb-12 sm:pt-16">
                             <AnimatePresence>
                               {bloomed && (
                                 <motion.div
@@ -469,48 +438,61 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
                                   initial={{ opacity: 0.45 }}
                                   animate={{ opacity: 0 }}
                                   transition={{ duration: 0.5, ease: "easeOut" }}
-                                  className="pointer-events-none absolute inset-0 z-[3] rounded-[40%]"
-                                  style={{ background: "radial-gradient(circle, rgba(180,220,150,0.42) 0%, transparent 68%)" }}
+                                  className="pointer-events-none absolute inset-0 z-[5]"
+                                  style={{ background: "radial-gradient(circle at 50% 42%, rgba(180,220,150,0.22) 0%, transparent 55%)" }}
                                 />
                               )}
                             </AnimatePresence>
 
-                            <div className="flex flex-col items-center gap-1 opacity-20">
-                              {["♠", "♥", "♦", "♣"].map((s) => (
-                                <span key={s} className="text-lg leading-none" style={{ fontFamily: "serif" }}>{s}</span>
-                              ))}
-                            </div>
-
-                            <div className="text-center">
-                              <p className="mb-1 text-[9px] uppercase tracking-[0.35em] text-black/30">{site.cardUi.backMetricTitle}</p>
-                              <p className="font-mono text-5xl font-light text-black/72 sm:text-6xl">{idea.score}</p>
-                              <p className="mt-1 text-[9px] tracking-widest text-black/22">{site.cardUi.backMetricSuffix}</p>
-                            </div>
-
-                            <p className="border-t border-black/10 pt-4 text-center text-[10px] uppercase tracking-[0.28em] text-black/38">
-                              {idea.trend} &nbsp;·&nbsp; {idea.category}
+                            <p className="mx-auto mb-6 max-w-sm border-b border-black/10 pb-3 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-600">
+                              {idea.trend}
+                              <span className="text-black/20">&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                              {idea.category}
                             </p>
 
+                            <div className="mx-auto w-full max-w-sm space-y-6">
+                              <div>
+                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/40">{site.cardUi.roleLabel}</p>
+                                <p
+                                  className="mt-2 font-serif text-[15px] leading-snug text-neutral-950 sm:text-base"
+                                  style={{ fontFamily: "'Playfair Display', serif" }}
+                                >
+                                  {idea.roleLine}
+                                </p>
+                              </div>
+                              <div className="border-t border-black/10 pt-6">
+                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/40">{site.cardUi.impactLabel}</p>
+                                <p
+                                  className="mt-2 font-serif text-[15px] leading-snug text-neutral-950 sm:text-base"
+                                  style={{ fontFamily: "'Playfair Display', serif" }}
+                                >
+                                  {idea.impactLine}
+                                </p>
+                              </div>
+                            </div>
+
                             <div
-                              className="text-sm leading-relaxed text-black/42 [&_p]:mb-3 [&_p:last-child]:mb-0"
+                              className="mt-8 max-w-none text-[15px] leading-[1.68] text-neutral-900 [&_em]:italic [&_em]:text-neutral-700 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-neutral-950"
                               dangerouslySetInnerHTML={{ __html: idea.detailHtml }}
                             />
 
                             <button
                               type="button"
                               onClick={advanceRose}
-                              className="mx-auto flex max-w-full flex-col items-center gap-2 rounded-lg border border-transparent px-3 py-3 text-center transition-colors hover:border-black/10 hover:bg-black/[0.02]"
+                              className="mx-auto mt-8 flex max-w-full flex-col items-center gap-2 border-t border-black/10 px-3 pt-8 text-center transition-colors hover:bg-black/[0.02]"
                             >
-                              <div className="relative h-10 w-7 text-black/45">
+                              <div className="relative h-10 w-7 text-neutral-600">
                                 <RoseStageIcon stage={stage} className="absolute inset-0" />
                               </div>
-                              <span className="text-[9px] uppercase tracking-wider text-black/28" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+                              <span
+                                className="text-[9px] uppercase tracking-wider text-neutral-500"
+                                style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                              >
                                 {stage === "full" ? site.cardUi.inBloom : site.cardUi.hintBack}
                               </span>
                             </button>
 
-                            <p className="text-center text-[9px] uppercase tracking-wider text-black/22">{site.cardUi.hintModalClose}</p>
-                          </div>
+                            <p className="mt-6 text-center text-[9px] uppercase tracking-wider text-black/35">{site.cardUi.hintModalClose}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -530,16 +512,16 @@ function IdeaCard({ idea, index, pipIndex }: { idea: SpotlightItem; index: numbe
         viewport={{ once: true, amount: 0.12 }}
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
-        className="relative select-none"
+        className="relative flex h-full min-h-0 flex-col select-none"
       >
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="block w-full cursor-pointer rounded-2xl border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2"
+          className="flex h-full min-h-0 w-full cursor-pointer flex-col rounded-2xl border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2"
           aria-haspopup="dialog"
           aria-expanded={expanded}
         >
-          <div className="relative">{stripFace}</div>
+          <div className="relative flex min-h-0 flex-1 flex-col">{stripFace}</div>
         </button>
       </motion.div>
       {modalPortal}
@@ -646,17 +628,13 @@ export default function HomePage() {
     hero,
     processIntro,
     aliceScale,
-    steps,
     garden,
     cheshire,
     footer,
   } = site;
 
   return (
-    <div
-      className="overflow-x-hidden"
-      style={{ background: "#ffffff", fontFamily: "'Inter', sans-serif", color: "#1a1a1a" }}
-    >
+    <div className="overflow-x-hidden text-[#1a1a1a]" style={{ background: "#ffffff" }}>
       {/* ── Navbar ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-8 h-16 flex items-center justify-between"
         style={{ borderBottom: "1px solid rgba(0,0,0,0.07)", backdropFilter: "blur(16px)", background: "rgba(255,255,255,0.92)" }}>
@@ -733,149 +711,16 @@ export default function HomePage() {
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-black/40 text-base max-w-md mx-auto mb-12 leading-relaxed"
+          className="text-black/40 mx-auto mb-10 max-w-md text-base leading-relaxed"
           dangerouslySetInnerHTML={{ __html: hero.subHtml }}
         />
 
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
-          className="flex items-center justify-center gap-4 mb-4"
-        >
-          <a href={links.contactMailto}>
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border border-black/80 bg-black text-white hover:bg-black/80">
-              {hero.primaryCta}
-            </motion.button>
-          </a>
-          <Link href="#garden">
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              className="px-8 py-3.5 text-sm font-medium tracking-widest transition-all border text-black/60 hover:border-black/40"
-              style={{ borderColor: "rgba(0,0,0,0.15)" }}>
-              {hero.secondaryCta}
-            </motion.button>
-          </Link>
-        </motion.div>
         </div>{/* /relative zIndex wrapper */}
 
       </section>
 
       {/* ══════════════════════════════════════════
-          LANDING — Process section
-      ══════════════════════════════════════════ */}
-      <section className="relative py-40 px-6 overflow-hidden"
-        style={{ background: "#ffffff" }}>
-
-        <div className="max-w-6xl mx-auto">
-
-          {/* ── About me: copy left, White Rabbit right (md+) ───────────── */}
-          <div className="relative mb-0 mx-auto max-w-5xl">
-            <div
-              className="flex flex-col items-stretch gap-10 md:flex-row md:items-center md:gap-12 lg:gap-16"
-            >
-              <div className="min-w-0 flex-1 text-center md:text-left md:pr-2">
-                <motion.p
-                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.7 }} viewport={{ once: true }}
-                  className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-5"
-                >
-                  {processIntro.eyebrow}
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.08 }} viewport={{ once: true }}
-                >
-                  <h2
-                    className="text-3xl md:text-[2.15rem] lg:text-4xl font-serif text-black/70 leading-snug"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                    dangerouslySetInnerHTML={{ __html: processIntro.titleHtml }}
-                  />
-                  <p
-                    className="text-black/32 mt-4 text-sm leading-relaxed tracking-wide md:max-w-xl"
-                    dangerouslySetInnerHTML={{ __html: processIntro.subHtml }}
-                  />
-                </motion.div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 14 }} whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.85, delay: 0.12 }} viewport={{ once: true }}
-                className="flex shrink-0 justify-center md:justify-end md:pl-2"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/rabbit.png"
-                  alt="White Rabbit"
-                  draggable={false}
-                  style={{
-                    width: "clamp(180px, 36vw, 300px)",
-                    height: "auto",
-                    filter: "grayscale(100%) contrast(1.5)",
-                    mixBlendMode: "multiply",
-                    userSelect: "none",
-                  }}
-                />
-              </motion.div>
-            </div>
-
-            {/* Dotted trail — rabbit's path leading down to the steps */}
-            <motion.div
-              initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }} viewport={{ once: true }}
-              style={{ originY: 0 }}
-              className="flex flex-col items-center gap-1.5 my-6"
-            >
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} style={{
-                  width: 3, height: 3, borderRadius: "50%",
-                  background: "rgba(0,0,0,0.15)",
-                  opacity: 1 - i * 0.1,
-                }} />
-              ))}
-            </motion.div>
-          </div>
-
-          <AliceScaleBand copy={aliceScale} />
-
-          <div className="grid md:grid-cols-3 gap-0">
-            {steps.map((step, i) => (
-              <motion.div key={step.num}
-                initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.15, duration: 0.7 }} viewport={{ once: true }}
-                className="py-12 px-8 text-center"
-                style={{
-                  borderLeft: i > 0 ? "1px solid rgba(0,0,0,0.07)" : "none",
-                  borderTop: "1px solid rgba(0,0,0,0.07)",
-                }}
-              >
-                <div style={{ height: 260, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={step.imageSrc}
-                    alt={step.imageAlt}
-                    style={{
-                      width: step.imageWidth,
-                      margin: "0 auto",
-                      filter: "grayscale(100%) contrast(1.4) opacity(0.85)",
-                      mixBlendMode: "multiply",
-                    }}
-                  />
-                </div>
-                <div className="mt-6 mb-2">
-                  <span className="text-black/20 text-xs font-serif tracking-widest"
-                    style={{ fontFamily: "'Playfair Display', serif" }}>{step.num}</span>
-                </div>
-                <h3 className="text-xl font-serif mb-3 text-black/75"
-                  style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
-                <p className="text-black/35 text-sm leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          QUEEN'S GARDEN — suit picker + skill cards
+          QUEEN'S GARDEN — suit picker + skill cards (early for recruiter scan)
       ══════════════════════════════════════════ */}
       <section
         id="garden"
@@ -974,7 +819,6 @@ export default function HomePage() {
               style={{ background: "linear-gradient(to left, rgba(255,255,255,0.95) 0%, transparent 100%)" }}
               aria-hidden
             />
-            {/* Outer: full-width scroll; inner row centered when narrower than viewport */}
             <div
               className="mx-auto flex w-full max-w-6xl justify-center overflow-x-auto overflow-y-visible px-6 py-10 pb-4 pt-2 sm:px-10 md:px-14 [&::-webkit-scrollbar]:hidden"
               style={{
@@ -984,27 +828,19 @@ export default function HomePage() {
                 msOverflowStyle: "none",
               }}
             >
-              <div className="inline-flex gap-4 sm:gap-5">
+              <div className="inline-flex items-stretch gap-4 sm:gap-5">
                 {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).map((idea, i) => {
-                  const orig = SPOTLIGHT.indexOf(idea);
-                  const TILTS = [-4, -2.5, -1, 0, 1, 2.5, 4, -3, -1.5, 0.5, 2, -2];
-                  const tilt = TILTS[i % TILTS.length];
                   return (
                     <motion.div
                       key={idea.title}
-                      className="shrink-0"
-                      style={{
-                        width: "clamp(220px, 56vw, 280px)",
-                        scrollSnapAlign: "center",
-                        transform: `rotate(${tilt}deg)`,
-                        transformOrigin: "bottom center",
-                      }}
+                      className="flex h-[min(404px,calc(100vh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 flex-col"
+                      style={{ scrollSnapAlign: "center" }}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.35, ease: "easeOut" }}
-                      whileHover={{ y: -4, rotate: 0, transition: { duration: 0.2, ease: "easeOut" } }}
+                      whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                     >
-                      <IdeaCard idea={idea} index={i} pipIndex={orig} />
+                      <IdeaCard idea={idea} index={i} selectedSuit={gardenSuit} />
                     </motion.div>
                   );
                 })}
@@ -1021,6 +857,87 @@ export default function HomePage() {
             </div>
           </div>
         ) : null}
+      </section>
+
+      {/* ══════════════════════════════════════════
+          LANDING — Process section
+      ══════════════════════════════════════════ */}
+      <section id="about" className="relative scroll-mt-24 py-40 px-6 overflow-hidden"
+        style={{ background: "#ffffff" }}>
+
+        <div className="max-w-6xl mx-auto">
+
+          {/* ── About me: copy left, White Rabbit right (md+) ───────────── */}
+          <div className="relative mb-0 mx-auto max-w-5xl">
+            <div
+              className="flex flex-col items-stretch gap-10 md:flex-row md:items-center md:gap-12 lg:gap-16"
+            >
+              <div className="min-w-0 flex-1 text-center md:text-left md:pr-2">
+                <motion.p
+                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.7 }} viewport={{ once: true }}
+                  className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-5"
+                >
+                  {processIntro.eyebrow}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.08 }} viewport={{ once: true }}
+                >
+                  <h2
+                    className="text-3xl md:text-[2.15rem] lg:text-4xl font-serif text-black/70 leading-snug"
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                    dangerouslySetInnerHTML={{ __html: processIntro.titleHtml }}
+                  />
+                  <p
+                    className="text-black/32 mt-4 text-sm leading-relaxed tracking-wide md:max-w-xl"
+                    dangerouslySetInnerHTML={{ __html: processIntro.subHtml }}
+                  />
+                </motion.div>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 14 }} whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.85, delay: 0.12 }} viewport={{ once: true }}
+                className="flex shrink-0 justify-center md:justify-end md:pl-2"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/rabbit.png"
+                  alt="White Rabbit"
+                  draggable={false}
+                  style={{
+                    width: "clamp(180px, 36vw, 300px)",
+                    height: "auto",
+                    filter: "grayscale(100%) contrast(1.5)",
+                    mixBlendMode: "multiply",
+                    userSelect: "none",
+                  }}
+                />
+              </motion.div>
+            </div>
+
+            {/* Dotted trail — rabbit’s path toward EAT ME / DRINK ME */}
+            <motion.div
+              initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }} viewport={{ once: true }}
+              style={{ originY: 0 }}
+              className="flex flex-col items-center gap-1.5 my-6"
+            >
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} style={{
+                  width: 3, height: 3, borderRadius: "50%",
+                  background: "rgba(0,0,0,0.15)",
+                  opacity: 1 - i * 0.1,
+                }} />
+              ))}
+            </motion.div>
+          </div>
+
+          <AliceScaleBand copy={aliceScale} />
+
+        </div>
       </section>
 
       {/* ══════════════════════════════════════════
