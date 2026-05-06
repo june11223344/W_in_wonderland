@@ -722,14 +722,8 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════
           QUEEN'S GARDEN — suit picker + skill cards (early for recruiter scan)
       ══════════════════════════════════════════ */}
-      <section
-        id="garden"
-        className="relative z-30 scroll-mt-24 border-t bg-white pb-12"
-        style={{ borderColor: "rgba(0,0,0,0.07)" }}
-      >
+      <section id="garden" className="relative z-30 scroll-mt-24 bg-white pb-12">
         <div className="mx-auto max-w-6xl px-6 pt-8 pb-6 sm:pt-10 md:pt-12">
-          <div className="mx-auto mb-5 h-px max-w-md bg-black/10" aria-hidden />
-
           {/* Suit picker + White Rabbit callout */}
           <div className="mx-auto max-w-3xl pb-4 text-center">
             <motion.div
