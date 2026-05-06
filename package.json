@@ -1,0 +1,10 @@
+{
+  "name": "alice_in",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix mypage",
+    "build": "npm run build --prefix mypage",
+    "start": "npm run start --prefix mypage",
+    "lint": "npm run lint --prefix mypage"
+  }
+}

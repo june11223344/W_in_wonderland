@@ -1,207 +1,97 @@
-# try.wepp
+# alice_in
 
-**Pre-launch market validation playground.**
-Post your idea before writing a single line of production code — get real pricing votes, feature requests, and community feedback from users.
-
-> Live demo · [try.wepp.vercel.app](https://try.wepp.vercel.app) *(replace with your deployment URL)*
+앨리스 테마의 **개인 자기소개 웹사이트**입니다. 백엔드 없이 정적 페이지로 배포할 수 있습니다.
 
 ---
 
-## Overview
+## 구성
 
-try.wepp lets builders validate ideas before they build. Creators submit a project in 5 minutes and get a public community page. Visitors browse, vote on pricing plans, vote on features, and leave feedback — all tracked in a real-time analytics dashboard.
-
-```
-Explorer → browses /explore → clicks project → votes + leaves feedback
-Creator  → submits project  → shares link    → reads analytics dashboard
-```
+| 경로 | 설명 |
+|------|------|
+| **`mypage/`** | Next.js 앱 (실제 홈페이지 코드) |
+| `MdFiles/`, `UI/` 등 | 레포에 함께 있는 기타 자료·에셋 (앱 빌드와 무관할 수 있음) |
 
 ---
 
-## Features
+## 기술 스택 (`mypage`)
 
-- **Project submission wizard** — 4-step form: info → pricing → landing copy → launch
-- **Community page** (`/[slug]`) — pricing vote, feature vote, threaded comments, waitlist signup
-- **Explore grid** — browse all live projects by category with live search and filter
-- **Analytics dashboard** — per-project or aggregate: daily visitors, pricing tier interest, feature vote breakdown
-- **Notifications** — bell icon shows recent waitlist signups and comments
-- **Google OAuth** — sign in with Google via Supabase Auth
-- **Row-level security** — public reads, owner-only writes enforced at the DB layer
+| 항목 | 버전·선택 |
+|------|-----------|
+| Next.js | 16 (App Router) |
+| React | 19 |
+| TypeScript | 5 |
+| 스타일 | Tailwind CSS 3 |
+| 모션 | Framer Motion |
+| 아이콘 | Lucide React |
 
----
-
-## Tech Stack
-
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 15 (App Router, React Server Components) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Auth & Database | Supabase (PostgreSQL + Auth + RLS) |
-| Charts | Recharts |
-| Icons | Lucide React |
-| UI primitives | shadcn/ui |
+**런타임:** Node.js **20.x** (`package.json`의 `engines` 참고)
 
 ---
 
-## Prerequisites
+## 로컬에서 실행
 
-- Node.js 18+
-- A [Supabase](https://supabase.com) project
-- A Google Cloud OAuth 2.0 client (for Google login)
-
----
-
-## Getting Started
+**처음 한 번:** 의존성은 Next 앱 폴더에 설치합니다.
 
 ```bash
-# Clone and enter the app directory
-git clone https://github.com/your-org/trywepp.git
-cd alice_in/site
-
-# Install dependencies
+cd mypage
 npm install
-
-# Set up environment variables
-cp .env.example .env.local
+cd ..
 ```
 
-Edit `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-```
+**이후:** 저장소 루트(`alice_in`)에서 그대로:
 
 ```bash
-# Start the development server
 npm run dev
-# → http://localhost:3000
 ```
+
+브라우저에서 **http://localhost:3000** 을 엽니다.
+
+루트 `package.json`이 `mypage`의 `dev` / `build` / `start` / `lint`를 `--prefix`로 실행합니다.
+
+- **환경 변수:** 이 앱은 정적 소개 페이지만 쓰는 구성이라 **필수 `.env`는 없습니다.** (`mypage/.env.example` 참고)
 
 ---
 
-## Database Setup
+## 내용·문구 바꾸기
 
-Run these SQL files **in order** in your Supabase SQL Editor:
+| 파일 | 역할 |
+|------|------|
+| **`mypage/lib/site.ts`** | 제목, 히어로 카피, 네비, 스포트라이트 카드 데이터, 연락·GitHub 링크 등 **대부분의 영문 카피** |
+| **`mypage/app/page.tsx`** | 섹션 순서, 레이아웃, 애니메이션, 인라인 UI |
 
-```
-db/schema.sql           # Core tables (experiments, waitlist_entries, click_events) + RLS policies
-db/comments.sql         # Comments table with public insert/owner read RLS
-db/add_fields.sql       # Adds category and maker_name columns to experiments
-db/add_reply.sql        # Adds parent_id to comments (threaded replies)
-db/add_project_url.sql  # Adds project_url column to experiments
-db/migrate_categories.sql  # (If upgrading) Normalises legacy category names
-db/seed.sql             # (Optional) Seeds 4 sample projects using the first signed-up user
-```
-
-### Google OAuth
-
-1. Supabase Dashboard → **Authentication → Providers → Google** → Enable
-2. Add your Google OAuth Client ID and Secret
-3. In Google Cloud Console, add this to **Authorized redirect URIs**:
-   ```
-   https://<your-project-ref>.supabase.co/auth/v1/callback
-   ```
+이미지는 **`mypage/public/`** 및 **`mypage/public/assets/`** 에 두고 경로로 참조합니다.
 
 ---
 
-## Project Structure
+## 배포 (Vercel 예시)
+
+1. GitHub에 연결한 뒤 **Root Directory**를 **`mypage`** 로 지정합니다.  
+2. **Node.js** 버전은 **20.x** 를 사용합니다.  
+3. Build: `npm run build`, Output: Next 기본 동작.
+
+---
+
+## 프로젝트 구조 (`mypage` 실제 기준)
 
 ```
-site/
+mypage/
 ├── app/
-│   ├── layout.tsx                    # Root layout — sidebar + auth check
-│   ├── page.tsx                      # Marketing landing page
-│   ├── explore/page.tsx              # Public project grid with search + category filter
-│   ├── (auth)/                       # /login
-│   ├── (dashboard)/                  # Auth-gated routes
-│   │   ├── home/page.tsx             # Creator stats banner + explore grid
-│   │   ├── dashboard/page.tsx        # Experiments table with action menu
-│   │   ├── analytics/page.tsx        # Charts (supports ?project=<id> for per-project view)
-│   │   └── settings/page.tsx         # Profile edit + preferences
-│   └── (landing)/[slug]/page.tsx     # Public community page per project
-│
-├── components/
-│   ├── layout/
-│   │   ├── Sidebar.tsx               # Hover-expand sidebar, guest/auth nav variants
-│   │   ├── TopBar.tsx                # Search, notifications, help, user avatar
-│   │   └── NavigationProgress.tsx    # Top loading bar on route change
-│   ├── landing/
-│   │   ├── PricingVoteSection.tsx    # Vote on pricing plans, see live results
-│   │   ├── FeatureVoteSection.tsx    # Vote on features
-│   │   ├── CommentSection.tsx        # Threaded comments with inline replies
-│   │   ├── PageViewTracker.tsx       # Fires page_view event on mount
-│   │   ├── ShareButtons.tsx          # Copy link + Post on X
-│   │   └── HeroSection.tsx           # Category-themed gradient hero
-│   ├── explore/
-│   │   ├── ProjectCard.tsx           # Card with category badge + pricing summary
-│   │   └── ExploreGrid.tsx           # Client component with category filter state
-│   ├── analytics/
-│   │   ├── ProjectSelector.tsx       # Dropdown to filter analytics by project
-│   │   ├── DailyVisitorsChart.tsx    # Recharts bar chart (last 14 days)
-│   │   ├── PricingBreakdownChart.tsx
-│   │   └── FeatureBreakdownChart.tsx
-│   ├── dashboard/
-│   │   ├── ExperimentActionsMenu.tsx # "..." dropdown: view, copy link, analytics, delete
-│   │   ├── MyProjectsList.tsx        # Creator's project list
-│   │   └── StatusBadge.tsx           # Clickable status pill (pause/resume/archive)
-│   └── settings/
-│       ├── ProfileForm.tsx           # Display name edit
-│       └── PreferencesPanel.tsx      # Toggles persisted to localStorage
-│
-├── db/                               # SQL migration files (run in Supabase SQL Editor)
-└── lib/
-    ├── supabase/client.ts            # Browser Supabase client
-    ├── supabase/server.ts            # Server Supabase client (SSR cookies)
-    └── utils.ts
+│   ├── layout.tsx          # 루트 레이아웃, 메타데이터, 폰트 링크
+│   ├── page.tsx            # 단일 홈 페이지 (섹션 전부)
+│   ├── globals.css
+│   └── api/health/route.ts # 헬스 체크용 (선택)
+├── lib/
+│   └── site.ts             # 사이트 카피·데이터 단일 소스
+├── public/                 # 정적 이미지·파비콘 등
+├── package.json
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+└── vercel.json
 ```
 
 ---
 
-## API Routes
-
-| Method | Route | Description |
-|--------|-------|-------------|
-| `GET` | `/api/experiments` | List authenticated user's experiments |
-| `POST` | `/api/experiments` | Create a new experiment (status: RUNNING) |
-| `PATCH` | `/api/experiments/[id]` | Update status (pause/resume/archive) |
-| `DELETE` | `/api/experiments/[id]` | Delete own experiment |
-| `POST` | `/api/track` | Record a click/view event (public) |
-| `POST` | `/api/waitlist` | Add email to waitlist (public) |
-| `GET` | `/api/comments` | Fetch comments for an experiment |
-| `POST` | `/api/comments` | Post a comment or reply |
-| `GET` | `/api/search` | Search live projects by name (public) |
-| `GET` | `/api/notifications` | Recent waitlist + comment activity for current user |
-
-### Event types tracked via `/api/track`
-
-| `event_type` | `metadata` | Trigger |
-|---|---|---|
-| `page_view` | `{}` | Community page mount (increments total_visitors) |
-| `pricing_click` | `{ planName }` | Pricing section button click |
-| `pricing_vote` | `{ planName }` | Community page plan vote |
-| `feature_vote` | `{ featureId, featureTitle }` | Feature vote button |
-
----
-
-## Categories
-
-SaaS · Marketplace · Consumer · Dev Tools · Health · Education · Social · Other
-
----
-
-## Contributing
-
-Pull requests are welcome. For major changes, open an issue first.
-
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feat/my-feature`)
-3. Commit your changes
-4. Open a pull request
-
----
-
-## License
+## 라이선스
 
 MIT
