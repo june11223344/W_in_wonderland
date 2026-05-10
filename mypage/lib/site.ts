@@ -1,5 +1,8 @@
 /**
  * Personal intro site — edit this file to change all English copy and links.
+ *
+ * Narrative north star: the visitor is Alice; this site is Wonjun’s world to explore.
+ * Keep curiosity-first tone while the garden stays the clear “evidence” trail.
  */
 export const site = {
   meta: {
@@ -29,25 +32,33 @@ export const site = {
   /** Short lines inside NavReveal panels (edit anytime) */
   navReveal: {
     boardDescription:
-      "The garden sits right under the hero. Suits group proof into four tracks: hard skills, soft skills, international experience, and just-for-fun experiments.",
+      "Under the hero: tap ♠ ♥ ♦ ♣ to filter proof — hard skills, soft skills, international, and side experiments.",
     linkedinDescription: "Public LinkedIn profile.",
     githubDescription: "Code and projects on GitHub.",
   },
 
   hero: {
-    eyebrow: "Welcome to a little wonderland",
-    line1: "Hello — I'm",
+    /** Optional small caps above the main headline (leave empty to skip). */
+    eyebrow: "",
+    /** Hero line 1 — stays visible; line 2 morphs from wonderlandMorph into nameLine. */
+    introLine1: "Welcome to the little wonderland",
+    /** Line 2 opens here (“I’m Wonderland…”), then backspaces toward morphStem, then finishes nameLine. */
+    wonderlandMorph: "I'm Wonderland",
+    /** After deletions stop (must be a prefix of wonderlandMorph). Then the rest of the name is typed. */
+    morphStem: "I'm W",
+    /** Final surname line (capital W); shared “W” with morphStem is not re-typed. */
     nameLine: "Wonjun.",
-    subHtml:
-      "I build for the web, chase side projects down rabbit holes,<br/>and believe the best work starts with honest curiosity.",
+    /** Appended after nameLine (e.g. space + greeting). */
+    helloTyping: " Hello!",
+    subHtml: "Curious? Follow the rabbit — the garden and cards carry the rest.",
   },
 
   processIntro: {
     eyebrow: "About me",
-    titleHtml: "I study Data Science — the way Alice <em>followed the rabbit.</em>",
-    /** Main intro (HTML: line breaks, emphasis). */
+    titleHtml: "You followed a rabbit — <em>the way Alice did.</em>",
+    /** Main intro (HTML: line breaks, emphasis). Visitor = Alice; site = hole; author = rabbit. */
     subHtml:
-      "I'm learning how to turn noisy questions into clean data, honest models, and stories people can actually use.<br/><br/>Alice didn't know where the White Rabbit would lead — only that she was curious. If you follow this rabbit for a minute, you'll see how I work, what I'm practicing, and what I'm chasing next.<br/><br/><em>Want to come down the hole with me?</em>",
+      "You got here the way Alice did — a little curiosity, a few clicks. I'm the rabbit: Data Science, messy questions into clean models, proof in the garden.<br/><br/><em>Stay for a minute?</em>",
   },
 
   /**
@@ -60,13 +71,13 @@ export const site = {
     growLabel: "EAT ME",
     growTitle: "What I want to grow",
     growBodyHtml:
-      "<p><strong>Curiosity</strong> — following questions even when the path isn’t clear.</p><p><strong>New experiences</strong> — places, tools, and problems I haven’t met yet.</p><p><strong>Meeting many kinds of people</strong> — conversations that widen how I see the work.</p><p><strong>Ease</strong> — leaving enough slack to think clearly instead of running on fumes.</p>",
+      "<p><strong>Logic, consistency, solidity</strong> — clear reasoning, the same bar on day ten as day one, work that survives reviews and edge cases.</p><p>When trade-offs hit, my reasoning stays <strong>legible to me first</strong> — my own metric, sharpened over time.</p>",
     growImageSrc: "/eattme.png",
     growImageAlt: "EAT ME cake",
     shrinkLabel: "DRINK ME",
     shrinkTitle: "What I want to shrink",
     shrinkBodyHtml:
-      "<p><strong>Hesitation</strong> — the pause that turns into never shipping.</p><p><strong>Second-guessing in circles</strong> — re-reading the same tab instead of taking the next small step.</p><p><strong>Impatience</strong> — the jittery rush that trades care for speed and leaves me less proud of the result.</p>",
+      "<p><strong>Thinking that grabs my ankles</strong> — every branch in my head until even small moves feel risky.</p><p>Some lessons only land <strong>mid-dive</strong>; I want cheaper first tries instead of waiting for a perfect map.</p>",
     shrinkImageSrc: "/drink-removebg-preview.png",
     shrinkImageAlt: "DRINK ME bottle",
   },
@@ -191,13 +202,20 @@ export const site = {
   garden: {
     cardRabbitSrc: "/card-rabbit.png",
     cardRabbitAlt: "White Rabbit herald with trumpet and scroll",
+    /** Small caps above the gate line — signals a scene change from the hero. */
+    sectionGateEyebrow: "The path shifts",
+    /** One beat: you’ve crossed into a new “page” of the site. */
+    sectionGateTitle: "This is the garden — the story turns here.",
+    /** Short bridge before the White Rabbit callout. */
+    sectionGateSub: "Proof ahead — suit by suit. Follow the rabbit when you’re ready.",
     /** White Rabbit voice above the suit buttons */
     rabbitCalloutHtml:
-      "<strong>Pick the thread you want.</strong> Hard skills, soft skills, international stories, and just-for-fun experiments — each suit deals a different hand. Tap a card to read it on a dimmed stage.",
+      "<strong>Pick a track.</strong> Each suit is a different slice — tap a card for the full note.",
     rabbitSignoff: "— The White Rabbit (in a hurry)",
     suitPickerTitle: "Pick a suit",
-    suitPickerHint:
-      "Four tracks: hard skills, soft skills, international experience, and just for fun. Tap a card to open the full note on a dimmed backdrop.",
+    suitPickerHint: "Tap a suit, then a card — details open on a dimmed stage.",
+    /** Shown under the hint while no suit is selected — makes the glyphs the obvious target */
+    tapSuitsCue: "Tap a suit symbol",
     changeSuit: "Change suit",
     suits: [
       {
@@ -205,37 +223,154 @@ export const site = {
         glyph: "♠",
         label: "Spades",
         sub: "Hard skills",
-        desc: "Languages, runtimes, APIs — the concrete stack and the reps of shipping real products. Everything here lives on the “building” side.",
+        desc: "Stack, shipping, products — the building side.",
       },
       {
         id: "heart",
         glyph: "♥",
         label: "Hearts",
         sub: "Soft skills",
-        desc: "Design sense, writing, feedback, and teamwork — the human layer that perfect code alone never fills.",
+        desc: "Design, writing, feedback, teamwork.",
       },
       {
         id: "diamond",
         glyph: "♦",
         label: "Diamonds",
         sub: "International",
-        desc: "Language, collaborating across borders, or life abroad — stories from when your default context is no longer the default.",
+        desc: "Abroad, language, work across borders.",
       },
       {
         id: "club",
         glyph: "♣",
         label: "Clubs",
         sub: "Just for fun",
-        desc: "Experiments and side quests where curiosity beats polish — the things you build because you like building, full stop.",
+        desc: "Side quests and experiments — curiosity over polish.",
       },
     ] as const,
+  },
+
+  /**
+   * Caterpillar shelf — four book-spine “moves”; opening one reveals that category.
+   */
+  shelf: {
+    sectionEyebrow: "The Caterpillar's shelf",
+    sectionTitle: "Four spines, four stacks",
+    sectionSub: "Four spines on one shelf — each opens a different stack. Tap one to browse that shelf.",
+    spineRowCue: "Four stacks — tap a spine",
+    caterpillarSrc: "/caterpillar-tenniel.png",
+    caterpillarAlt: "The Caterpillar on a mushroom (Tenniel)",
+    backToShelf: "← Back to shelf",
+    emptyShelfTitle: "This stack is still growing",
+    emptyShelfBody:
+      "Books and music are next on the shelf — same format as films and drama when they're ready.",
+    /**
+     * Order: films → music → books → drama.
+     * spineFoot = category · spineBlurb = what’s inside · spineTitle = vertical spine label.
+     */
+    categories: [
+      {
+        id: "films",
+        spineTitle: "Movies",
+        spineFoot: "Films",
+        spineBlurb: "Posters · one-line notes",
+        spineClass: "from-[#6e2434] to-[#3a121c]",
+      },
+      {
+        id: "music",
+        spineTitle: "Sound",
+        spineFoot: "Music",
+        spineBlurb: "Albums · tracks",
+        spineClass: "from-[#3d2f66] to-[#1f1538]",
+      },
+      {
+        id: "books",
+        spineTitle: "Reading",
+        spineFoot: "Books",
+        spineBlurb: "Reads · quotes",
+        spineClass: "from-[#2d4a38] to-[#152018]",
+      },
+      {
+        id: "dramas",
+        spineTitle: "Series",
+        spineFoot: "Drama",
+        spineBlurb: "Series · picks",
+        spineClass: "from-[#244a72] to-[#102840]",
+      },
+    ] as const,
+    films: [
+      {
+        title: "The Florida Project",
+        year: 2017,
+        director: "Sean Baker",
+        posterSrc: "/shelf/the-florida-project.png",
+        lineEn: "In hard light, tenderness and truth feel almost the same.",
+        lineKo: "A heart laid bare in the glare of the day.",
+      },
+      {
+        title: "Little Miss Sunshine",
+        year: 2006,
+        director: "Jonathan Dayton & Valerie Faris",
+        posterSrc: "/shelf/little-miss-sunshine.png",
+        lineEn: "Solidarity forged in the gaps — a family held together by what they lack.",
+        lineKo: "Bonds that tighten where something is always missing.",
+      },
+      {
+        title: "Monster",
+        year: 2023,
+        director: "Hirokazu Kore-eda",
+        posterSrc: "/shelf/monster-2023.png",
+        lineEn: "The moment self-centred stories collide — and everyone thinks they’re the victim.",
+        lineKo: "자기중심성이 서로를 해치는 순간",
+      },
+    ],
+    dramas: [
+      {
+        title: "The Pitt",
+        year: 2025,
+        director: "R. Scott Gemmill",
+        posterSrc: "/shelf/the-pitt.png",
+        lineEn: "One long shift reads like a cross-section of the whole world.",
+        lineKo: "Twelve hours that feel like a cut through everything at once.",
+      },
+      {
+        title: "Succession",
+        year: 2023,
+        director: "Jesse Armstrong",
+        posterSrc: "/shelf/succession.png",
+        lineEn: "Petty hearts rattling inside tailored shoulders.",
+        lineKo: "Power suits hiding small, restless egos.",
+      },
+      {
+        title: "The White Lotus",
+        year: 2021,
+        director: "Mike White",
+        posterSrc: "/shelf/the-white-lotus.png",
+        lineEn: "A bitter satire of who serves whom.",
+        lineKo: "Class and service, sharpened into dark comedy.",
+      },
+      {
+        title: "Severance",
+        year: 2022,
+        director: "Dan Erickson",
+        posterSrc: "/shelf/severance.png",
+        lineEn: "Maybe the cut wasn’t escape — it was a wish for harmony that split the wrong way.",
+        lineKo: "Perhaps they wanted wholeness — and got a fault line instead.",
+      },
+      {
+        title: "Shrinking",
+        year: 2023,
+        director: "Bill Lawrence · Jason Segel · Brett Goldstein",
+        posterSrc: "/shelf/shrinking.png",
+        lineEn: "Slow, clumsy steps toward recovery — but unmistakable footprints forward.",
+        lineKo: "Healing that stumbles — yet still moves in one direction.",
+      },
+    ],
   },
 
   cheshire: {
     quote: "“We're all mad here.”",
     attribution: "— The Cheshire Cat",
-    bodyHtml:
-      "The best projects always sound a little impossible at first.<br/>That's exactly why I like building them anyway.",
+    bodyHtml: "The best ideas sound impossible first — that's why I build them.",
     cta: "Get in touch",
   },
 

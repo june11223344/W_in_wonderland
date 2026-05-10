@@ -47,17 +47,17 @@ export function NavReveal({
   }, [open]);
 
   const row =
-    "inline-flex min-h-[40px] items-center justify-center font-[inherit] leading-none";
+    "inline-flex min-h-[44px] min-w-[44px] items-center justify-center font-[inherit] leading-none sm:min-w-0";
 
   const textCls =
     size === "xs"
-      ? `${row} border-0 bg-transparent px-1 text-xs tracking-wider text-black/20 transition-colors hover:text-black/50`
-      : `${row} border-0 bg-transparent px-1 text-sm tracking-wide text-black/40 transition-colors hover:text-black`;
+      ? `${row} border-0 bg-transparent px-2 text-xs tracking-wider text-black/20 transition-colors hover:text-black/50 sm:px-1`
+      : `${row} border-0 bg-transparent px-2 text-sm tracking-wide text-black/40 transition-colors hover:text-black sm:px-1`;
 
   const outlineCls =
     size === "xs"
       ? `${row} border bg-transparent px-3 text-xs tracking-wider text-black/60 transition-all hover:bg-black hover:text-white`
-      : `${row} border bg-transparent px-5 text-sm tracking-wider text-black/70 transition-all hover:bg-black hover:text-white`;
+      : `${row} border bg-transparent px-4 text-sm tracking-wider text-black/70 transition-all hover:bg-black hover:text-white sm:px-5`;
 
   const btnCls =
     trigger === "outline"

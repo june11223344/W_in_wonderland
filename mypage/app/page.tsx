@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useCallback, useRef, type CSSProperties, type WheelEvent } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { NavReveal } from "@/components/NavReveal";
@@ -373,12 +373,12 @@ function IdeaCard({
                           ? { duration: 0 }
                           : { duration: 0.58, ease: [0.22, 1, 0.36, 1], delay: 0.05 }
                       }
-                      className="min-h-[min(88vh,560px)]"
+                      className="h-[min(88dvh,560px)] min-h-[320px] w-full"
                       style={{ transformStyle: "preserve-3d", position: "relative" }}
                     >
                       {/* Modal front — minimal flip preview */}
                       <div
-                        className="flex h-full min-h-[min(88vh,560px)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
+                        className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
                         style={{
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
@@ -407,16 +407,14 @@ function IdeaCard({
                         </div>
                       </div>
 
-                      {/* Modal back — minimal reading panel (no imagery / watermark) */}
+                      {/* Modal back: fixed card height; only inner column scrolls (avoids clipped body copy) */}
                       <div
-                        className="absolute inset-0 flex min-h-[min(88vh,560px)] flex-col overflow-y-auto overflow-x-hidden rounded-2xl border border-black/10 bg-[#fafaf9] [&::-webkit-scrollbar]:hidden"
+                        className="absolute inset-0 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9] [scrollbar-gutter:stable]"
                         style={{
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
                           transform: "rotateY(180deg)",
                           boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-                          scrollbarWidth: "none",
-                          msOverflowStyle: "none",
                         }}
                       >
                         <button
@@ -430,7 +428,7 @@ function IdeaCard({
                         <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} size="sm" />
                         <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip size="sm" />
 
-                        <div className="relative z-10 flex flex-1 flex-col px-6 pb-10 pt-14 sm:px-10 sm:pb-12 sm:pt-16">
+                        <div className="relative z-10 min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain px-6 pb-20 pt-14 sm:px-10 sm:pb-24 sm:pt-16">
                             <AnimatePresence>
                               {bloomed && (
                                 <motion.div
@@ -532,10 +530,183 @@ function IdeaCard({
 // ── Shared font constant ──────────────────────────────────────────────────
 const SERIF = "'Cormorant Garamond', 'Playfair Display', serif";
 
+function resolveMorphStem(morphFrom: string, morphStem: string | undefined): string {
+  const trimmed = morphStem?.trim();
+  if (trimmed) return trimmed;
+  const word = morphFrom.replace(/\?+$/, "");
+  return word.slice(0, 3);
+}
+
+/** Letters typed after stem so line 2 ends as nameLine (handles shared “W”, etc.). */
+function suffixAfterMorphStem(stem: string, nameLine: string): string {
+  const n = nameLine.replace(/^\s+/, "");
+  if (n.startsWith(stem)) return n.slice(stem.length);
+  const last = stem.slice(-1);
+  if (last && n.startsWith(last)) return n.slice(1);
+  return n;
+}
+
+/** Relative times (ms from cycle start) and line-2 text for one hero morph pass. */
+function buildHeroMorphTimeline(
+  morphFrom: string,
+  nameLine: string,
+  helloTyping: string,
+  morphStem: string | undefined,
+): { at: number; text: string }[] {
+  const stem = resolveMorphStem(morphFrom, morphStem);
+  const suffixChars = suffixAfterMorphStem(stem, nameLine);
+
+  const items: { at: number; text: string }[] = [];
+  let t = 520;
+  items.push({ at: t, text: morphFrom });
+  t += 780;
+
+  let cur = morphFrom;
+  while (cur.length > stem.length) {
+    t += 68;
+    cur = cur.slice(0, -1);
+    items.push({ at: t, text: cur });
+  }
+
+  let acc = stem;
+  for (const ch of suffixChars) {
+    t += 78;
+    acc += ch;
+    items.push({ at: t, text: acc });
+  }
+
+  t += 200;
+  for (const ch of helloTyping) {
+    t += 78;
+    acc += ch;
+    items.push({ at: t, text: acc });
+  }
+
+  return items;
+}
+
+/** Line 1 fixed; line 2 loops: I’m Wonderland → … → I’m Wonjun. → Hello! → pause → repeat. */
+function HeroWonderlandIntro({
+  line1,
+  morphFrom,
+  morphStem,
+  nameLine,
+  helloTyping,
+}: {
+  line1: string;
+  morphFrom: string;
+  morphStem?: string;
+  nameLine: string;
+  helloTyping: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  const stemResolved = resolveMorphStem(morphFrom, morphStem);
+  const line2Complete = `${stemResolved}${suffixAfterMorphStem(stemResolved, nameLine)}${helloTyping}`;
+  const [line2, setLine2] = useState(reduceMotion ? line2Complete : "");
+
+  const h1Style: CSSProperties = {
+    fontFamily: SERIF,
+    color: "#000000",
+    fontWeight: 400,
+    fontStyle: "italic",
+  };
+
+  const morphTimeoutIds = useRef<number[]>([]);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+
+    const HOLD_FULL_MS = 2200;
+    const BLANK_MS = 900;
+
+    const events = buildHeroMorphTimeline(morphFrom, nameLine, helloTyping, morphStem);
+    const lastAt = events.length > 0 ? events[events.length - 1].at : 0;
+
+    let dead = false;
+
+    const clearCycleTimeouts = () => {
+      morphTimeoutIds.current.forEach((id) => window.clearTimeout(id));
+      morphTimeoutIds.current = [];
+    };
+
+    const run = (fn: () => void, delay: number) => {
+      const id = window.setTimeout(() => {
+        if (!dead) fn();
+      }, delay);
+      morphTimeoutIds.current.push(id);
+    };
+
+    const cycle = () => {
+      if (dead) return;
+      clearCycleTimeouts();
+      events.forEach(({ at, text }) => {
+        run(() => setLine2(text), at);
+      });
+      run(() => setLine2(""), lastAt + HOLD_FULL_MS);
+      run(() => cycle(), lastAt + HOLD_FULL_MS + BLANK_MS);
+    };
+
+    cycle();
+
+    return () => {
+      dead = true;
+      clearCycleTimeouts();
+    };
+  }, [reduceMotion, morphFrom, morphStem, nameLine, helloTyping]);
+
+  if (reduceMotion) {
+    return (
+      <div className="mb-10 text-center">
+        <motion.p
+          className="mx-auto mb-4 max-w-3xl text-[clamp(1.05rem,3.4vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black md:leading-snug"
+          style={h1Style}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.2 }}
+        >
+          {line1}
+        </motion.p>
+        <motion.h1
+          className="mx-auto max-w-[min(96vw,56rem)] px-1 text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black text-balance sm:text-5xl md:text-7xl md:leading-none lg:text-8xl"
+          style={h1Style}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.38 }}
+          aria-label={line2Complete}
+        >
+          {line2Complete}
+        </motion.h1>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative mb-10 min-h-[8.5rem] sm:min-h-[9rem] md:min-h-[12rem]">
+      <motion.p
+        className="mx-auto mb-4 max-w-3xl text-[clamp(1.05rem,3.4vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black md:leading-snug"
+        style={h1Style}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, delay: 0.2 }}
+      >
+        {line1}
+      </motion.p>
+      <h1
+        className="mx-auto min-h-[2.85rem] max-w-[min(96vw,56rem)] px-1 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black text-balance sm:min-h-[3.2rem] sm:text-5xl md:min-h-[4.5rem] md:text-7xl md:leading-none lg:text-8xl"
+        style={h1Style}
+        aria-live="polite"
+        aria-label={line2Complete}
+      >
+        {line2 || "\u00a0"}
+      </h1>
+    </div>
+  );
+}
+
 function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
   /** Same box on both sides so labels + titles line up across the split */
   const imgWrapClass =
-    "flex h-[148px] w-full shrink-0 items-center justify-center md:h-[160px] md:w-[140px]";
+    "flex h-[148px] w-full shrink-0 items-center justify-center sm:h-[160px] md:h-auto md:w-[140px] md:shrink-0 md:self-center";
   const imgStyle: CSSProperties = {
     maxHeight: "132px",
     width: "auto",
@@ -568,16 +739,16 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
       />
 
       <div
-        className="grid overflow-hidden rounded-2xl border md:grid-cols-2 md:items-stretch"
-        style={{ borderColor: "rgba(0,0,0,0.1)", boxShadow: "0 1px 0 rgba(255,255,255,0.85) inset" }}
+        className="grid overflow-hidden rounded-2xl border border-black/10 md:grid-cols-2 md:items-stretch"
+        style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.85) inset" }}
       >
-        <div className="flex min-h-0 flex-col gap-5 bg-[#faf9f7] p-7 sm:p-8 md:h-full md:flex-row md:items-stretch md:gap-8 md:border-r md:border-black/10">
+        <div className="flex min-h-0 flex-col gap-5 bg-[#fff8fa] p-7 sm:p-8 md:h-full md:flex-row md:items-center md:gap-8 md:border-r md:border-rose-100/45">
           <div className={imgWrapClass}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={copy.growImageSrc} alt={copy.growImageAlt} draggable={false} style={imgStyle} />
           </div>
           <div className="flex min-w-0 flex-col text-center md:flex-1 md:justify-center md:text-left">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-red-900/50">{copy.growLabel}</p>
+            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-rose-900/45">{copy.growLabel}</p>
             <h4
               className="mb-2 font-serif text-lg text-black/78 sm:text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -585,13 +756,13 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
               {copy.growTitle}
             </h4>
             <div
-              className="text-sm leading-relaxed text-black/38"
+              className="text-sm leading-relaxed text-black/45"
               dangerouslySetInnerHTML={{ __html: copy.growBodyHtml }}
             />
           </div>
         </div>
 
-        <div className="flex min-h-0 flex-col gap-5 border-t border-black/10 bg-white p-7 sm:p-8 md:h-full md:flex-row md:items-stretch md:border-t-0 md:gap-8">
+        <div className="flex min-h-0 flex-col gap-5 border-t border-sky-100/45 bg-[#f6fbff] p-7 sm:p-8 md:h-full md:flex-row md:items-center md:border-t-0 md:gap-8">
           <div className={imgWrapClass}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={copy.shrinkImageSrc} alt={copy.shrinkImageAlt} draggable={false} style={imgStyle} />
@@ -605,7 +776,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
               {copy.shrinkTitle}
             </h4>
             <div
-              className="text-sm leading-relaxed text-black/38"
+              className="text-sm leading-relaxed text-black/45"
               dangerouslySetInnerHTML={{ __html: copy.shrinkBodyHtml }}
             />
           </div>
@@ -615,11 +786,245 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
   );
 }
 
+type ShelfCategoryId = (typeof site.shelf.categories)[number]["id"];
+
+type ShelfMediaRow = (typeof site.shelf.films)[number] | (typeof site.shelf.dramas)[number];
+
+function ShelfMediaGrid({ items }: { items: readonly ShelfMediaRow[] }) {
+  return (
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      {items.map((item, i) => (
+        <motion.article
+          key={item.title}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.04 + i * 0.05 }}
+          className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+        >
+          <div className="relative aspect-[2/3] w-full bg-neutral-100">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.posterSrc}
+              alt={`${item.title} (${item.year}) poster`}
+              draggable={false}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col p-4 sm:p-5">
+            <h4 className="font-serif text-lg leading-tight text-black sm:text-xl" style={{ fontFamily: SERIF }}>
+              {item.title}
+            </h4>
+            <p className="mt-0.5 text-[11px] uppercase tracking-wider text-black/40">
+              {item.year} · {item.director}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-black/55">{item.lineEn}</p>
+            <p className="mt-3 border-t border-black/[0.06] pt-3 text-sm font-medium leading-snug text-black/80">
+              {item.lineKo}
+            </p>
+          </div>
+        </motion.article>
+      ))}
+    </div>
+  );
+}
+
+function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
+  const [activeCategory, setActiveCategory] = useState<ShelfCategoryId | null>(null);
+
+  const activeMeta = activeCategory ? copy.categories.find((c) => c.id === activeCategory) : undefined;
+
+  return (
+    <section
+      id="shelf"
+      className="relative scroll-mt-24 border-t border-black/[0.07] bg-[#fafbf9] px-6 py-20 md:py-28"
+    >
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+          className="mb-10 text-center md:mb-14"
+        >
+          <p
+            className="mb-2 text-[10px] uppercase tracking-[0.42em] text-black/30"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            {copy.sectionEyebrow}
+          </p>
+          <h2
+            className="mb-3 font-serif text-2xl text-black/75 md:text-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 400 }}
+          >
+            {copy.sectionTitle}
+          </h2>
+          <p
+            className="mx-auto max-w-2xl text-sm leading-relaxed text-black/45"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            {copy.sectionSub}
+          </p>
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          {activeCategory === null ? (
+            <motion.div
+              key="spines"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35 }}
+              className="grid items-end gap-10 lg:grid-cols-[minmax(0,min(42vw,380px))_1fr] lg:gap-14 xl:gap-20"
+            >
+              <div className="flex flex-col items-center gap-4 lg:items-start">
+                <motion.div
+                  initial={{ opacity: 0, x: -8 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55 }}
+                  className="flex w-full justify-center lg:justify-start"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={copy.caterpillarSrc}
+                    alt={copy.caterpillarAlt}
+                    draggable={false}
+                    className="h-auto max-h-[min(52vw,320px)] w-auto max-w-[min(92vw,380px)] object-contain sm:max-h-[360px] lg:max-h-[min(38vw,420px)]"
+                    style={{ filter: "grayscale(100%) contrast(1.35) opacity(0.9)", mixBlendMode: "multiply", userSelect: "none" }}
+                  />
+                </motion.div>
+              </div>
+
+              <div className="flex min-w-0 flex-col gap-5">
+                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/30 lg:text-left">
+                  {copy.spineRowCue}
+                </p>
+                <div className="grid w-full grid-cols-2 justify-items-center gap-x-3 gap-y-4 sm:grid-cols-4 sm:gap-x-5 sm:gap-y-5 md:gap-6">
+                  {copy.categories.map((cat) => (
+                    <div key={cat.id} className="flex touch-manipulation justify-center p-1.5 sm:p-0">
+                    <button
+                      type="button"
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={[
+                        "group flex h-[220px] min-h-[220px] min-w-[48px] w-[3.65rem] max-w-[4.25rem] shrink-0 flex-col rounded-sm border border-black/30 shadow-md transition-transform",
+                        "sm:h-[244px] sm:min-h-[244px] sm:min-w-0 sm:w-16 md:h-[260px] md:w-[4.1rem]",
+                        "bg-gradient-to-b hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/35 focus-visible:ring-offset-2 active:scale-[0.98]",
+                        cat.spineClass,
+                      ].join(" ")}
+                      aria-label={`${cat.spineFoot}: ${cat.spineBlurb}. ${cat.spineTitle}`}
+                    >
+                      <span
+                        className="px-1.5 pb-1 pt-2.5 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.16em] text-white"
+                        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.55)" }}
+                      >
+                        {cat.spineFoot}
+                      </span>
+                      <span
+                        className="flex flex-1 items-center justify-center py-1 font-serif text-sm font-semibold tracking-wide text-white sm:text-[0.95rem]"
+                        style={{
+                          fontFamily: SERIF,
+                          writingMode: "vertical-rl",
+                          textOrientation: "mixed",
+                          textShadow: "0 1px 3px rgba(0,0,0,0.5)",
+                        }}
+                      >
+                        {cat.spineTitle}
+                      </span>
+                      <span
+                        className="px-1 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-white/95 sm:text-[8px]"
+                        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.55)" }}
+                      >
+                        {cat.spineBlurb}
+                      </span>
+                    </button>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  className="h-2.5 w-full rounded-sm"
+                  style={{
+                    background: "linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.06))",
+                    boxShadow: "0 1px 0 rgba(255,255,255,0.65) inset",
+                  }}
+                  aria-hidden
+                />
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35 }}
+              className="space-y-8"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory(null)}
+                  className="self-start border-b border-black/25 pb-0.5 text-left text-xs tracking-wider text-black/50 transition-colors hover:border-black/45 hover:text-black/75"
+                >
+                  {copy.backToShelf}
+                </button>
+                <div className="text-right sm:text-right">
+                  <h3 className="font-serif text-2xl text-black/85 md:text-3xl" style={{ fontFamily: SERIF }}>
+                    {activeMeta?.spineTitle}
+                  </h3>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/38">{activeMeta?.spineFoot}</p>
+                </div>
+              </div>
+
+              {activeCategory === "films" ? (
+                <ShelfMediaGrid items={copy.films} />
+              ) : activeCategory === "dramas" ? (
+                <ShelfMediaGrid items={copy.dramas} />
+              ) : (
+                <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-white/80 px-8 py-12 text-center">
+                  <p className="font-serif text-lg text-black/70" style={{ fontFamily: SERIF }}>
+                    {copy.emptyShelfTitle}
+                  </p>
+                  <p
+                    className="mt-3 text-sm leading-relaxed text-black/45"
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                  >
+                    {copy.emptyShelfBody}
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
+
 // ══════════════════════════════════════════════════════════════════════════
 type GardenSuit = SpotlightItem["suit"];
 
 export default function HomePage() {
   const [gardenSuit, setGardenSuit] = useState<GardenSuit | null>(null);
+  const gardenHintMotion = useReducedMotion();
+
+  /** Map vertical wheel to horizontal scroll on the card strip (wheel still scrolls the page at the ends). */
+  const onGardenCardStripWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    if (el.scrollWidth <= el.clientWidth + 2) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const delta = e.deltaY + e.deltaX;
+    if (delta === 0) return;
+    const atStart = el.scrollLeft <= 1;
+    const atEnd = el.scrollLeft >= max - 1;
+    if (delta > 0 && !atEnd) {
+      el.scrollLeft = Math.min(max, el.scrollLeft + delta);
+      e.preventDefault();
+    } else if (delta < 0 && !atStart) {
+      el.scrollLeft = Math.max(0, el.scrollLeft + delta);
+      e.preventDefault();
+    }
+  }, []);
+
   const {
     links,
     brand,
@@ -629,6 +1034,7 @@ export default function HomePage() {
     processIntro,
     aliceScale,
     garden,
+    shelf,
     cheshire,
     footer,
   } = site;
@@ -636,15 +1042,22 @@ export default function HomePage() {
   return (
     <div className="overflow-x-hidden text-[#1a1a1a]" style={{ background: "#ffffff" }}>
       {/* ── Navbar ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-8 h-16 flex items-center justify-between"
-        style={{ borderBottom: "1px solid rgba(0,0,0,0.07)", backdropFilter: "blur(16px)", background: "rgba(255,255,255,0.92)" }}>
-        <div className="flex items-center gap-3">
+      <nav
+        className="fixed left-0 right-0 top-0 z-50 flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2 sm:h-16 sm:flex-nowrap sm:gap-y-0 sm:px-8 sm:py-0"
+        style={{
+          borderBottom: "1px solid rgba(0,0,0,0.07)",
+          backdropFilter: "blur(16px)",
+          background: "rgba(255,255,255,0.92)",
+          paddingTop: "max(0.5rem, env(safe-area-inset-top))",
+        }}
+      >
+        <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/rabbit.png" alt={brand.rabbitAlt} style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }} />
           <span className="font-serif text-black/80 tracking-wide text-lg"
             style={{ fontFamily: SERIF }}>{brand.navTitle}</span>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 sm:gap-x-6">
+        <div className="flex max-w-[min(100%,calc(100%-5.5rem))] flex-wrap items-center justify-end gap-x-3 gap-y-1 sm:max-w-none sm:gap-x-5 sm:gap-y-2 md:gap-x-6">
           <NavReveal
             label={nav.board}
             kind="anchor"
@@ -687,31 +1100,30 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
-      <section className="pt-32 pb-0 px-6 text-center relative">
+      <section className="relative px-6 pb-0 pt-28 text-center sm:pt-32">
         <div style={{ position: "relative", zIndex: 1 }}>
-          <motion.p
-            initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-black/30 text-xs tracking-[0.4em] uppercase mb-6"
-          >{hero.eyebrow}</motion.p>
+          {hero.eyebrow.trim() ? (
+            <motion.p
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="mb-6 text-xs uppercase tracking-[0.4em] text-black/30"
+            >
+              {hero.eyebrow}
+            </motion.p>
+          ) : null}
 
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.35 }}
-            className="text-5xl md:text-8xl font-serif leading-none tracking-tight mb-2"
-            style={{ fontFamily: SERIF, fontWeight: 300 }}
-          >
-            {hero.line1}
-          </motion.h1>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
-            className="text-5xl md:text-8xl font-serif italic leading-none tracking-tight mb-10"
-            style={{ fontFamily: SERIF, color: "rgba(0,0,0,0.38)", fontWeight: 400 }}
-          >
-            {hero.nameLine}
-          </motion.h1>
+          <HeroWonderlandIntro
+            line1={hero.introLine1}
+            morphFrom={hero.wonderlandMorph}
+            morphStem={hero.morphStem}
+            nameLine={hero.nameLine}
+            helloTyping={hero.helloTyping}
+          />
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-black/40 mx-auto mb-10 max-w-md text-base leading-relaxed"
+          className="mx-auto mb-10 max-w-md text-base leading-relaxed text-black"
           dangerouslySetInnerHTML={{ __html: hero.subHtml }}
         />
 
@@ -723,7 +1135,34 @@ export default function HomePage() {
           QUEEN'S GARDEN — suit picker + skill cards (early for recruiter scan)
       ══════════════════════════════════════════ */}
       <section id="garden" className="relative z-30 scroll-mt-24 bg-white pb-12">
-        <div className="mx-auto max-w-6xl px-6 pt-8 pb-6 sm:pt-10 md:pt-12">
+        <div className="mx-auto max-w-6xl px-6 pb-6 pt-14 sm:pt-16 md:pt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            className="mx-auto mb-12 max-w-xl border-b border-black/[0.07] pb-12 text-center sm:mb-14 sm:pb-14"
+          >
+            <p
+              className="mb-3 text-[10px] uppercase tracking-[0.42em] text-black/35"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              {garden.sectionGateEyebrow}
+            </p>
+            <p
+              className="font-serif text-xl leading-snug text-black sm:text-2xl"
+              style={{ fontFamily: SERIF, fontWeight: 400, fontStyle: "italic" }}
+            >
+              {garden.sectionGateTitle}
+            </p>
+            <p
+              className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-black/50"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              {garden.sectionGateSub}
+            </p>
+          </motion.div>
+
           {/* Suit picker + White Rabbit callout */}
           <div className="mx-auto max-w-3xl pb-4 text-center">
             <motion.div
@@ -761,38 +1200,76 @@ export default function HomePage() {
             >
               {garden.suitPickerTitle}
             </p>
-            <p className="mb-6 text-xs leading-relaxed text-black/32">{garden.suitPickerHint}</p>
+            <p className="mb-4 text-xs leading-relaxed text-black/32">{garden.suitPickerHint}</p>
+            {gardenSuit === null ? (
+              <div className="mb-5 flex flex-col items-center gap-1">
+                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+                  <span
+                    className="font-serif text-xl leading-none tracking-[0.35em] text-black/35 sm:text-2xl sm:tracking-[0.4em]"
+                    style={{ fontFamily: SERIF }}
+                    aria-hidden
+                  >
+                    ♠♥♦♣
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black/48">
+                    {garden.tapSuitsCue}
+                  </span>
+                </div>
+                {!gardenHintMotion ? (
+                  <motion.span
+                    className="select-none text-lg text-black/28"
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
+                    aria-hidden
+                  >
+                    ↓
+                  </motion.span>
+                ) : null}
+              </div>
+            ) : null}
             <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4 sm:gap-4">
-              {garden.suits.map((s) => {
+              {garden.suits.map((s, i) => {
                 const active = gardenSuit === s.id;
                 const red = s.id === "heart" || s.id === "diamond";
+                const idlePulse = gardenSuit === null && !gardenHintMotion;
                 return (
                   <button
                     key={s.id}
                     type="button"
                     onClick={() => setGardenSuit(s.id)}
                     className={[
-                      "flex h-full min-h-[210px] flex-col items-center justify-between gap-1 rounded-2xl border px-2.5 py-4 text-center transition-all sm:min-h-[240px] sm:px-3 sm:py-5",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2",
+                      "flex min-h-[168px] flex-col items-center justify-center gap-2 rounded-2xl border px-3 py-6 text-center transition-all sm:min-h-[188px] sm:gap-2.5 sm:py-8",
+                      "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2",
                       active ? "border-black/30 bg-white/90 shadow-md ring-1 ring-black/12" : "border-black/10 bg-white/50 hover:border-black/20 hover:bg-white/70",
+                      gardenSuit === null && !active ? "ring-2 ring-black/10 ring-offset-2 ring-offset-white" : "",
                     ].join(" ")}
                     aria-pressed={active}
+                    aria-label={`${s.label}: ${s.sub}. ${s.desc}`}
                   >
-                    <div className="flex flex-col items-center">
-                      <span
-                        className="font-serif text-4xl leading-none sm:text-5xl"
-                        style={{
-                          fontFamily: SERIF,
-                          color: red ? "rgba(140, 35, 35, 0.85)" : "rgba(0,0,0,0.55)",
-                        }}
-                        aria-hidden
-                      >
-                        {s.glyph}
-                      </span>
-                      <span className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-black/45">{s.label}</span>
-                      <span className="mt-0.5 text-[9px] font-medium text-black/38">{s.sub}</span>
+                    <motion.span
+                      className="inline-block font-serif text-4xl leading-none sm:text-5xl"
+                      style={{
+                        fontFamily: SERIF,
+                        color: red ? "rgba(140, 35, 35, 0.85)" : "rgba(0,0,0,0.55)",
+                      }}
+                      animate={
+                        idlePulse
+                          ? { scale: [1, 1.08, 1], y: [0, -3, 0] }
+                          : { scale: 1, y: 0 }
+                      }
+                      transition={
+                        idlePulse
+                          ? { duration: 2.1, repeat: Infinity, ease: "easeInOut", delay: i * 0.16 }
+                          : { duration: 0.22 }
+                      }
+                      aria-hidden
+                    >
+                      {s.glyph}
+                    </motion.span>
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/45">{s.label}</span>
+                      <span className="text-[11px] font-medium text-black/55">{s.sub}</span>
                     </div>
-                    <p className="text-[10px] leading-snug text-black/34">{s.desc}</p>
                   </button>
                 );
               })}
@@ -814,20 +1291,20 @@ export default function HomePage() {
               aria-hidden
             />
             <div
-              className="mx-auto flex w-full max-w-6xl justify-center overflow-x-auto overflow-y-visible px-6 py-10 pb-4 pt-2 sm:px-10 md:px-14 [&::-webkit-scrollbar]:hidden"
+              className="mx-auto flex w-full max-w-6xl justify-center overflow-x-auto overflow-y-visible px-6 py-10 pb-4 pt-2 sm:px-10 md:px-14"
               style={{
                 scrollSnapType: "x mandatory",
                 WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
+                overscrollBehaviorX: "contain",
               }}
+              onWheel={onGardenCardStripWheel}
             >
               <div className="inline-flex items-stretch gap-4 sm:gap-5">
                 {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).map((idea, i) => {
                   return (
                     <motion.div
                       key={idea.title}
-                      className="flex h-[min(404px,calc(100vh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 flex-col"
+                      className="flex h-[min(404px,calc(100dvh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 flex-col"
                       style={{ scrollSnapAlign: "center" }}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -856,7 +1333,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════
           LANDING — Process section
       ══════════════════════════════════════════ */}
-      <section id="about" className="relative scroll-mt-24 py-40 px-6 overflow-hidden"
+      <section id="about" className="relative scroll-mt-24 overflow-hidden px-6 py-24 md:py-32 lg:py-40"
         style={{ background: "#ffffff" }}>
 
         <div className="max-w-6xl mx-auto">
@@ -934,31 +1411,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      <CaterpillarShelfSection copy={shelf} />
+
       {/* ══════════════════════════════════════════
           CHESHIRE QUOTE — CTA
       ══════════════════════════════════════════ */}
-      <section className="relative py-40 px-6 text-center overflow-hidden"
-        style={{ borderTop: "1px solid rgba(0,0,0,0.07)", background: "#ffffff" }}>
+      <section
+        className="relative overflow-hidden px-6 py-24 text-center md:py-32 lg:py-40"
+        style={{ borderTop: "1px solid rgba(0,0,0,0.07)", background: "#ffffff" }}
+      >
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.2 }} viewport={{ once: true }}
           className="max-w-3xl mx-auto">
-          <div
-            className="mb-10 flex flex-col items-center justify-center gap-8 sm:mb-12 sm:flex-row sm:items-end sm:gap-10 md:gap-14"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/caterpillar-tenniel.png"
-              alt="The Caterpillar on a mushroom (Tenniel)"
-              draggable={false}
-              className="h-auto max-h-[200px] w-auto max-w-[min(72vw,220px)] object-contain sm:max-h-[220px]"
-              style={{ filter: "grayscale(100%) contrast(1.35) opacity(0.82)", mixBlendMode: "multiply", userSelect: "none" }}
-            />
+          <div className="mb-10 flex justify-center sm:mb-12">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/chat.png"
               alt="Cheshire Cat"
               draggable={false}
-              className="h-auto max-h-[200px] w-auto max-w-[min(72vw,200px)] object-contain sm:max-h-[220px]"
+              className="h-auto max-h-[200px] w-auto max-w-[min(72vw,220px)] object-contain sm:max-h-[240px]"
               style={{ filter: "grayscale(100%) contrast(1.4) opacity(0.82)", mixBlendMode: "multiply", userSelect: "none" }}
             />
           </div>
