@@ -323,7 +323,7 @@ export const site = {
     /**
      * Order: films → music → books → drama.
      * spineFoot = category · spineBlurb = what’s inside · spineTitle = vertical spine label.
-     * spineClass: solid fills — same herb tones as former gradient endpoints (no gradients).
+     * spineClass: light pastel solids (readable with dark spine type in page.tsx).
      */
     categories: [
       {
@@ -331,28 +331,28 @@ export const site = {
         spineTitle: "Movies",
         spineFoot: "Films",
         spineBlurb: "Posters · one-line notes",
-        spineClass: "bg-[#c98281]",
+        spineClass: "bg-[#ddbfbc]",
       },
       {
         id: "music",
         spineTitle: "Sound",
         spineFoot: "Music",
         spineBlurb: "Albums · tracks",
-        spineClass: "bg-[#e88b5c]",
+        spineClass: "bg-[#edd0b8]",
       },
       {
         id: "books",
         spineTitle: "Reading",
         spineFoot: "Books",
         spineBlurb: "Reads · quotes",
-        spineClass: "bg-[#627664]",
+        spineClass: "bg-[#b8c9bc]",
       },
       {
         id: "dramas",
         spineTitle: "Series",
         spineFoot: "Drama",
         spineBlurb: "Series · picks",
-        spineClass: "bg-[#9a8f6e]",
+        spineClass: "bg-[#d6cfc0]",
       },
     ] as const,
     films: [
@@ -361,24 +361,24 @@ export const site = {
         year: 2017,
         director: "Sean Baker",
         posterSrc: "/shelf/the-florida-project.png",
-        lineEn: "In hard light, tenderness and truth feel almost the same.",
-        lineKo: "센 빛 아래에서는 다정함과 진실이 거의 같은 얼굴로 다가온다.",
+        lineEn: "I love how this film lets tenderness and sorrow meet.",
+        lineKo: "다정함과 슬픔이 만나는 이 영화가 좋아요.",
       },
       {
         title: "Little Miss Sunshine",
         year: 2006,
         director: "Jonathan Dayton & Valerie Faris",
         posterSrc: "/shelf/little-miss-sunshine.png",
-        lineEn: "Solidarity forged in the gaps — a family held together by what they lack.",
-        lineKo: "텅 빈 곳에서 단단해진 연대 — 없는 것으로 버티는 가족.",
+        lineEn: "I'm rooting for this messy family that grows stronger through what they lack.",
+        lineKo: "결핍으로 단단해지는 이 엉망인 가족을 응원하고 싶어요.",
       },
       {
         title: "Monster",
         year: 2023,
         director: "Hirokazu Kore-eda",
         posterSrc: "/shelf/monster-2023.png",
-        lineEn: "The moment self-centred stories collide — and everyone thinks they’re the victim.",
-        lineKo: "자기중심성이 서로를 해치는 순간",
+        lineEn: "If they'd known each other just a little more, they might not have hurt each other so deeply.",
+        lineKo: "조금만 서로를 더 알면 깊이 상처주지 못했을 텐데.",
       },
     ],
     music: [
@@ -387,8 +387,8 @@ export const site = {
         year: 2013,
         director: "Lorde · Pure Heroine",
         posterSrc: "/shelf/music-lorde-pure-heroine.png",
-        lineEn: "Childhood freedom rushes back — then a quiet ache settles in.",
-        lineKo: "이 노래를 들으면 자유롭던 어린 시절이 떠오르면서 마음 어딘가가 울적해져",
+        lineEn: "Freer days rush back—and it all turns bittersweet.",
+        lineKo: "자유롭던 시절이 떠오르면서 달콤씁쓸해진다",
       },
       {
         title: "You're On Your Own, Kid",
@@ -403,8 +403,8 @@ export const site = {
         year: 2023,
         director: "AJR · The Maybe Man",
         posterSrc: "/shelf/music-ajr-the-maybe-man.png",
-        lineEn: "Comfort for the version of me that barely knows me — and wants to bolt.",
-        lineKo: "나도 나를 모르겠고 도망치고 싶은 나를 위로해주는 노래",
+        lineEn: "Comfort when I don't know myself and just want to run.",
+        lineKo: "나도 나를 모르겠고 도망치고 싶을 때 위로가 됩니다",
       },
     ],
     books: [
@@ -439,24 +439,24 @@ export const site = {
         year: 2025,
         director: "R. Scott Gemmill",
         posterSrc: "/shelf/the-pitt.png",
-        lineEn: "One long shift reads like a cross-section of the whole world.",
-        lineKo: "한 번의 긴 근무가 온 세계의 단면처럼 읽힌다.",
+        lineEn: "The push-pull between characters is so precise you fall in before you know it.",
+        lineKo: "인물의 역학 관계가 정교하고 그래서 빠져들게 됩니다",
       },
       {
         title: "Succession",
         year: 2023,
         director: "Jesse Armstrong",
         posterSrc: "/shelf/succession.png",
-        lineEn: "Petty hearts rattling inside tailored shoulders.",
-        lineKo: "맞춤 어깨 안에서 작은 마음이 덜컥거린다.",
+        lineEn: "Cruelty, I felt, arrives trailing loneliness.",
+        lineKo: "잔인함은 외로움에서 온다고 느꼈어요",
       },
       {
         title: "Severance",
         year: 2022,
         director: "Dan Erickson",
         posterSrc: "/shelf/severance.png",
-        lineEn: "Maybe the cut wasn’t escape — it was a wish for harmony that split the wrong way.",
-        lineKo: "도망이 아니라 완전함을 바랐는데, 잘못 난 단층을 얻었을지도 모른다.",
+        lineEn: "I don't want to cut myself off from the pride work gives me.",
+        lineKo: "노동을 통한 뿌듯함과 단절되고 싶지 않아요",
       },
     ],
     /** Below the shelf — Tenniel tea-party art + contact “on the table”. */
@@ -470,16 +470,31 @@ export const site = {
       imageSrc: "/tea-party-invite.png",
       imageAlt:
         "Mad tea-party engraving: Alice, March Hare, Dormouse, and Mad Hatter at a long table with teacups and plates",
-      plateLinkLabel: "LinkedIn",
-      cupLinkLabel: "Email",
+      /** Small ink sketch between the engraving and contact links (decorative). */
+      teacupSrc: "/tea-cup.png",
+      /** Visible link text — URLs sit in `title` / `aria-label` on the anchors. */
+      linkCtaLinkedin: "Fancy connecting with me?",
+      linkCtaEmail: "Care to send me an email?",
     },
   },
 
   cheshire: {
-    quote: "“We're all mad here.”",
-    attribution: "— The Cheshire Cat",
-    bodyHtml: "The best ideas sound impossible first — that's why I build them.",
-    cta: "Get in touch",
+    /** Lead + in-scene dialogue (Alice’s last line leads into the pull quote). */
+    bodyHtml:
+      '<p class="mb-8 text-[0.95rem] leading-relaxed text-black/45">If you have wandered this far—through the garden, the shelf, the tea—you might almost hear the old exchange: Alice, quite lost, asking which way she ought to go, and the Cat answering as if it were murmuring, <em>well done</em> for following this far.</p>' +
+      '<div class="mx-auto max-w-xl space-y-4 border-t border-b border-black/10 py-8 text-left text-[0.9rem] leading-relaxed text-black/55">' +
+      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;Would you tell me, please, which way I ought to go from here?&rdquo;</p>' +
+      '<p><span class="mr-2 font-semibold text-black/40">Cheshire Cat</span> &ldquo;That depends a good deal on where you want to get to.&rdquo;</p>' +
+      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;I don\'t much care where—&rdquo;</p>' +
+      '<p><span class="mr-2 font-semibold text-black/40">Cheshire Cat</span> &ldquo;Then it doesn\'t matter which way you go.&rdquo;</p>' +
+      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;—so long as I get <em>somewhere</em>.&rdquo;</p>' +
+      "</div>",
+    /** Pull quote — walk long enough and you’ll arrive somewhere. */
+    quote: "\u201cOh, you're sure to do that, if only you walk long enough.\u201d",
+    attribution: "\u2014 The Cheshire Cat, Alice's Adventures in Wonderland",
+    codaHtml:
+      '<p class="mx-auto mt-10 max-w-lg text-[0.95rem] leading-relaxed text-black/45">Even when the map is still misty, as long as something like a path keeps meeting your feet—may you read that as a small promise: <em>walk long enough</em>, and you will come out somewhere.</p>',
+    cta: "Drop me a line",
   },
 
   footer: {

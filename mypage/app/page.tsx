@@ -305,36 +305,36 @@ function IdeaCard({
   const stripFace = (
     <div
       className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border"
-      style={{
+          style={{
         borderColor: borderFront,
         boxShadow: shadowFront,
-        background: "linear-gradient(145deg, #fbfbf9 0%, #f2f2ee 100%)",
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+            background: "linear-gradient(145deg, #fbfbf9 0%, #f2f2ee 100%)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
         src={idea.imageSrc}
         alt=""
         aria-hidden
         draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
+            className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
         style={{ objectPosition: "center center", opacity: 0.08, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.2)" }}
-      />
+          />
 
-      <div
+          <div
         className="relative z-[1] m-2 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl ring-1 ring-black/18 sm:m-2.5"
-        style={{
+            style={{
           border: "1px solid rgba(0,0,0,0.22)",
           boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.8), inset 0 0 0 2px rgba(0,0,0,0.05)",
-        }}
-      >
-        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
-        <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
+            }}
+          >
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} />
+            <PlayingCardCornerPip rank={pip.rank} suit={pip.suit} flip />
 
         <div className="relative flex h-full min-h-0 flex-1 flex-col bg-[#f6f5f2] px-5 pb-4 pt-10 sm:px-6 sm:pb-5 sm:pt-11">
-          <QueenCroquetMosaic cardIndex={index} />
+              <QueenCroquetMosaic cardIndex={index} />
           <div className="pointer-events-none absolute inset-0 z-[1] bg-white/50" aria-hidden />
-          <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
+              <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
 
           <div className="relative z-[2] flex min-h-0 flex-1 flex-col items-center text-center">
             <h3
@@ -364,12 +364,12 @@ function IdeaCard({
                 }
                 style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
               />
-            </div>
+                  </div>
             {spotlightHasProjectUrl(idea) ? (
               <div className="relative z-20 mb-2 flex w-full max-w-[95%] shrink-0 justify-center px-1">
                 <SpotlightProjectLink href={idea.projectUrl} className="text-[10px]" />
               </div>
-            ) : null}
+                  ) : null}
             <div className="mb-3 min-h-0 w-full max-w-[95%] flex-1 space-y-2 overflow-hidden border-t border-black/18 pt-2.5 text-left">
               <div>
                 <p className="text-[8px] uppercase tracking-[0.22em] text-black/40">{site.cardUi.roleLabel}</p>
@@ -383,12 +383,12 @@ function IdeaCard({
                   {idea.impactLine}
                 </p>
               </div>
-            </div>
+                </div>
 
             <p className="mt-auto shrink-0 pt-1 text-[9px] font-semibold uppercase tracking-wider text-neutral-600">{site.cardUi.hintClosed}</p>
-          </div>
-        </div>
-      </div>
+                  </div>
+                  </div>
+                </div>
     </div>
   );
 
@@ -448,17 +448,17 @@ function IdeaCard({
                               &ldquo;{idea.title}&rdquo;
                             </h3>
                             <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-neutral-500">{idea.category}</p>
-                          </div>
-                        </div>
-                      </div>
+            </div>
+          </div>
+        </div>
 
                       {/* Modal back: scrollable column + footer close; wheel on card chrome forwards to body */}
-                      <div
+        <div
                         className="absolute inset-0 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
-                        style={{
-                          backfaceVisibility: "hidden",
-                          WebkitBackfaceVisibility: "hidden",
-                          transform: "rotateY(180deg)",
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
                           boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                         }}
                       >
@@ -508,12 +508,12 @@ function IdeaCard({
                                 }
                                 style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
                               />
-                            </div>
+              </div>
 
                             {spotlightHasProjectUrl(idea) ? (
                               <div className="relative z-20 mx-auto mb-6 flex max-w-sm justify-center px-1">
                                 <SpotlightProjectLink href={idea.projectUrl} className="text-xs sm:text-[13px]" />
-                              </div>
+              </div>
                             ) : null}
 
                             <div className="mx-auto w-full max-w-sm space-y-6">
@@ -533,9 +533,9 @@ function IdeaCard({
                                   style={{ fontFamily: "'Playfair Display', serif" }}
                                 >
                                   {idea.impactLine}
-                                </p>
-                              </div>
-                            </div>
+              </p>
+            </div>
+          </div>
 
                             <div
                               className="mt-8 max-w-none text-[15px] leading-[1.68] text-neutral-900 [&_em]:italic [&_em]:text-neutral-700 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-neutral-950"
@@ -549,7 +549,7 @@ function IdeaCard({
                             >
                               <div className="relative h-10 w-7 text-neutral-600">
                                 <RoseStageIcon stage={stage} className="absolute inset-0" />
-                              </div>
+        </div>
                               <span
                                 className="text-[9px] uppercase tracking-wider text-neutral-500"
                                 style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
@@ -571,8 +571,8 @@ function IdeaCard({
                           </button>
                         </div>
                       </div>
-                    </motion.div>
-                  </motion.div>
+      </motion.div>
+    </motion.div>
                 </div>
           </>,
           document.body,
@@ -893,14 +893,24 @@ function ShelfMediaGrid({
 }) {
   const albumLayout = coverLayout === "album";
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+    <div
+      className={[
+        "flex flex-nowrap gap-5 pb-2 pt-0.5 [-webkit-overflow-scrolling:touch]",
+        "snap-x snap-mandatory overflow-x-auto overflow-y-visible scroll-pl-4 scroll-pr-4",
+        "max-sm:-mx-1.5 max-sm:px-1.5",
+        "sm:snap-none sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-8 sm:overflow-visible sm:pb-0 sm:pl-0 sm:pr-0 sm:pt-0 lg:grid-cols-3",
+      ].join(" ")}
+    >
       {items.map((item, i) => (
         <motion.article
           key={item.title}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.04 + i * 0.05 }}
-          className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+          className={[
+            "flex shrink-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]",
+            "w-[min(18.5rem,calc(100vw-2.75rem))] snap-center sm:w-auto sm:min-w-0 sm:shrink sm:snap-align-none",
+          ].join(" ")}
         >
           <div
             className={
@@ -949,13 +959,14 @@ function ShelfMediaGrid({
 
 function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
   const [activeCategory, setActiveCategory] = useState<ShelfCategoryId | null>(null);
+  const reduceMotion = useReducedMotion();
 
   const activeMeta = activeCategory ? copy.categories.find((c) => c.id === activeCategory) : undefined;
 
   return (
     <section
       id="shelf"
-      className="relative scroll-mt-24 border-t border-[#768E78]/18 bg-[#f0ebe1] px-6 py-20 md:py-28"
+      className="relative scroll-mt-24 border-t border-[#768E78]/18 bg-[#f6f4ee] px-6 py-20 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <motion.div
@@ -985,37 +996,35 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
           </p>
         </motion.div>
 
-        <AnimatePresence mode="wait">
-          {activeCategory === null ? (
-            <motion.div
-              key="spines"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35 }}
-              className="grid items-end gap-10 lg:grid-cols-[minmax(0,min(42vw,380px))_1fr] lg:gap-14 xl:gap-20"
-            >
-              <div className="flex flex-col items-center gap-4 lg:items-start">
+        <div className="flex flex-col">
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.45 }}
+            className="flex flex-col items-center gap-8 lg:flex-row lg:items-end lg:justify-center lg:gap-8 xl:gap-10"
+          >
+              <div className="flex shrink-0 flex-col items-center gap-4 lg:items-end">
                 <motion.div
                   initial={{ opacity: 0, x: -8 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.55 }}
-                  className="flex w-full justify-center lg:justify-start"
+                  className="flex justify-center"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={copy.caterpillarSrc}
                     alt={copy.caterpillarAlt}
                     draggable={false}
-                    className="h-auto max-h-[min(52vw,320px)] w-auto max-w-[min(92vw,380px)] object-contain sm:max-h-[360px] lg:max-h-[min(38vw,420px)]"
+                    className="h-auto max-h-[min(52vw,300px)] w-auto max-w-[min(88vw,340px)] object-contain sm:max-h-[320px] lg:max-h-[min(34vw,360px)] lg:max-w-[min(36vw,320px)]"
                     style={{ filter: "grayscale(100%) contrast(1.35) opacity(0.9)", mixBlendMode: "multiply", userSelect: "none" }}
                   />
                 </motion.div>
               </div>
 
-              <div className="flex min-w-0 flex-col gap-5">
-                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/30 lg:text-left">
+              <div className="flex w-full shrink-0 flex-col items-center gap-5 lg:w-auto">
+                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/30">
                   {copy.spineRowCue}
                 </p>
                 <div className="flex w-full flex-wrap justify-center gap-x-0.5 gap-y-3 sm:gap-x-1 sm:gap-y-3 md:gap-x-1">
@@ -1024,37 +1033,41 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                     <button
                       type="button"
                       onClick={() => setActiveCategory(cat.id)}
+                      aria-pressed={activeCategory === cat.id}
                       className={[
-                        "group flex h-[220px] min-h-[220px] min-w-[48px] w-[3.65rem] max-w-[4.25rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-transform",
+                        "group flex h-[220px] min-h-[220px] min-w-[48px] w-[3.65rem] max-w-[4.25rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-[transform,box-shadow,ring]",
                         "sm:h-[244px] sm:min-h-[244px] sm:min-w-0 sm:w-16 md:h-[260px] md:w-[4.1rem]",
                         "hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 active:scale-[0.98]",
+                        activeCategory === cat.id
+                          ? "z-10 ring-2 ring-black/35 ring-offset-2 ring-offset-[#f6f4ee] shadow-[0_8px_20px_rgba(0,0,0,0.14)]"
+                          : "",
                         cat.spineClass,
                       ].join(" ")}
                       aria-label={`${cat.spineFoot}: ${cat.spineBlurb}. ${cat.spineTitle}`}
                     >
                       <span
-                        className="px-1.5 pb-1 pt-2.5 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.16em] text-white"
-                        style={{ textShadow: "0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.75)" }}
+                        className="px-1.5 pb-1 pt-2.5 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.16em] text-black/68"
+                        style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
                       >
                         {cat.spineFoot}
                       </span>
                       <span
-                        className="flex flex-1 items-center justify-center py-1 font-serif text-sm font-semibold tracking-wide text-white sm:text-[0.95rem]"
-                        style={{
+                        className="flex flex-1 items-center justify-center py-1 font-serif text-sm font-semibold tracking-wide text-black/78 sm:text-[0.95rem]"
+          style={{
                           fontFamily: SERIF,
                           writingMode: "vertical-rl",
                           textOrientation: "mixed",
-                          textShadow: "0 0 2px rgba(0,0,0,0.85), 0 2px 4px rgba(0,0,0,0.55)",
+                          textShadow: "0 1px 0 rgba(255,255,255,0.4)",
                         }}
                       >
                         {cat.spineTitle}
                       </span>
-                      <span
-                        className="px-1 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-white sm:text-[8px]"
-                        style={{ textShadow: "0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.75)" }}
-                      >
+          <span
+                        className="px-1 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/62 sm:text-[8px]"
+                        style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
+          >
                         {cat.spineBlurb}
-                      </span>
+          </span>
                     </button>
                     </div>
                   ))}
@@ -1068,69 +1081,99 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                   aria-hidden
                 />
               </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35 }}
-              className="flex flex-col gap-8"
-            >
-              <div className="text-center sm:text-right">
-                <h3 className="font-serif text-2xl text-black/85 md:text-3xl" style={{ fontFamily: SERIF }}>
-                  {activeMeta?.spineTitle}
-                </h3>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/38">{activeMeta?.spineFoot}</p>
-              </div>
+          </motion.div>
 
-              {activeCategory === "films" ? (
-                <ShelfMediaGrid items={copy.films} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
-              ) : activeCategory === "music" ? (
-                <ShelfMediaGrid
-                  items={copy.music}
-                  enLabel={copy.stackBodyEnLabel}
-                  koLabel={copy.stackBodyKoLabel}
-                  coverLayout="album"
-                />
-              ) : activeCategory === "books" ? (
-                <ShelfMediaGrid items={copy.books} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
-              ) : activeCategory === "dramas" ? (
-                <ShelfMediaGrid items={copy.dramas} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
-              ) : (
-                <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-white/80 px-8 py-12 text-center">
-                  <p className="font-serif text-lg text-black/70" style={{ fontFamily: SERIF }}>
-                    {copy.emptyShelfTitle}
-                  </p>
-                  <p
-                    className="mt-3 text-sm leading-relaxed text-black/45"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    {copy.emptyShelfBody}
-                  </p>
-                </div>
-              )}
-
-              <div
-                className="flex justify-center px-6 pt-6"
-                style={{
-                  width: "100vw",
-                  marginLeft: "calc(50% - 50vw)",
-                  marginRight: "calc(50% - 50vw)",
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setActiveCategory(null)}
-                  className="border-b-2 border-black/20 pb-2 text-center text-lg font-medium tracking-[0.14em] text-black/55 transition-colors hover:border-black/45 hover:text-black/80 sm:text-xl md:text-2xl md:pb-2.5 md:tracking-[0.18em]"
+          <div className="mx-auto w-full max-w-6xl sm:[perspective:1200px]">
+            <AnimatePresence initial={false} mode="wait">
+              {activeCategory ? (
+                <motion.div
+                  key={activeCategory}
+                  initial={
+                    reduceMotion
+                      ? { opacity: 0, y: 20 }
+                      : { opacity: 0, y: 36, scale: 0.96 }
+                  }
+                  animate={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, scale: 1 }}
+                  exit={
+                    reduceMotion
+                      ? { opacity: 0, y: 12 }
+                      : { opacity: 0, y: 18, scale: 0.98 }
+                  }
+                  transition={
+                    reduceMotion
+                      ? { duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }
+                      : { type: "spring", stiffness: 280, damping: 26 }
+                  }
+                  className="relative mt-8 origin-top sm:mt-10"
                 >
-                  {copy.backToShelf}
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <div
+                    className={[
+                      "relative rounded-2xl border border-black/[0.14] p-5 shadow-[0_14px_0_rgba(0,0,0,0.04),0_28px_56px_rgba(0,0,0,0.11)] sm:p-7 md:p-8",
+                      "bg-gradient-to-b from-white via-[#faf9f6] to-[#f0ebe3]",
+                    ].join(" ")}
+                  >
+                    <span
+                      className="pointer-events-none absolute left-4 top-3 select-none font-serif text-2xl leading-none text-black/[0.11] sm:left-5 sm:top-4 sm:text-3xl"
+                      aria-hidden
+                    >
+                      ♦
+                    </span>
+                    <span
+                      className="pointer-events-none absolute bottom-3 right-4 rotate-180 select-none font-serif text-2xl leading-none text-black/[0.11] sm:bottom-4 sm:right-5 sm:text-3xl"
+                      aria-hidden
+                    >
+                      ♦
+                    </span>
+
+                    <div className="relative z-[1] mb-6 text-center sm:text-right">
+                      <h3 className="font-serif text-2xl text-black/85 md:text-3xl" style={{ fontFamily: SERIF }}>
+                        {activeMeta?.spineTitle}
+                      </h3>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/38">{activeMeta?.spineFoot}</p>
+                    </div>
+
+                    {activeCategory === "films" ? (
+                      <ShelfMediaGrid items={copy.films} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
+                    ) : activeCategory === "music" ? (
+                      <ShelfMediaGrid
+                        items={copy.music}
+                        enLabel={copy.stackBodyEnLabel}
+                        koLabel={copy.stackBodyKoLabel}
+                        coverLayout="album"
+                      />
+                    ) : activeCategory === "books" ? (
+                      <ShelfMediaGrid items={copy.books} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
+                    ) : activeCategory === "dramas" ? (
+                      <ShelfMediaGrid items={copy.dramas} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
+                    ) : (
+                      <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-white/80 px-8 py-12 text-center">
+                        <p className="font-serif text-lg text-black/70" style={{ fontFamily: SERIF }}>
+                          {copy.emptyShelfTitle}
+                        </p>
+                        <p
+                          className="mt-3 text-sm leading-relaxed text-black/45"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                          {copy.emptyShelfBody}
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="relative z-[1] mt-10 flex justify-center border-t border-black/10 pt-6">
+                      <button
+                        type="button"
+                        onClick={() => setActiveCategory(null)}
+                        className="border-b-2 border-black/20 pb-2 text-center text-base font-medium tracking-[0.14em] text-black/55 transition-colors hover:border-black/45 hover:text-black/80 sm:text-lg md:text-xl md:pb-2.5 md:tracking-[0.18em]"
+                      >
+                        {copy.backToShelf}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1139,18 +1182,23 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
 function TeaPartyInviteSection({
   invite,
   links,
-  nav,
 }: {
   invite: (typeof site)["shelf"]["teaInvite"];
   links: (typeof site)["links"];
-  nav: (typeof site)["nav"];
 }) {
   const emailPlain = links.contactMailto.replace(/^mailto:/i, "").trim();
+  let linkedinLine: string = links.linkedin;
+  try {
+    const u = new URL(links.linkedin);
+    linkedinLine = `${u.hostname.replace(/^www\./, "")}${u.pathname}`.replace(/\/$/, "");
+  } catch {
+    /* keep full string */
+  }
 
   return (
     <section
       id="tea-invite"
-      className="relative scroll-mt-24 border-t border-[#768E78]/15 bg-[#eae3d5] px-6 py-16 md:py-24"
+      className="relative scroll-mt-24 border-t border-[#768E78]/15 bg-[#f5f2ea] px-6 py-16 md:py-24"
     >
       <div className="mx-auto max-w-3xl">
         <motion.div
@@ -1170,7 +1218,7 @@ function TeaPartyInviteSection({
             {invite.title}
           </h2>
 
-          <div className="relative mx-auto max-w-[min(100%,640px)]">
+          <div className="mx-auto max-w-[min(100%,640px)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={invite.imageSrc}
@@ -1179,47 +1227,50 @@ function TeaPartyInviteSection({
               className="w-full select-none rounded-lg border border-black/10 bg-white shadow-[0_8px_28px_rgba(0,0,0,0.06)]"
               style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
             />
-            <div className="pointer-events-none absolute inset-x-0 bottom-[5%] flex justify-center gap-[min(10vw,2.5rem)] sm:bottom-[6%] sm:gap-16 md:bottom-[7%] md:gap-24">
+            <div className="mt-4 flex justify-center sm:mt-5" aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={invite.teacupSrc}
+                alt=""
+                width={88}
+                height={72}
+                draggable={false}
+                className="h-12 w-auto max-w-[min(5.5rem,22vw)] select-none opacity-[0.92] sm:h-14"
+                style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
+              />
+            </div>
+            <div
+              className="mt-4 flex flex-col items-center justify-center gap-3 sm:mt-5 sm:flex-row sm:gap-10"
+              lang="en"
+            >
               <a
                 href={links.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pointer-events-auto flex h-[4.5rem] w-[4.5rem] flex-col items-center justify-center rounded-full border-[1.5px] border-black/25 bg-gradient-to-b from-white to-[#f0ede8] shadow-[0_3px_10px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.95)] transition-transform hover:-translate-y-0.5 hover:border-black/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 sm:h-[5rem] sm:w-[5rem]"
-                aria-label={`${nav.linkedin} — opens in new tab`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                title={linkedinLine}
+                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/60 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
+                aria-label={`${invite.linkCtaLinkedin} ${linkedinLine}, opens in new tab`}
               >
-                <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-black/48 sm:text-[10px]">{invite.plateLinkLabel}</span>
+                {invite.linkCtaLinkedin}
               </a>
-
-              <div className="pointer-events-auto flex flex-col items-center">
-                <a
-                  href={links.contactMailto}
-                  className="group flex flex-col items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 rounded-t-[100%]"
-                  aria-label={nav.email}
-                >
-                  <div className="relative flex h-[3.25rem] w-[3rem] flex-col items-center rounded-t-[100%] rounded-b-2xl border border-black/22 bg-gradient-to-b from-white to-[#ebe8e2] shadow-[0_3px_10px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] transition-transform group-hover:-translate-y-0.5 group-hover:border-black/35 sm:h-[3.5rem] sm:w-[3.25rem]">
-                    <span className="mt-2 text-[8px] font-semibold uppercase tracking-[0.12em] text-black/42 sm:mt-2.5 sm:text-[9px]">
-                      {invite.cupLinkLabel}
-                    </span>
-                  </div>
-                  <div
-                    className="-mt-0.5 h-2 w-[4.25rem] rounded-[100%] border border-black/14 bg-gradient-to-b from-[#f6f4f0] to-[#e5e1d9] shadow-[inset_0_1px_0_rgba(255,255,255,0.75)] sm:w-[5rem]"
-                    aria-hidden
-                  />
-                </a>
-                <p
-                  className="mt-2 max-w-[12rem] truncate px-1 text-center font-mono text-[9px] text-black/40 sm:text-[10px]"
-                  title={emailPlain}
-                >
-                  {emailPlain}
-                </p>
-              </div>
+              <span className="hidden text-black/25 sm:inline" aria-hidden>
+                ·
+              </span>
+              <a
+                href={links.contactMailto}
+                title={emailPlain}
+                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/60 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
+                aria-label={`${invite.linkCtaEmail} ${emailPlain}`}
+              >
+                {invite.linkCtaEmail}
+              </a>
             </div>
           </div>
 
-          <p className="mx-auto mt-10 max-w-lg text-base leading-relaxed text-black/78" lang="ko">
+          <p className="mx-auto mt-10 max-w-lg text-base leading-relaxed text-black/78" lang="en">
             {invite.bodyLine1}
           </p>
-          <p className="mx-auto mt-3 max-w-lg text-base leading-relaxed text-black/78" lang="ko">
+          <p className="mx-auto mt-3 max-w-lg text-base leading-relaxed text-black/78" lang="en">
             {invite.bodyLine2}
           </p>
         </motion.div>
@@ -1267,7 +1318,7 @@ export default function HomePage() {
   } = site;
 
   return (
-    <div className="overflow-x-hidden bg-[#fcfcfa] text-[#1a1a1a]">
+    <div className="min-w-0 overflow-x-hidden bg-[#fcfcfa] text-[#1a1a1a]">
       {/* ── Navbar ── */}
       <nav
         className="fixed left-0 right-0 top-0 z-50 flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2 sm:h-16 sm:flex-nowrap sm:gap-y-0 sm:px-8 sm:py-0"
@@ -1320,7 +1371,7 @@ export default function HomePage() {
       <section className="relative bg-[#fcfcfa] px-6 pb-0 pt-28 text-center sm:pt-32">
         <div style={{ position: "relative", zIndex: 1 }}>
           {hero.eyebrow.trim() ? (
-            <motion.p
+          <motion.p
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
@@ -1351,7 +1402,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════
           QUEEN'S GARDEN — suit picker + skill cards (early for recruiter scan)
       ══════════════════════════════════════════ */}
-      <section id="garden" className="relative z-30 scroll-mt-24 bg-[#f9f6f0] pb-12">
+      <section id="garden" className="relative z-30 scroll-mt-24 bg-[#faf9f6] pb-12">
         <div className="mx-auto max-w-6xl px-6 pb-6 pt-14 sm:pt-16 md:pt-20">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -1431,7 +1482,7 @@ export default function HomePage() {
                   <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black/48">
                     {garden.tapSuitsCue}
                   </span>
-                </div>
+          </div>
                 {!gardenHintMotion ? (
                   <motion.span
                     className="select-none text-lg text-black/28"
@@ -1465,7 +1516,7 @@ export default function HomePage() {
                   >
                     <motion.span
                       className="inline-block font-serif text-4xl leading-none sm:text-5xl"
-                      style={{
+                style={{
                         fontFamily: SERIF,
                         color: red ? "rgba(140, 35, 35, 0.85)" : "rgba(0,0,0,0.55)",
                       }}
@@ -1499,17 +1550,17 @@ export default function HomePage() {
           <div className="relative w-full overflow-visible pb-16 pt-2">
             <div
               className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 sm:w-20"
-              style={{ background: "linear-gradient(to right, rgba(249,246,240,0.95) 0%, transparent 100%)" }}
+              style={{ background: "linear-gradient(to right, rgba(250,249,246,0.95) 0%, transparent 100%)" }}
               aria-hidden
             />
             <div
               className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 sm:w-20"
-              style={{ background: "linear-gradient(to left, rgba(249,246,240,0.95) 0%, transparent 100%)" }}
+              style={{ background: "linear-gradient(to left, rgba(250,249,246,0.95) 0%, transparent 100%)" }}
               aria-hidden
             />
             <div
               className="mx-auto flex w-full max-w-6xl justify-center overflow-x-auto overflow-y-visible px-6 py-10 pb-4 pt-2 sm:px-10 md:px-14"
-              style={{
+                    style={{
                 scrollSnapType: "x mandatory",
                 WebkitOverflowScrolling: "touch",
                 overscrollBehaviorX: "contain",
@@ -1542,12 +1593,12 @@ export default function HomePage() {
                         whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                       >
                         <IdeaCard idea={idea} index={i} selectedSuit={gardenSuit} />
-                      </motion.div>
+              </motion.div>
                     );
                   })}
-                </div>
+          </div>
               )}
-            </div>
+        </div>
             <div className="flex justify-center pt-4">
               <button
                 type="button"
@@ -1566,7 +1617,7 @@ export default function HomePage() {
       ══════════════════════════════════════════ */}
       <section
         id="about"
-        className="relative scroll-mt-24 overflow-hidden bg-[#f5f1e8] px-6 py-24 md:py-32 lg:py-40"
+        className="relative scroll-mt-24 overflow-hidden bg-[#f8f6f2] px-6 py-24 md:py-32 lg:py-40"
       >
 
         <div className="max-w-6xl mx-auto">
@@ -1577,15 +1628,15 @@ export default function HomePage() {
               className="flex flex-col items-stretch gap-10 md:flex-row md:items-center md:gap-12 lg:gap-16"
             >
               <div className="min-w-0 flex-1 text-center md:text-left md:pr-2">
-                <motion.p
+            <motion.p
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.7 }} viewport={{ once: true }}
                   className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-5"
                 >
                   {processIntro.eyebrow}
-                </motion.p>
+            </motion.p>
 
-                <motion.div
+            <motion.div
                   initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.08 }} viewport={{ once: true }}
                 >
@@ -1599,28 +1650,28 @@ export default function HomePage() {
                     dangerouslySetInnerHTML={{ __html: processIntro.subHtml }}
                   />
                 </motion.div>
-              </div>
+          </div>
 
-              <motion.div
+          <motion.div
                 initial={{ opacity: 0, x: 14 }} whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.85, delay: 0.12 }} viewport={{ once: true }}
                 className="flex shrink-0 justify-center md:justify-end md:pl-2"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
                   src="/rabbit.png"
                   alt="White Rabbit"
-                  draggable={false}
-                  style={{
+              draggable={false}
+              style={{
                     width: "clamp(180px, 36vw, 300px)",
                     height: "auto",
                     filter: "grayscale(100%) contrast(1.5)",
-                    mixBlendMode: "multiply",
-                    userSelect: "none",
-                  }}
-                />
-              </motion.div>
-            </div>
+                mixBlendMode: "multiply",
+                userSelect: "none",
+              }}
+            />
+          </motion.div>
+        </div>
 
             {/* Dotted trail — rabbit’s path toward EAT ME / DRINK ME */}
             <motion.div
@@ -1646,20 +1697,21 @@ export default function HomePage() {
 
       <CaterpillarShelfSection copy={shelf} />
 
-      <TeaPartyInviteSection invite={shelf.teaInvite} links={links} nav={nav} />
+      <TeaPartyInviteSection invite={shelf.teaInvite} links={links} />
 
       {/* ══════════════════════════════════════════
           CHESHIRE QUOTE — CTA
       ══════════════════════════════════════════ */}
       <section
-        className="relative overflow-hidden bg-[#e4dcc8] px-6 py-24 text-center md:py-32 lg:py-40"
+        lang="en"
+        className="relative overflow-hidden bg-[#f3efe6] px-6 py-24 text-center md:py-32 lg:py-40"
         style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}
       >
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.2 }} viewport={{ once: true }}
           className="max-w-3xl mx-auto">
           <div className="mb-10 flex justify-center sm:mb-12">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/chat.png"
               alt="Cheshire Cat"
@@ -1668,13 +1720,20 @@ export default function HomePage() {
               style={{ filter: "grayscale(100%) contrast(1.4) opacity(0.82)", mixBlendMode: "multiply", userSelect: "none" }}
             />
           </div>
-          <blockquote className="text-3xl md:text-5xl font-serif italic leading-tight text-black/50 mb-6"
-            style={{ fontFamily: "'Playfair Display', serif" }}>
+          <div
+            className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
+            dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
+          />
+          <blockquote
+            className="mb-6 text-2xl font-serif italic leading-snug text-black/50 md:text-3xl lg:text-[2.1rem] lg:leading-snug"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
             {cheshire.quote}
           </blockquote>
-          <p className="text-black/25 text-sm tracking-wider mb-14">{cheshire.attribution}</p>
-          <p className="text-black/40 text-base leading-relaxed max-w-lg mx-auto mb-12"
-            dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
+          <p className="mb-10 text-sm tracking-wider text-black/30">{cheshire.attribution}</p>
+          <div
+            className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
+            dangerouslySetInnerHTML={{ __html: cheshire.codaHtml }}
           />
           <a href={links.contactMailto}>
             <motion.button whileHover={{ scale: 1.03, background: "#1a1a1a" }} whileTap={{ scale: 0.97 }}
@@ -1687,7 +1746,7 @@ export default function HomePage() {
 
       {/* ── Footer ── */}
       <footer
-        className="bg-[#ded4be] py-10 px-8"
+        className="bg-[#f2ece2] py-10 px-8"
         style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}
       >
         {/* Classical colophon */}
