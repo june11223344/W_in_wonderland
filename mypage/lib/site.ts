@@ -19,14 +19,12 @@ export const site = {
   links: {
     contactMailto: "mailto:wj0103230806@gmail.com",
     linkedin: "https://www.linkedin.com/in/wonjun-wonjun/",
-    github: "https://github.com/june11223344",
   },
 
   nav: {
     board: "Garden",
     email: "Email",
     linkedin: "LinkedIn",
-    github: "GitHub",
   },
 
   /** Short lines inside NavReveal panels (edit anytime) */
@@ -34,7 +32,6 @@ export const site = {
     boardDescription:
       "Under the hero: tap ♠ ♥ ♦ ♣ — hard skills, soft skills, international, and clubs (side quests: broadcast cameo, sport, language streaks, and more to come).",
     linkedinDescription: "Public LinkedIn profile.",
-    githubDescription: "Code and projects on GitHub.",
   },
 
   hero: {
@@ -275,29 +272,29 @@ export const site = {
         id: "spade",
         glyph: "♠",
         label: "Spades",
-        sub: "Hard skills",
-        desc: "Stack, shipping, products — the building side.",
+        sub: "A spade's edge — craft kept sharp",
+        desc: "Models, stacks, and shipped work — proof you can weigh.",
       },
       {
         id: "heart",
         glyph: "♥",
         label: "Hearts",
-        sub: "Soft skills",
-        desc: "Design, writing, feedback, teamwork.",
+        sub: "Warm craft learned beside people",
+        desc: "Leadership, feedback, and the softer wiring of teams.",
       },
       {
         id: "diamond",
         glyph: "♦",
         label: "Diamonds",
-        sub: "International",
-        desc: "Abroad, language, work across borders.",
+        sub: "Rare light gathered beyond home",
+        desc: "Languages, borders crossed, programs abroad — small bright facets.",
       },
       {
         id: "club",
         glyph: "♣",
         label: "Clubs",
-        sub: "Just for fun",
-        desc: "Side quests and experiments — curiosity over polish.",
+        sub: "Side clubs, detours, the rest of me",
+        desc: "Broadcast cameos, sport, streaks — curiosity over polish.",
       },
     ] as const,
   },
@@ -308,9 +305,9 @@ export const site = {
    */
   shelf: {
     sectionEyebrow: "The Caterpillar's shelf",
-    sectionTitle: "Four spines, four stacks",
-    sectionSub: "Four spines on one shelf — each opens a different stack. Tap one to browse that shelf.",
-    spineRowCue: "Four stacks — tap a spine",
+    sectionTitle: "The Caterpillar's shelf — a small study in comfort and spark",
+    sectionSub: "Films, albums, pages, and drama I keep like pictures on the wall.",
+    spineRowCue: "Four spines — tap to open",
     caterpillarSrc: "/caterpillar.png",
     caterpillarAlt: "The Caterpillar on a mushroom (illustration)",
     backToShelf: "← Back to shelf",
@@ -330,7 +327,8 @@ export const site = {
         id: "films",
         spineTitle: "Movies",
         spineFoot: "Films",
-        spineBlurb: "Posters · one-line notes",
+        /** Narrow no-break hyphen in “one‑line” so spine labels don’t split mid-word. */
+        spineBlurb: "Posters · one\u2011line notes",
         spineClass: "bg-[#ddbfbc]",
       },
       {
@@ -462,7 +460,7 @@ export const site = {
     /** Below the shelf — Tenniel tea-party art + contact “on the table”. */
     teaInvite: {
       eyebrow: "After the shelf",
-      title: "Why is a raven like a writing-desk?",
+      title: "Back from the study — feeling a little peckish?",
       bodyLine1:
         "All that wandering through pictures — small wonder you've worked up an appetite.",
       bodyLine2:
@@ -473,28 +471,22 @@ export const site = {
       /** Small ink sketch between the engraving and contact links (decorative). */
       teacupSrc: "/tea-cup.png",
       /** Visible link text — URLs sit in `title` / `aria-label` on the anchors. */
-      linkCtaLinkedin: "Fancy connecting with me?",
+      linkCtaLinkedin: "Want to link with me on LinkedIn?",
       linkCtaEmail: "Care to send me an email?",
     },
   },
 
   cheshire: {
-    /** Lead + in-scene dialogue (Alice’s last line leads into the pull quote). */
+    /** Lead + Alice’s hinge line so the pull quote lands; then a short steadiness beat. */
     bodyHtml:
-      '<p class="mb-8 text-[0.95rem] leading-relaxed text-black/45">If you have wandered this far—through the garden, the shelf, the tea—you might almost hear the old exchange: Alice, quite lost, asking which way she ought to go, and the Cat answering as if it were murmuring, <em>well done</em> for following this far.</p>' +
-      '<div class="mx-auto max-w-xl space-y-4 border-t border-b border-black/10 py-8 text-left text-[0.9rem] leading-relaxed text-black/55">' +
-      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;Would you tell me, please, which way I ought to go from here?&rdquo;</p>' +
-      '<p><span class="mr-2 font-semibold text-black/40">Cheshire Cat</span> &ldquo;That depends a good deal on where you want to get to.&rdquo;</p>' +
-      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;I don\'t much care where—&rdquo;</p>' +
-      '<p><span class="mr-2 font-semibold text-black/40">Cheshire Cat</span> &ldquo;Then it doesn\'t matter which way you go.&rdquo;</p>' +
-      '<p><span class="mr-2 font-semibold text-black/40">Alice</span> &ldquo;—so long as I get <em>somewhere</em>.&rdquo;</p>' +
-      "</div>",
-    /** Pull quote — walk long enough and you’ll arrive somewhere. */
+      '<p class="mx-auto mb-4 max-w-md text-[1rem] leading-relaxed text-black/50">You&rsquo;ve come this far—past the garden, the shelf, the tea. Small steps, still a real journey.</p>' +
+      '<div class="mx-auto mb-4 max-w-md border-l-2 border-black/15 pl-4 text-left text-[0.9rem] leading-relaxed text-black/50"><p><span class="mr-2 font-semibold text-black/35">Alice</span>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>' +
+      '<p class="mx-auto max-w-md text-[0.95rem] leading-relaxed text-black/44">The map won&rsquo;t always be clear. Keep walking steady enough, and you&rsquo;ll still fetch up somewhere that matters.</p>',
+    /** Carroll line — same “walk long enough” promise, less prose around it. */
     quote: "\u201cOh, you're sure to do that, if only you walk long enough.\u201d",
     attribution: "\u2014 The Cheshire Cat, Alice's Adventures in Wonderland",
-    codaHtml:
-      '<p class="mx-auto mt-10 max-w-lg text-[0.95rem] leading-relaxed text-black/45">Even when the map is still misty, as long as something like a path keeps meeting your feet—may you read that as a small promise: <em>walk long enough</em>, and you will come out somewhere.</p>',
-    cta: "Drop me a line",
+    /** Optional closing after the pull quote; leave empty when the lead already says it. */
+    codaHtml: "",
   },
 
   footer: {

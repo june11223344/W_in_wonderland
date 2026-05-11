@@ -172,13 +172,13 @@ function PlayingCardCornerPip({
         ? "bottom-3 right-3 rotate-180 sm:bottom-3.5 sm:right-3.5"
         : "top-3 left-3 sm:top-3.5 sm:left-3.5"
       : flip
-        ? "bottom-2 right-2 rotate-180 sm:bottom-2.5 sm:right-2.5"
+        ? "bottom-3 right-2.5 rotate-180 sm:bottom-4 sm:right-3"
         : "top-2 left-2 sm:top-2.5 sm:left-2.5";
   const rankCls = size === "lg" ? "text-[15px] sm:text-[16px]" : "text-[12px] sm:text-[13px]";
   const suitCls = size === "lg" ? "text-[22px] sm:text-[24px]" : "text-[17px] sm:text-[19px]";
   return (
     <div
-      className={`pointer-events-none absolute z-[4] flex flex-col items-center gap-0 select-none ${pos}`}
+      className={`pointer-events-none absolute z-[35] flex flex-col items-center gap-0 select-none ${pos}`}
       style={{ fontFamily: "'Playfair Display', serif" }}
       aria-hidden
     >
@@ -347,10 +347,10 @@ function IdeaCard({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div
               className={[
-                "mb-3 w-full max-w-[95%] shrink-0 overflow-hidden rounded-md",
+                "mb-3 w-full max-w-[95%] shrink-0 rounded-md",
                 imageFitContain
-                  ? "flex aspect-[5/3] items-center justify-center bg-[#f0efec] ring-1 ring-black/10"
-                  : "ring-1 ring-black/18",
+                  ? "relative aspect-[5/3] overflow-hidden bg-[#f0efec] ring-1 ring-black/10"
+                  : "overflow-hidden ring-1 ring-black/18",
               ].join(" ")}
             >
               <img
@@ -359,7 +359,7 @@ function IdeaCard({
                 draggable={false}
                 className={
                   imageFitContain
-                    ? "max-h-[min(42vw,9.5rem)] w-auto max-w-[min(78%,13rem)] object-contain sm:max-h-[10.5rem]"
+                    ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
                     : "aspect-[5/3] w-full object-cover"
                 }
                 style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
@@ -493,7 +493,7 @@ function IdeaCard({
                               className={[
                                 "mx-auto mb-6 max-w-sm overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
                                 imageFitContain
-                                  ? "flex justify-center border-black/10 bg-[#f0efec] py-6"
+                                  ? "relative aspect-[5/3] border-black/10 bg-[#f0efec]"
                                   : "border-black/12",
                               ].join(" ")}
                             >
@@ -503,7 +503,7 @@ function IdeaCard({
                                 draggable={false}
                                 className={
                                   imageFitContain
-                                    ? "max-h-48 w-auto max-w-[85%] object-contain sm:max-h-52"
+                                    ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
                                     : "max-h-48 w-full object-cover sm:max-h-52"
                                 }
                                 style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
@@ -898,7 +898,7 @@ function ShelfMediaGrid({
         "flex flex-nowrap gap-5 pb-2 pt-0.5 [-webkit-overflow-scrolling:touch]",
         "snap-x snap-mandatory overflow-x-auto overflow-y-visible scroll-pl-4 scroll-pr-4",
         "max-sm:-mx-1.5 max-sm:px-1.5",
-        "sm:snap-none sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-8 sm:overflow-visible sm:pb-0 sm:pl-0 sm:pr-0 sm:pt-0 lg:grid-cols-3",
+        "sm:snap-none sm:mx-0 sm:grid sm:grid-cols-2 sm:justify-items-center sm:gap-x-6 sm:gap-y-8 sm:overflow-visible sm:pb-0 sm:pl-0 sm:pr-0 sm:pt-0 lg:grid-cols-3 lg:gap-x-8",
       ].join(" ")}
     >
       {items.map((item, i) => (
@@ -909,7 +909,8 @@ function ShelfMediaGrid({
           transition={{ duration: 0.4, delay: 0.04 + i * 0.05 }}
           className={[
             "flex shrink-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]",
-            "w-[min(18.5rem,calc(100vw-2.75rem))] snap-center sm:w-auto sm:min-w-0 sm:shrink sm:snap-align-none",
+            /* Mobile: slightly narrower strip cards; sm+: cap width so 2:3 posters don’t tower on wide grids */
+            "w-[min(16rem,calc(100vw-2.75rem))] snap-center sm:w-full sm:min-w-0 sm:max-w-[15rem] sm:shrink sm:snap-align-none md:max-w-[15.5rem]",
           ].join(" ")}
         >
           <div
@@ -1023,11 +1024,11 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                 </motion.div>
               </div>
 
-              <div className="flex w-full shrink-0 flex-col items-center gap-5 lg:w-auto">
+              <div className="flex w-full shrink-0 flex-col items-center gap-3.5 lg:w-auto">
                 <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/30">
                   {copy.spineRowCue}
                 </p>
-                <div className="flex w-full flex-wrap justify-center gap-x-0.5 gap-y-3 sm:gap-x-1 sm:gap-y-3 md:gap-x-1">
+                <div className="flex w-full flex-wrap justify-center gap-x-0 gap-y-2 sm:gap-x-0.5 sm:gap-y-2 md:gap-x-0.5">
                   {copy.categories.map((cat) => (
                     <div key={cat.id} className="flex touch-manipulation justify-center">
                     <button
@@ -1035,39 +1036,37 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       onClick={() => setActiveCategory(cat.id)}
                       aria-pressed={activeCategory === cat.id}
                       className={[
-                        "group flex h-[220px] min-h-[220px] min-w-[48px] w-[3.65rem] max-w-[4.25rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-[transform,box-shadow,ring]",
-                        "sm:h-[244px] sm:min-h-[244px] sm:min-w-0 sm:w-16 md:h-[260px] md:w-[4.1rem]",
-                        "hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 active:scale-[0.98]",
+                        "group flex h-[210px] min-h-[210px] w-[5.45rem] min-w-[5.45rem] max-w-[6rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-[transform,box-shadow,ring]",
+                        "sm:h-[228px] sm:min-h-[228px] sm:w-[5.55rem] sm:min-w-[5.55rem] md:h-[236px] md:w-[5.65rem] md:min-w-[5.65rem]",
+                        "hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-1 active:scale-[0.98]",
                         activeCategory === cat.id
-                          ? "z-10 ring-2 ring-black/35 ring-offset-2 ring-offset-[#f6f4ee] shadow-[0_8px_20px_rgba(0,0,0,0.14)]"
+                          ? "z-10 ring-2 ring-black/35 ring-offset-1 ring-offset-[#f6f4ee] shadow-[0_8px_20px_rgba(0,0,0,0.14)]"
                           : "",
                         cat.spineClass,
                       ].join(" ")}
                       aria-label={`${cat.spineFoot}: ${cat.spineBlurb}. ${cat.spineTitle}`}
                     >
                       <span
-                        className="px-1.5 pb-1 pt-2.5 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.16em] text-black/68"
+                        className="px-1.5 pb-0.5 pt-2.5 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/68"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
                       >
                         {cat.spineFoot}
                       </span>
                       <span
-                        className="flex flex-1 items-center justify-center py-1 font-serif text-sm font-semibold tracking-wide text-black/78 sm:text-[0.95rem]"
-          style={{
+                        className="flex min-h-0 flex-1 items-center justify-center px-1 py-1 text-center font-serif text-sm font-semibold leading-tight tracking-wide text-black/78 sm:text-[0.95rem]"
+                        style={{
                           fontFamily: SERIF,
-                          writingMode: "vertical-rl",
-                          textOrientation: "mixed",
                           textShadow: "0 1px 0 rgba(255,255,255,0.4)",
                         }}
                       >
                         {cat.spineTitle}
                       </span>
-          <span
-                        className="px-1 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/62 sm:text-[8px]"
+                      <span
+                        className="px-1.5 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/62 sm:text-[8px]"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
-          >
+                      >
                         {cat.spineBlurb}
-          </span>
+                      </span>
                     </button>
                     </div>
                   ))}
@@ -1125,8 +1124,8 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       ♦
                     </span>
 
-                    <div className="relative z-[1] mb-6 text-center sm:text-right">
-                      <h3 className="font-serif text-2xl text-black/85 md:text-3xl" style={{ fontFamily: SERIF }}>
+                    <div className="relative z-[1] mb-5 text-center sm:mb-4 sm:text-right">
+                      <h3 className="font-serif text-xl text-black/85 sm:text-2xl md:text-[1.65rem]" style={{ fontFamily: SERIF }}>
                         {activeMeta?.spineTitle}
                       </h3>
                       <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/38">{activeMeta?.spineFoot}</p>
@@ -1214,7 +1213,11 @@ function TeaPartyInviteSection({
           >
             {invite.eyebrow}
           </p>
-          <h2 className="mb-8 font-serif text-xl text-black/70 md:text-2xl" style={{ fontFamily: SERIF }}>
+          <h2
+            lang="ko"
+            className="mb-8 font-serif text-xl text-black/70 md:text-2xl"
+            style={{ fontFamily: SERIF }}
+          >
             {invite.title}
           </h2>
 
@@ -1284,6 +1287,7 @@ function TeaPartyInviteSection({
 export default function HomePage() {
   const [gardenSuit, setGardenSuit] = useState<GardenSuit | null>(null);
   const gardenHintMotion = useReducedMotion();
+  const cheshireImageReduced = useReducedMotion();
 
   /** Map vertical wheel to horizontal scroll on the card strip (wheel still scrolls the page at the ends). */
   const onGardenCardStripWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
@@ -1342,15 +1346,6 @@ export default function HomePage() {
             href={links.linkedin}
             panelTitle="LinkedIn"
             description={navReveal.linkedinDescription}
-            size="sm"
-            panel="below"
-          />
-          <NavReveal
-            label={nav.github}
-            kind="external"
-            href={links.github}
-            panelTitle="GitHub"
-            description={navReveal.githubDescription}
             size="sm"
             panel="below"
           />
@@ -1495,7 +1490,7 @@ export default function HomePage() {
                 ) : null}
               </div>
             ) : null}
-            <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4 sm:gap-4">
+            <div className="grid grid-cols-2 items-stretch gap-2 sm:grid-cols-4 sm:gap-3">
               {garden.suits.map((s, i) => {
                 const active = gardenSuit === s.id;
                 const red = s.id === "heart" || s.id === "diamond";
@@ -1534,9 +1529,9 @@ export default function HomePage() {
                     >
                       {s.glyph}
                     </motion.span>
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/45">{s.label}</span>
-                      <span className="text-[11px] font-medium text-black/55">{s.sub}</span>
+                    <div className="flex max-w-[11.5rem] flex-col items-center gap-1 px-0.5">
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/52">{s.label}</span>
+                      <span className="text-[11px] font-medium leading-snug text-black/62">{s.sub}</span>
                     </div>
                   </button>
                 );
@@ -1711,13 +1706,23 @@ export default function HomePage() {
           transition={{ duration: 1.2 }} viewport={{ once: true }}
           className="max-w-3xl mx-auto">
           <div className="mb-10 flex justify-center sm:mb-12">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <motion.img
               src="/chat.png"
               alt="Cheshire Cat"
               draggable={false}
               className="h-auto max-h-[200px] w-auto max-w-[min(72vw,220px)] object-contain sm:max-h-[240px]"
-              style={{ filter: "grayscale(100%) contrast(1.4) opacity(0.82)", mixBlendMode: "multiply", userSelect: "none" }}
+              style={{ filter: "grayscale(100%) contrast(1.4)", mixBlendMode: "multiply", userSelect: "none" }}
+              initial={{ opacity: 0.82 }}
+              animate={
+                cheshireImageReduced
+                  ? { opacity: 0.82 }
+                  : { opacity: [0.18, 0.92, 0.18] }
+              }
+              transition={
+                cheshireImageReduced
+                  ? { duration: 0 }
+                  : { duration: 9, repeat: Infinity, ease: "easeInOut", times: [0, 0.5, 1] }
+              }
             />
           </div>
           <div
@@ -1730,17 +1735,17 @@ export default function HomePage() {
           >
             {cheshire.quote}
           </blockquote>
-          <p className="mb-10 text-sm tracking-wider text-black/30">{cheshire.attribution}</p>
-          <div
-            className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
-            dangerouslySetInnerHTML={{ __html: cheshire.codaHtml }}
-          />
-          <a href={links.contactMailto}>
-            <motion.button whileHover={{ scale: 1.03, background: "#1a1a1a" }} whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-3 px-10 py-4 border border-black/20 text-black/70 text-sm tracking-widest transition-all hover:text-white hover:border-black">
-              {cheshire.cta}
-            </motion.button>
-          </a>
+          <p
+            className={`text-sm tracking-wider text-black/30 ${cheshire.codaHtml.trim() ? "mb-10" : "mb-12"}`}
+          >
+            {cheshire.attribution}
+          </p>
+          {cheshire.codaHtml.trim() ? (
+            <div
+              className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
+              dangerouslySetInnerHTML={{ __html: cheshire.codaHtml }}
+            />
+          ) : null}
         </motion.div>
       </section>
 
@@ -1752,22 +1757,22 @@ export default function HomePage() {
         {/* Classical colophon */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.1)" }} />
-            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.1)" }} />
+            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.14)" }} />
+            <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.14)" }} />
           </div>
-          <p className="text-black/20 text-xs tracking-widest"
+          <p className="text-black/45 text-xs tracking-widest"
             style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", letterSpacing: "0.18em" }}>
             {footer.colophonLine1}
           </p>
           <div className="flex items-center justify-center gap-2 mt-1.5">
-            <span className="text-black/25 text-xs font-serif tracking-widest"
+            <span className="text-black/50 text-xs font-serif tracking-widest"
               style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
         </div>
 
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-black/30 text-sm font-serif"
+            <span className="text-black/55 text-sm font-serif"
               style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-1">
@@ -1781,15 +1786,6 @@ export default function HomePage() {
               panel="above"
             />
             <NavReveal
-              label={nav.github}
-              kind="external"
-              href={links.github}
-              panelTitle="GitHub"
-              description={navReveal.githubDescription}
-              size="xs"
-              panel="above"
-            />
-            <NavReveal
               label={nav.email}
               kind="mailto"
               href={links.contactMailto}
@@ -1798,7 +1794,7 @@ export default function HomePage() {
               panel="above"
             />
           </div>
-          <p className="text-black/15 text-xs">{footer.copyright}</p>
+          <p className="text-black/40 text-xs">{footer.copyright}</p>
         </div>
       </footer>
     </div>
