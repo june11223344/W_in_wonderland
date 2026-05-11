@@ -1,6 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, type CSSProperties, type WheelEvent } from "react";
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+  useMemo,
+  type CSSProperties,
+  type WheelEvent,
+} from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { NavReveal } from "@/components/NavReveal";
@@ -812,7 +821,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
       className="mx-auto mb-14 mt-2 max-w-5xl px-1"
     >
       <p
-        className="mb-2 text-center text-[10px] uppercase tracking-[0.42em] text-black/60"
+        className="mb-2 text-center text-[10px] tracking-[0.14em] text-black/60"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         {copy.sectionEyebrow}
@@ -833,7 +842,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
             <img src={copy.growImageSrc} alt={copy.growImageAlt} draggable={false} style={imgStyle} />
           </div>
           <div className="flex min-w-0 flex-col text-center md:flex-1 md:justify-center md:text-left">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/60">{copy.growLabel}</p>
+            <p className="mb-1 text-[10px] tracking-[0.12em] text-black/60">{copy.growLabel}</p>
             <h4
               className="mb-2 font-serif text-lg text-black/78 sm:text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -853,7 +862,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
             <img src={copy.shrinkImageSrc} alt={copy.shrinkImageAlt} draggable={false} style={imgStyle} />
           </div>
           <div className="flex min-w-0 flex-col text-center md:flex-1 md:justify-center md:text-left">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/60">{copy.shrinkLabel}</p>
+            <p className="mb-1 text-[10px] tracking-[0.12em] text-black/60">{copy.shrinkLabel}</p>
             <h4
               className="mb-2 font-serif text-lg text-black/78 sm:text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -978,7 +987,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
           className="mb-10 text-center md:mb-14"
         >
           <p
-            className="mb-2 text-[10px] uppercase tracking-[0.42em] text-black/72"
+            className="mb-2 text-[10px] tracking-[0.14em] text-black/72"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {copy.sectionEyebrow}
@@ -1025,7 +1034,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
               </div>
 
               <div className="flex w-full shrink-0 flex-col items-center gap-3.5 lg:w-auto">
-                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/72">
+                <p className="text-center text-[11px] font-medium tracking-wide text-black/72">
                   {copy.spineRowCue}
                 </p>
                 <div
@@ -1214,7 +1223,7 @@ function TeaPartyInviteSection({
           className="text-center"
         >
           <p
-            className="mb-2 text-[10px] uppercase tracking-[0.38em] text-black/72"
+            className="mb-2 text-[10px] tracking-[0.12em] text-black/72"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {invite.eyebrow}
@@ -1290,10 +1299,92 @@ function TeaPartyInviteSection({
 
 // ══════════════════════════════════════════════════════════════════════════
 
+/** Nav / footer text link — matches NavReveal `text` trigger (sm). */
+const NAV_TEXT_LINK_ROW =
+  "inline-flex min-h-[44px] min-w-[44px] items-center justify-center border-0 bg-transparent px-2 text-sm tracking-wide text-black/62 underline-offset-4 transition-colors hover:text-black/90 hover:underline sm:min-w-0 sm:px-1";
+
 export default function HomePage() {
   const [gardenSuit, setGardenSuit] = useState<GardenSuit | null>(null);
   const gardenHintMotion = useReducedMotion();
   const cheshireImageReduced = useReducedMotion();
+  const gardenStripRef = useRef<HTMLDivElement>(null);
+  const gardenStripInnerRef = useRef<HTMLDivElement>(null);
+  const [gardenCardStripIndex, setGardenCardStripIndex] = useState(0);
+  /** When all cards fit in the strip width, center the row with flex instead of scroll. */
+  const [gardenStripRowCenter, setGardenStripRowCenter] = useState(false);
+
+  const gardenStripCards = useMemo(
+    () => (gardenSuit ? SPOTLIGHT.filter((idea) => idea.suit === gardenSuit) : []),
+    [gardenSuit],
+  );
+
+  const syncGardenStripActiveIndex = useCallback(() => {
+    const el = gardenStripRef.current;
+    if (!el || gardenStripCards.length === 0) {
+      setGardenCardStripIndex(0);
+      return;
+    }
+    const n = gardenStripCards.length;
+    if (n <= 1) {
+      setGardenCardStripIndex(0);
+      return;
+    }
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 2) {
+      setGardenCardStripIndex(0);
+      return;
+    }
+    const ratio = el.scrollLeft / maxScroll;
+    const idx = Math.round(ratio * (n - 1));
+    setGardenCardStripIndex(Math.max(0, Math.min(n - 1, idx)));
+  }, [gardenStripCards]);
+
+  /**
+   * After picking a suit, center the first card in the horizontal strip.
+   * `scrollIntoView` is unreliable here (motion layout + nested scrollport), so we set `scrollLeft` from geometry.
+   */
+  useLayoutEffect(() => {
+    if (gardenSuit === null || gardenStripCards.length === 0) {
+      setGardenCardStripIndex(0);
+      setGardenStripRowCenter(false);
+      return;
+    }
+    setGardenCardStripIndex(0);
+
+    const strip = gardenStripRef.current;
+    const inner = gardenStripInnerRef.current;
+    if (!strip || !inner) return;
+
+    setGardenStripRowCenter(false);
+
+    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+    const apply = () => {
+      const first = inner.children[0] as HTMLElement | undefined;
+      if (!first) return;
+      const maxScroll = Math.max(0, strip.scrollWidth - strip.clientWidth);
+      if (maxScroll <= 2) {
+        strip.scrollLeft = 0;
+        setGardenStripRowCenter(true);
+        return;
+      }
+      const s = strip.getBoundingClientRect();
+      const c = first.getBoundingClientRect();
+      const diff = c.left + c.width / 2 - (s.left + s.width / 2);
+      strip.scrollLeft = clamp(Math.round(strip.scrollLeft + diff), 0, maxScroll);
+    };
+
+    apply();
+    const id0 = requestAnimationFrame(apply);
+    const id1 = requestAnimationFrame(() => {
+      apply();
+      syncGardenStripActiveIndex();
+    });
+    return () => {
+      cancelAnimationFrame(id0);
+      cancelAnimationFrame(id1);
+    };
+  }, [gardenSuit, gardenStripCards, syncGardenStripActiveIndex]);
 
   /** Map vertical wheel to horizontal scroll on the card strip (wheel still scrolls the page at the ends). */
   const onGardenCardStripWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
@@ -1318,6 +1409,7 @@ export default function HomePage() {
     brand,
     nav,
     navReveal,
+    a11y,
     hero,
     processIntro,
     aliceScale,
@@ -1329,6 +1421,12 @@ export default function HomePage() {
 
   return (
     <div className="min-w-0 overflow-x-hidden bg-[#fcfcfa] text-[#1a1a1a]">
+      <a
+        href="#main"
+        className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-[140%] rounded-md border border-black/12 bg-[#fcfcfa] px-4 py-2.5 text-sm font-medium text-black shadow-md outline-none ring-0 transition-transform duration-200 focus:pointer-events-auto focus:translate-y-[max(0.5rem,env(safe-area-inset-top))] focus:ring-2 focus:ring-black/25"
+      >
+        {a11y.skipToMain}
+      </a>
       {/* ── Navbar ── */}
       <nav
         className="fixed left-0 right-0 top-0 z-50 flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2 sm:h-16 sm:flex-nowrap sm:gap-y-0 sm:px-8 sm:py-0"
@@ -1360,17 +1458,18 @@ export default function HomePage() {
             size="sm"
             panel="below"
           />
-          <NavReveal
-            label={nav.email}
-            kind="mailto"
-            href={links.contactMailto}
-            panelTitle="Email"
-            size="sm"
-            panel="below"
-          />
+          <a href={links.contactMailto} className={NAV_TEXT_LINK_ROW}>
+            {nav.email}
+          </a>
         </div>
       </nav>
 
+      <main
+        id="main"
+        tabIndex={-1}
+        lang="en"
+        className="outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fcfcfa]"
+      >
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
@@ -1381,7 +1480,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="mb-6 text-xs uppercase tracking-[0.4em] text-black/72"
+              className="mb-6 text-xs tracking-[0.2em] text-black/72"
             >
               {hero.eyebrow}
             </motion.p>
@@ -1397,9 +1496,19 @@ export default function HomePage() {
 
         <motion.p
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
-          className="mx-auto mb-10 max-w-md text-base leading-relaxed text-black"
+          className={`mx-auto max-w-md text-base leading-relaxed text-black ${hero.summaryHtml.trim() ? "mb-6" : "mb-10"}`}
           dangerouslySetInnerHTML={{ __html: hero.subHtml }}
         />
+
+        {hero.summaryHtml.trim() ? (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 1.05 }}
+            className="mx-auto mb-10 max-w-lg rounded-lg border border-black/[0.08] bg-white/60 px-5 py-4 text-left text-sm leading-relaxed text-black/88 shadow-sm sm:text-[0.9375rem] sm:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: hero.summaryHtml }}
+          />
+        ) : null}
 
         </div>{/* /relative zIndex wrapper */}
 
@@ -1418,7 +1527,7 @@ export default function HomePage() {
             className="mx-auto mb-12 max-w-xl border-b border-black/[0.07] pb-12 text-center sm:mb-14 sm:pb-14"
           >
             <p
-              className="mb-3 text-[10px] uppercase tracking-[0.42em] text-black/78"
+              className="mb-3 text-[11px] tracking-[0.12em] text-black/78"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.sectionGateEyebrow}
@@ -1469,7 +1578,7 @@ export default function HomePage() {
               </div>
             </motion.div>
             <p
-              className="mb-4 text-[10px] uppercase tracking-[0.35em] text-black/56"
+              className="mb-4 text-[11px] font-medium tracking-wide text-black/62"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.suitPickerTitle}
@@ -1541,7 +1650,7 @@ export default function HomePage() {
                       {s.glyph}
                     </motion.span>
                     <div className="flex max-w-[11.5rem] flex-col items-center gap-1 px-0.5">
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/78">{s.label}</span>
+                      <span className="text-[10px] font-semibold tracking-wide text-black/78">{s.label}</span>
                       <span className="text-[11px] font-medium leading-snug text-black/76">{s.sub}</span>
                     </div>
                   </button>
@@ -1564,12 +1673,22 @@ export default function HomePage() {
               style={{ background: "linear-gradient(to left, rgba(250,249,246,0.95) 0%, transparent 100%)" }}
               aria-hidden
             />
+            {gardenStripCards.length > 1 ? (
+              <p
+                className="mx-auto max-w-6xl px-6 pb-2 pt-1 text-center text-[11px] leading-snug text-black/62 sm:px-10 md:px-14"
+                lang="en"
+              >
+                {garden.cardStripHint}
+              </p>
+            ) : null}
             <div
-              className="mx-auto flex w-full max-w-6xl justify-start overflow-x-auto overflow-y-visible overscroll-x-contain px-6 py-10 pb-4 pt-2 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_mandatory] [scroll-padding-inline:max(1.25rem,calc(50vw-clamp(110px,26vw,134px)))] touch-pan-x sm:px-10 md:px-14"
-              style={{ overscrollBehaviorX: "contain" }}
+              ref={gardenStripRef}
+              onScroll={syncGardenStripActiveIndex}
+              className="mx-auto flex w-full max-w-6xl justify-start overflow-x-auto overflow-y-visible overscroll-x-contain px-4 py-10 pb-4 pt-2 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_mandatory] [scroll-padding-inline:1rem] [touch-action:pan-x_pan-y] sm:px-8 md:px-10"
+              style={{ overscrollBehaviorX: "contain", overscrollBehaviorY: "auto" }}
               onWheel={onGardenCardStripWheel}
             >
-              {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).length === 0 ? (
+              {gardenStripCards.length === 0 ? (
                 <div className="flex min-h-[min(280px,calc(100dvh-16rem))] w-full max-w-md flex-col items-center justify-center px-6 py-16 text-center">
                   <p className="font-serif text-lg text-black/74 sm:text-xl" style={{ fontFamily: SERIF }}>
                     {garden.emptySuitTitle}
@@ -1582,24 +1701,61 @@ export default function HomePage() {
                   </p>
                 </div>
               ) : (
-                <div className="inline-flex items-stretch gap-4 px-[max(0.75rem,calc(50vw-clamp(110px,26vw,134px)))] sm:gap-5 sm:px-[max(1rem,calc(50%-8.375rem))]">
-                  {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).map((idea, i) => {
+                <div
+                  ref={gardenStripInnerRef}
+                  className={[
+                    "items-stretch gap-4 sm:gap-5",
+                    gardenStripRowCenter
+                      ? "flex w-full min-w-full flex-nowrap justify-center px-2"
+                      : "inline-flex min-w-max px-1 sm:px-2",
+                  ].join(" ")}
+                >
+                  {gardenStripCards.map((idea, i) => {
                     return (
                       <motion.div
                         key={idea.title}
-                        className="flex h-[min(404px,calc(100dvh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 snap-center flex-col"
+                        className="flex h-[min(404px,calc(100dvh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 snap-center flex-col [touch-action:pan-x_pan-y]"
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.04, duration: 0.35, ease: "easeOut" }}
                         whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                       >
                         <IdeaCard idea={idea} index={i} selectedSuit={gardenSuit} />
-              </motion.div>
+                      </motion.div>
                     );
                   })}
-          </div>
+                </div>
               )}
-        </div>
+            </div>
+            {gardenStripCards.length > 1 ? (
+              <div
+                className="flex justify-center gap-2 pb-1 pt-2"
+                role="navigation"
+                aria-label={a11y.gardenCardStripNav}
+              >
+                {gardenStripCards.map((_, i) => (
+                  <button
+                    key={`${gardenSuit}-${i}`}
+                    type="button"
+                    aria-label={`Card ${i + 1} of ${gardenStripCards.length}`}
+                    aria-current={i === gardenCardStripIndex ? "step" : undefined}
+                    onClick={() => {
+                      const inner = gardenStripInnerRef.current;
+                      const node = inner?.children[i] as HTMLElement | undefined;
+                      node?.scrollIntoView({
+                        behavior: gardenHintMotion ? "auto" : "smooth",
+                        inline: "center",
+                        block: "nearest",
+                      });
+                    }}
+                    className={[
+                      "h-2 w-2 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f6]",
+                      i === gardenCardStripIndex ? "bg-black/65" : "bg-black/22 hover:bg-black/40",
+                    ].join(" ")}
+                  />
+                ))}
+              </div>
+            ) : null}
             <div className="flex justify-center pt-4">
               <button
                 type="button"
@@ -1632,7 +1788,7 @@ export default function HomePage() {
             <motion.p
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.7 }} viewport={{ once: true }}
-                  className="text-black/74 text-[10px] tracking-[0.45em] uppercase mb-5"
+                  className="mb-5 text-[11px] tracking-[0.14em] text-black/74"
                 >
                   {processIntro.eyebrow}
             </motion.p>
@@ -1754,6 +1910,7 @@ export default function HomePage() {
           ) : null}
         </motion.div>
       </section>
+      </main>
 
       {/* ── Footer ── */}
       <footer
@@ -1791,14 +1948,12 @@ export default function HomePage() {
               size="xs"
               panel="above"
             />
-            <NavReveal
-              label={nav.email}
-              kind="mailto"
+            <a
               href={links.contactMailto}
-              panelTitle="Email"
-              size="xs"
-              panel="above"
-            />
+              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center border-0 bg-transparent px-2 text-xs tracking-wide text-black/65 underline-offset-4 transition-colors hover:text-black/88 hover:underline sm:min-w-0 sm:px-1"
+            >
+              {nav.email}
+            </a>
           </div>
           <p className="text-black/78 text-xs">{footer.copyright}</p>
         </div>

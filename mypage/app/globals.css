@@ -32,39 +32,6 @@
   }
 }
 
-@layer utilities {
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%);
-  }
-
-  .bg-gradient-hero {
-    background: linear-gradient(160deg, #f0fdfa 0%, #ccfbf1 50%, #f0fdfa 100%);
-  }
-
-  .bg-gradient-navy {
-    background: linear-gradient(180deg, #0B1026 0%, #111938 100%);
-  }
-
-  .bg-gradient-cta-green {
-    background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%);
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, #0D9488, #14B8A6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .card-shadow {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  }
-
-  .card-shadow-md {
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
-  }
-}
-
 /* ── Landing page animations ───────────────────────────── */
 @keyframes sparkDraw {
   from { stroke-dashoffset: 300; }

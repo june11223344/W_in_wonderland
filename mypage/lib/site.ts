@@ -21,6 +21,12 @@ export const site = {
     linkedin: "https://www.linkedin.com/in/wonjun-wonjun/",
   },
 
+  /** Skip link and other accessibility strings (keep in English for `lang="en"` pages). */
+  a11y: {
+    skipToMain: "Skip to main content",
+    gardenCardStripNav: "Garden cards in this suit",
+  },
+
   nav: {
     board: "Garden",
     email: "Email",
@@ -48,6 +54,9 @@ export const site = {
     /** Appended after nameLine (e.g. space + greeting). */
     helloTyping: " Hello!",
     subHtml: "Curious? Follow the rabbit — the garden and cards carry the rest.",
+    /** Plain bridge after the hero: who this is and why the garden comes next (first-visit clarity). */
+    summaryHtml:
+      "<p><strong>Wonjun</strong> — Data Science and AI product builder (live apps, ML, and team leadership). The <strong>garden</strong> below is the proof deck: each playing card is a real project or chapter, sorted by suit.</p>",
   },
 
   processIntro: {
@@ -68,13 +77,13 @@ export const site = {
     growLabel: "EAT ME",
     growTitle: "What I want to grow",
     growBodyHtml:
-      "<p><strong>Logic, consistency, solidity</strong> — clear reasoning, the same bar on day ten as day one, work that survives reviews and edge cases.</p><p>When trade-offs hit, my reasoning stays <strong>legible to me first</strong> — my own metric, sharpened over time.</p>",
+      "<p>I value <strong>logic, consistency, and solid work</strong> — clear thinking, steady standards, and building things that can handle <strong>feedback and problems</strong>.</p><p>When difficult choices come up, I want my reasoning to <strong>make sense to myself first</strong>. That personal standard is something I've developed over time.</p>",
     growImageSrc: "/eattme.png",
     growImageAlt: "EAT ME cake",
     shrinkLabel: "DRINK ME",
     shrinkTitle: "What I want to shrink",
     shrinkBodyHtml:
-      "<p><strong>Thinking that grabs my ankles</strong> — every branch in my head until even small moves feel risky.</p><p>Some lessons only land <strong>mid-dive</strong>; I want cheaper first tries instead of waiting for a perfect map.</p>",
+      "<p>I tend to <strong>overthink</strong> things — following every possibility until even small decisions start to feel risky.</p><p>Some lessons can only be learned by <strong>trying</strong>. I want to get more comfortable <strong>taking small steps</strong> instead of waiting for a <strong>perfect plan</strong>.</p>",
     shrinkImageSrc: "/drink-removebg-preview.png",
     shrinkImageAlt: "DRINK ME bottle",
   },
@@ -85,7 +94,7 @@ export const site = {
    */
   spotlight: [
     {
-      title: "eLe — news into level-matched dialogue",
+      title: "eLe — live news into leveled English dialogues",
       category: "Hard skills · AI product",
       trend: "Mar 2026",
       suit: "spade",
@@ -93,27 +102,27 @@ export const site = {
       imageAlt:
         "eLe English education graphic: easy plus live equals english, with try-it cue and QR — Presented by Wonjun Lee",
       projectUrl: "https://juns007-ele-frontend.static.hf.space/",
-      roleLine: "Product direction; news-to-dialogue teaching pipeline",
-      impactLine: "Less manual prep; fresher, level-matched English practice",
+      roleLine: "Led product direction and built a flow from fresh news to classroom-ready dialogues.",
+      impactLine: "Teachers spend less time on prep; learners get dialogues that match their level.",
       detailHtml:
-        "<p><strong>KEY AI PRODUCT · eLe</strong> — An English-learning AI platform that turns live news into dialogues matched to the learner’s level.</p><p>Focused on automating teaching-material generation to cut manual work, and on keeping the product feeling like content that never goes stale.</p>",
+        "<p><strong>eLe</strong> is an English-study product that turns <strong>live news</strong> into short dialogues matched to the learner’s level.</p><p>I focused on <strong>auto-building lesson material</strong> so the work is lighter for teachers, and on keeping the content feeling <strong>new each week</strong>.</p>",
     },
     {
-      title: "Point — presentation coaching agent",
+      title: "Point — live presentation coach",
       category: "Hard skills · real-time AI",
       trend: "Mar 2026 →",
       suit: "spade",
       imageSrc: "/spotlight/point-landing.png",
       imageAlt: "Point landing page: Your AI presentation coach, lined paper background and Start with Point button",
       projectUrl: "https://pointpresent.com/",
-      roleLine: "Real-time coaching UX; client-side processing focus",
-      impactLine: "Snappier feedback loop without heavy server round-trips",
+      roleLine: "Built the live practice screen and kept heavy work on the user’s device when possible.",
+      impactLine: "Learners get quicker tips during a talk, without waiting on a distant server.",
       detailHtml:
-        "<p><strong>KEY AI PRODUCT · Point</strong> — A real-time coaching tool that gives feedback on speech and non-verbal cues during practice talks.</p><p>Designed around <strong>client-side processing</strong> to keep latency low so the experience feels like an immediate, in-the-room coach.</p>",
+        "<p><strong>Point</strong> gives <strong>live feedback</strong> on voice and body language while someone rehearses a talk.</p><p>I designed it so <strong>most processing runs on the device</strong>, which keeps delay low and the coach feeling present.</p>",
     },
     {
-      title: "ML & data pipelines + X:AI Base — class & campus reading",
-      category: "Hard skills · ML, analytics & school reading",
+      title: "ML class work and a campus AI reading circle",
+      category: "Hard skills · ML & analytics",
       trend: "2025",
       suit: "spade",
       imageSrc: "/spotlight/kookmin-university-logo.png",
@@ -121,133 +130,127 @@ export const site = {
       imageFit: "contain",
       imageAlt:
         "Kookmin University circular seal: KMU wordmark with ring text Kookmin University / 국민대학교",
-      roleLine: "DL, voice, text & analytics from class; Kookmin X:AI Base — papers, circle read & defend",
-      impactLine: "STT & topic-model artifacts; research skim → deep read + sharper ML paper critique",
+      roleLine: "Course projects in deep learning, speech, text, and analytics; ran a small on-campus AI paper circle.",
+      impactLine: "Built course models and reports; learned to read research faster and ask better questions.",
       detailHtml:
-        "<p><strong>Deep learning course</strong> — Framed a smart fish-farm object-detection idea to think through domain-specific DL.</p><p><strong>X:AI Adv</strong> — End-to-end STT shopping-cart flow and voice-model fine-tuning.</p><p><strong>Text analytics</strong> — Airline reviews with word clouds and topic modeling.</p><p><strong>X:AI Base (Spring 2025, Kookmin University)</strong> — An <strong>on-campus paper-reading circle</strong> where I read, presented, and discussed AI research with peers.</p><p>Trained hard skills that carry into coursework and projects: <strong>fast triage vs deep read</strong>, checking methods and assumptions, and asking sharper questions of research writing.</p>",
+        "<p><strong>Deep learning</strong> — Used a fish-farm detection brief to think through real-world object detection.</p><p><strong>Advanced AI (speech)</strong> — Built an end-to-end speech flow for a shopping task and tuned a small voice model.</p><p><strong>Text analytics</strong> — Worked with airline reviews, word clouds, and simple topic views.</p><p><strong>X:AI Base (Spring 2025)</strong> — Joined a <strong>weekly paper-reading circle</strong> at Kookmin: present, debate, and take notes with peers.</p><p>Takeaway: know when to <strong>skim</strong> a paper and when to <strong>go deep</strong>, and always check the methods and assumptions.</p>",
     },
     {
-      title: "HUSS hackathon — vision, roadmap, stage",
+      title: "HUSS hackathon — vision, roadmap, main pitch",
       category: "Soft skills · leadership",
       trend: "Aug 2025",
       suit: "heart",
       imageSrc: "/spotlight/huss-convergence-presentation.png",
       imageAlt:
         "HUSS stage pitch: presenter with slide on government macro data versus neighbourhood micro data for an environmental data app",
-      roleLine: "Platform vision, technical roadmap, main-stage pitch",
-      impactLine: "Grand Prize; dense tech translated for 200+ listeners",
+      roleLine: "Owned the product vision and roadmap; delivered the main stage pitch for our team.",
+      impactLine: "Won Grand Prize; learned to explain hard tech clearly to a large crowd.",
       detailHtml:
-        "<p><strong>HUSS Idea Hackathon (environmental data app)</strong> — Led the platform <strong>vision</strong> and pitched a complex <strong>technical roadmap</strong> to an audience of 200+.</p><p><strong>Grand Prize</strong> — what stuck most was practice turning dense tech into a story people could follow in one sitting.</p>",
+        "<p><strong>HUSS Idea Hackathon</strong> — Our team built an idea for an <strong>environmental data app</strong>.</p><p>I led the <strong>vision</strong>, shaped the <strong>roadmap</strong>, and pitched to <strong>200+</strong> people. We won the <strong>Grand Prize</strong>. The best lesson was turning dense tech into a <strong>simple story</strong> people could follow in one sitting.</p>",
     },
     {
-      title: "Capstone — problem to solution with the team",
-      category: "Soft skills · collaboration",
+      title: "Capstone — from team problem to team solution",
+      category: "Soft skills · teamwork",
       trend: "Spring 2025",
       suit: "heart",
       imageSrc: "/spotlight/capstone-outlier-accommodations.png",
       imageAlt:
         "Capstone slide: final definition of outlier Airbnb listings — scatter of model-predicted vs actual booking rate with high and low outlier clusters",
-      roleLine: "Problem framing → solution with a cross-major student team",
-      impactLine: "Full delivery arc, not only analysis in a notebook",
+      roleLine: "Worked with students from other majors from first question to final delivery.",
+      impactLine: "Shipped a full project path, not only charts in a notebook.",
       detailHtml:
-        "<p>Airbnb lodging-data capstone: ran the <strong>full arc from problem framing to solution</strong> with a student team.</p><p>Worked across different majors, split roles, and synced often — the messy human part of shipping, not just the notebook.</p><p><strong>Outlier listings</strong> — Compared <strong>model-predicted vs actual booking rates</strong> to flag “superior” stays the model undersold and “underperforming” stays that lagged despite a strong forecast — tightening what the team optimised for next.</p>",
+        "<p><strong>Airbnb capstone</strong> — We moved from a clear problem to a shared solution as a team.</p><p>We split roles, met often, and handled the messy parts of <strong>real group work</strong>.</p><p>We also studied <strong>outlier listings</strong> by comparing <strong>model guesses vs real booking rates</strong> to find stays the model missed—then we tightened what to improve next.</p>",
     },
     {
-      title: "D&A — big-data society ops & seminars",
-      category: "Soft skills · lead",
+      title: "D&A society — year plan and member seminars",
+      category: "Soft skills · community lead",
       trend: "Jan–Nov 2025",
       suit: "heart",
       imageSrc: "/spotlight/da-bagging-seminar.png",
       imageAlt:
         "D&A seminar in session: presenter beside screen explaining Bagging — bootstrap sampling, multiple models, and aggregating predictions (vote or average)",
-      roleLine: "Society ops: roadmap + advanced seminar program",
-      impactLine: "50+ members; raised the bar on RNNs, LSTMs, and practice",
+      roleLine: "Set the year plan for 50+ members and led seminars on harder ML topics.",
+      impactLine: "Helped members level up on RNNs, LSTMs, and hands-on practice.",
       detailHtml:
-        "<p><strong>PROFESSIONAL · D&amp;A (Big Data Analysis Society)</strong> — Set a <strong>roadmap</strong> for 50+ members and <strong>ran seminars</strong> on advanced topics like RNNs and LSTMs.</p><p>Aimed to lift the society’s technical floor while tightening my own understanding by teaching structure, not only using it.</p><p><strong>Seminar snapshot</strong> — Led sessions that walked through <strong>Bagging</strong> (bootstrap + aggregating): resampled training sets, trained parallel models, then combined outputs with <strong>majority vote</strong> for classification or <strong>averaging</strong> for regression — linking ensemble intuition to how members read models end-to-end.</p>",
+        "<p><strong>D&amp;A (Big Data Analysis Society)</strong> — I helped run the club for a year with <strong>50+</strong> members.</p><p>I wrote the <strong>roadmap</strong>, ran <strong>seminars</strong>, and taught topics like RNNs and LSTMs in plain steps.</p><p>One example: <strong>Bagging</strong> — train many small models on random samples, then <strong>vote</strong> (for labels) or <strong>average</strong> (for numbers) so the group is stronger than any single model.</p>",
     },
     {
-      title: "Netherlands exchange — web with locals",
-      category: "International",
+      title: "Netherlands exchange — civic site with local partners",
+      category: "International · exchange",
       trend: "Fall 2024",
       suit: "diamond",
       imageSrc: "/spotlight/netherlands-exchange-team.png",
       imageAlt:
         "Netherlands exchange: team photo on campus with civic-tech project posters (democracy / gamification) in the background",
-      roleLine: "Community website with local stakeholders (English day-to-day)",
-      impactLine: "Shipped site + rapport outside my default context",
+      roleLine: "Built a small community website with local partners; used English every day.",
+      impactLine: "Shipped a real site and grew more comfortable outside my home context.",
       detailHtml:
-        "<p><strong>Netherlands Exchange Program (Fall 2024)</strong> — Built a community website with local stakeholders, negotiating needs in English day to day.</p><p>A stretch season for communication and rapport — the kind of growth that only really shows up when you leave your default context.</p>",
+        "<p><strong>Netherlands exchange (Fall 2024)</strong> — Our team made a <strong>civic-tech style site</strong> with local partners.</p><p>I gathered needs, wrote copy, and coordinated in <strong>English daily</strong>. It was a strong stretch for listening, writing, and earning trust in a new place.</p>",
     },
     {
-      title: "Global Climate Change Response — Georgia & Uzbekistan",
+      title: "Climate field study — Georgia and Uzbekistan",
       category: "International · field research",
       trend: "Jul 2025",
       suit: "diamond",
       imageSrc: "/spotlight/climate-field-meeting.png",
       imageAlt:
         "Climate field program meeting room: round table with Uzbekistan desk flag and partners in discussion",
-      roleLine: "Field research, regional expert interviews, report synthesis",
-      impactLine: "One strategic report; supported ministry convening (GGGI)",
+      roleLine: "Did field visits and expert talks; turned notes into one clear written report.",
+      impactLine: "Helped set up a ministry meeting with GGGI support; compared regions in plain language.",
       detailHtml:
-        "<p><strong>Global Climate Change Response Program</strong> (Kookmin University) — Field research and expert interviews in <strong>Georgia and Uzbekistan</strong> to compare how different regions approach international climate response.</p><p><strong>Regional expert interviews</strong> — Met climate advisors at the National Centre for Climate Change (Tashkent) and traced environmental initiatives across the Caucasus and Central Asia.</p><p><strong>Global collaboration</strong> — Worked with a GGGI manager to help convene discussions at the Ministry of Ecology.</p><p><strong>Strategic insight</strong> — Turned varied regional voices into one report on partner relations and climate project management.</p><p><em>Skills:</em> English and interviewing.</p>",
+        "<p><strong>Global Climate Change Response</strong> (Kookmin) — Field work in <strong>Georgia and Uzbekistan</strong> to see how two regions handle climate work.</p><p>I met experts (for example in Tashkent), joined local meetings, and helped a GGGI partner prepare talks at the <strong>Ministry of Ecology</strong>.</p><p>I wrote <strong>one report</strong> that pulled the voices together on partners and project flow. Main tools: <strong>English</strong> and <strong>interview notes</strong>.</p>",
     },
     {
-      title: "Global PBL — Irvine, CA",
+      title: "Global PBL — six months in Irvine, CA",
       category: "International · study abroad",
       trend: "Mar–Aug 2026",
       suit: "diamond",
       imageSrc: "/spotlight/global-pbl-presentation.png",
       imageAlt:
         "Global PBL presentation: full-length photo of speaker in black tee between two projection screens, laptop on stand, classroom lighting",
-      roleLine: "Six-month exchange: applied AI, AWS, full-stack, startup ecosystem",
-      impactLine: "US coursework + building inside a venture-heavy region",
+      roleLine: "Six-month track: applied AI, AWS, full-stack work, and time around local startups.",
+      impactLine: "US classes plus project work in a region with many early-stage companies.",
       detailHtml:
-        "<p><strong>Global PBL Program</strong> (Kookmin University) — <strong>Six months in Irvine, California</strong>, focused on advanced coursework and building in a US startup ecosystem.</p><p>Current emphasis: <strong>applied AI</strong>; <strong>full-stack service development</strong>; <strong>cloud-based product building</strong>; <strong>startup dynamics and venture ecosystems</strong>.</p><p><em>Skills:</em> AI agents, Amazon Web Services (AWS).</p>",
+        "<p><strong>Global PBL</strong> (Kookmin) — <strong>Six months in Irvine, California</strong> (planned window on the card).</p><p>Focus areas: <strong>applied AI</strong>, <strong>full-stack apps</strong>, <strong>cloud builds</strong>, and learning how <strong>startups</strong> move from idea to launch.</p><p>Tools in view: <strong>AI agents</strong> and <strong>AWS</strong>.</p>",
     },
     {
-      title: "Broadcast extra",
+      title: "TV crowd extra — Boss Project (tvN)",
       category: "Clubs · on-camera cameo",
       trend: "Side quest",
       suit: "club",
       imageSrc: "/spotlight/club-tvn-broadcast-extra.png",
       imageAlt:
         "tvN drama still from Boss Project (신사장 프로젝트): night crowd scene; arrows mark background extra in light jacket",
-      roleLine:
-        "Filling the frame behind the leads: the direction I heard most was to look ordinary—plain, average, not standing out.",
-      impactLine:
-        "One believable crowd takes this many bodies; I felt how many hands keep a night scene alive, and the restless pace of that work among strangers.",
+      roleLine: "Stood in the crowd behind the leads; was asked to look plain and blend in.",
+      impactLine: "Saw how many people and resets it takes to make one night scene feel real.",
       detailHtml:
-        "<p><strong>tvN <em>Boss Project</em></strong> (신사장 프로젝트) — I joined an outdoor crowd shot as a <strong>background extra</strong>. The job was less about “acting” and more about <strong>vanishing into the mass</strong>: match the spacing, match the tone, let the principals carry the gaze.</p><p>From the back rows you notice how much <strong>density and timing</strong> a natural-looking scene needs—how smooth primetime is stacked from resets, spacing, and bodies holding space. Among people of different ages and lines of work, I also felt the <strong>busy rhythm of labor on set</strong>—the unspoken rule that the line keeps moving.</p>",
+        "<p><strong>tvN <em>Boss Project</em></strong> (신사장 프로젝트) — I was a <strong>background extra</strong> in a night crowd shot.</p><p>The job was to <strong>match spacing and tone</strong>, not to stand out. From the back you notice the <strong>pace on set</strong> and how many small moves keep a scene believable.</p>",
     },
     {
-      title: "Fencing épée — club practice",
+      title: "Club fencing (épée)",
       category: "Clubs · sport",
       trend: "Side quest",
       suit: "club",
       imageSrc: "/spotlight/club-fencing-class.png",
       imageAlt:
         "Fencing club group photo in a gym: white jackets, masks and blades, brick wall and court lines",
-      roleLine:
-        "Club épée: masks, etiquette, and the strip—where every phrase is attack or defense in miniature, like life with sharper edges.",
-      impactLine:
-        "Defense alone rarely scores; every attack opens your own target—épée keeps asking you to risk a forward step anyway, and I want that mix off the piste too.",
+      roleLine: "Trained épée in a club—gear, rules, and steady footwork on the strip.",
+      impactLine: "Learned how attack and defense both show up in work and life, not only in bouts.",
       detailHtml:
-        "<p>Épée in a club taught me more than footwork. <strong>Fencing felt like a small model of life</strong>: stretches where you <strong>attack</strong>—step forward and widen the field—and stretches where you <strong>defend</strong>—hold ground and protect what you already have.</p><p>If you only defend, the bout goes thin; you almost never take a touch. Yet every serious attack exposes a line on your own body—there is <strong>real peril in choosing to press</strong>. The strip made that trade legible again: you still have to come forward sometimes.</p><p>I left wanting the same balance away from the gym: <strong>measured offense beside patient defense</strong>, not one posture forever. The club season is a side chapter, but it already reads like one of those memories that keeps answering questions long after the jackets are hung up.</p>",
+        "<p><strong>Club épée</strong> — Weekly practice with masks, foils, and simple drills.</p><p>Fencing felt like a small picture of life: sometimes you <strong>step forward</strong>, sometimes you <strong>hold the line</strong>. Only defending rarely wins; only attacking opens you up—so balance matters off the strip too.</p>",
     },
     {
-      title: "Spanish on Duolingo — another instrument",
+      title: "Spanish on Duolingo — daily streak",
       category: "Clubs · daily language",
       trend: "440+ days",
       suit: "club",
       imageSrc: "/spotlight/club-duolingo-spanish-streak.png",
       imageAlt:
         "Duolingo streak share card: 440-day flame streak with Duo mascot and “See you later!”",
-      roleLine:
-        "Each new language feels like growing another mind—Spanish is for friends whose first tongue it is, and for travel with less glass between me and a place.",
-      impactLine:
-        "Daily practice tuned a new sense; I treat Spanish as an instrument I want to play cleanly, not only a streak to keep burning.",
+      roleLine: "Study Spanish a little every day for friends and travel—not only for the number.",
+      impactLine: "A small daily habit that still changes how the day feels.",
       detailHtml:
-        "<p><strong>Spanish · Duolingo</strong> — The card shows a <strong>440-day streak</strong>: a pocket ritual, not a whole conservatory, but a line I have tried not to break.</p><p>I keep coming back because <strong>every workable language widens the room inside my head</strong>—new routes for jokes, arguments, apologies, and small kindnesses. Spanish is the one I chose next so I can <strong>meet friends more honestly in their mother tongue</strong> and move through the world with a little less translation in the middle.</p><p>Some days it really does feel like <strong>a new sensory channel switching on</strong>: the same street, another soundtrack. Long term, I am less interested in “finishing” the tree than in <strong>playing this instrument cleanly</strong>—hearing nuance, carrying tune in conversation—one lesson at a time.</p>",
+        "<p><strong>Spanish · Duolingo</strong> — The screenshot shows a <strong>440-day streak</strong>.</p><p>I keep the habit because each new language feels like <strong>more room in my head</strong>—new ways to joke, apologize, and listen. Spanish is the one I chose next for <strong>friends</strong> and for <strong>travel</strong> with less friction.</p><p>Long term I care less about “finishing the tree” and more about <strong>speaking clearly</strong>, one short session at a time.</p>",
     },
   ],
 
@@ -268,6 +271,8 @@ export const site = {
     suitPickerHint: "Tap a suit, then a card — details open on a dimmed stage.",
     /** Shown under the hint while no suit is selected — makes the glyphs the obvious target */
     tapSuitsCue: "Tap a suit symbol",
+    /** Shown above the horizontal card strip when a suit is selected (scroll affordance). */
+    cardStripHint: "The first card lands centered — scroll sideways for more.",
     changeSuit: "Change suit",
     /** Shown when a suit has no spotlight cards yet (e.g. ♣ with zero items). */
     emptySuitTitle: "This suit is open",
@@ -278,29 +283,29 @@ export const site = {
         id: "spade",
         glyph: "♠",
         label: "Hard skills",
-        sub: "A spade's edge — craft kept sharp",
+        sub: "A spade's edge — craft kept trim and sharp",
         desc: "Spade lane — ML, AI products, analytics, and the building side.",
       },
       {
         id: "heart",
         glyph: "♥",
         label: "Soft skills",
-        sub: "Warm craft learned beside people",
+        sub: "A heart's warmth — calm craft beside people",
         desc: "Heart lane — collaboration, communication, and people craft.",
       },
       {
         id: "diamond",
         glyph: "♦",
         label: "International",
-        sub: "Bright as stones—miles and tongues from away.",
+        sub: "Bright as stones — miles and new tongues",
         desc: "Diamond lane — abroad, languages, precious keepsakes like small gems.",
       },
       {
         id: "club",
         glyph: "♣",
-        label: "Clubs",
-        sub: "One stem, many leaves—extras that round me out.",
-        desc: "Club lane — clover-shaped curiosity: cameos, fencing, streaks, small side quests.",
+        label: "just for fun",
+        sub: "One stem, three leaves — bits that round me out",
+        desc: "Just-for-fun lane — clover-shaped curiosity: cameos, fencing, streaks, small side quests.",
       },
     ] as const,
   },

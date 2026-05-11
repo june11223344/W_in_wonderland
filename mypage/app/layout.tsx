@@ -5,6 +5,9 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: site.meta.title,
   description: site.meta.description,
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
