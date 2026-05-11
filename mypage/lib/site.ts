@@ -205,43 +205,49 @@ export const site = {
         "<p><strong>Global PBL Program</strong> (Kookmin University) — <strong>Six months in Irvine, California</strong>, focused on advanced coursework and building in a US startup ecosystem.</p><p>Current emphasis: <strong>applied AI</strong>; <strong>full-stack service development</strong>; <strong>cloud-based product building</strong>; <strong>startup dynamics and venture ecosystems</strong>.</p><p><em>Skills:</em> AI agents, Amazon Web Services (AWS).</p>",
     },
     {
-      title: "Broadcast extra — tvN crowd scene",
+      title: "Broadcast extra",
       category: "Clubs · on-camera cameo",
       trend: "Side quest",
       suit: "club",
       imageSrc: "/spotlight/club-tvn-broadcast-extra.png",
       imageAlt:
         "tvN drama still from Boss Project (신사장 프로젝트): night crowd scene; arrows mark background extra in light jacket",
-      roleLine: "Walked a real set once — background in a primetime K-drama crowd",
-      impactLine: "Proof that curiosity sometimes means standing in frame, not only behind a screen",
+      roleLine:
+        "Filling the frame behind the leads: the direction I heard most was to look ordinary—plain, average, not standing out.",
+      impactLine:
+        "One believable crowd takes this many bodies; I felt how many hands keep a night scene alive, and the restless pace of that work among strangers.",
       detailHtml:
-        "<p><strong>Background extra</strong> — Appeared in a crowd scene for <strong>tvN’s <em>Boss Project</em> (신사장 프로젝트)</strong>. A small <strong>on-set memory</strong>: how a big moment on TV is built from waits, resets, and choreography.</p><p><em>More club-lane notes to add later.</em></p>",
+        "<p><strong>tvN <em>Boss Project</em></strong> (신사장 프로젝트) — I joined an outdoor crowd shot as a <strong>background extra</strong>. The job was less about “acting” and more about <strong>vanishing into the mass</strong>: match the spacing, match the tone, let the principals carry the gaze.</p><p>From the back rows you notice how much <strong>density and timing</strong> a natural-looking scene needs—how smooth primetime is stacked from resets, spacing, and bodies holding space. Among people of different ages and lines of work, I also felt the <strong>busy rhythm of labor on set</strong>—the unspoken rule that the line keeps moving.</p>",
     },
     {
-      title: "Fencing — gym club snapshot",
+      title: "Fencing épée — club practice",
       category: "Clubs · sport",
       trend: "Side quest",
       suit: "club",
       imageSrc: "/spotlight/club-fencing-class.png",
       imageAlt:
         "Fencing club group photo in a gym: white jackets, masks and blades, brick wall and court lines",
-      roleLine: "Learned fencing with a club — gear, etiquette, and repetition on the strip",
-      impactLine: "Different muscles than typing; same respect for fundamentals",
+      roleLine:
+        "Club épée: masks, etiquette, and the strip—where every phrase is attack or defense in miniature, like life with sharper edges.",
+      impactLine:
+        "Defense alone rarely scores; every attack opens your own target—épée keeps asking you to risk a forward step anyway, and I want that mix off the piste too.",
       detailHtml:
-        "<p><strong>Fencing</strong> — Club training with the full kit: masks, foils, and the slow path to <strong>clean footwork</strong>.</p><p><em>Longer write-up coming.</em></p>",
+        "<p>Épée in a club taught me more than footwork. <strong>Fencing felt like a small model of life</strong>: stretches where you <strong>attack</strong>—step forward and widen the field—and stretches where you <strong>defend</strong>—hold ground and protect what you already have.</p><p>If you only defend, the bout goes thin; you almost never take a touch. Yet every serious attack exposes a line on your own body—there is <strong>real peril in choosing to press</strong>. The strip made that trade legible again: you still have to come forward sometimes.</p><p>I left wanting the same balance away from the gym: <strong>measured offense beside patient defense</strong>, not one posture forever. The club season is a side chapter, but it already reads like one of those memories that keeps answering questions long after the jackets are hung up.</p>",
     },
     {
-      title: "Spanish on Duolingo — long streak",
+      title: "Spanish on Duolingo — another instrument",
       category: "Clubs · daily language",
       trend: "440+ days",
       suit: "club",
       imageSrc: "/spotlight/club-duolingo-spanish-streak.png",
       imageAlt:
         "Duolingo streak share card: 440-day flame streak with Duo mascot and “See you later!”",
-      roleLine: "Daily Spanish on Duolingo — past a full year and still checking in",
-      impactLine: "Low-stakes consistency that survives busy weeks without a project deadline",
+      roleLine:
+        "Each new language feels like growing another mind—Spanish is for friends whose first tongue it is, and for travel with less glass between me and a place.",
+      impactLine:
+        "Daily practice tuned a new sense; I treat Spanish as an instrument I want to play cleanly, not only a streak to keep burning.",
       detailHtml:
-        "<p><strong>Spanish · Duolingo</strong> — Over <strong>a year</strong> of daily practice; the screenshot shows a <strong>440-day streak</strong>. A pocket habit — not a substitute for immersion, but a lane I can keep honest.</p><p><em>Room here for more detail when you’re ready.</em></p>",
+        "<p><strong>Spanish · Duolingo</strong> — The card shows a <strong>440-day streak</strong>: a pocket ritual, not a whole conservatory, but a line I have tried not to break.</p><p>I keep coming back because <strong>every workable language widens the room inside my head</strong>—new routes for jokes, arguments, apologies, and small kindnesses. Spanish is the one I chose next so I can <strong>meet friends more honestly in their mother tongue</strong> and move through the world with a little less translation in the middle.</p><p>Some days it really does feel like <strong>a new sensory channel switching on</strong>: the same street, another soundtrack. Long term, I am less interested in “finishing” the tree than in <strong>playing this instrument cleanly</strong>—hearing nuance, carrying tune in conversation—one lesson at a time.</p>",
     },
   ],
 
@@ -271,30 +277,30 @@ export const site = {
       {
         id: "spade",
         glyph: "♠",
-        label: "Spades",
+        label: "Hard skills",
         sub: "A spade's edge — craft kept sharp",
-        desc: "Models, stacks, and shipped work — proof you can weigh.",
+        desc: "Spade lane — ML, AI products, analytics, and the building side.",
       },
       {
         id: "heart",
         glyph: "♥",
-        label: "Hearts",
+        label: "Soft skills",
         sub: "Warm craft learned beside people",
-        desc: "Leadership, feedback, and the softer wiring of teams.",
+        desc: "Heart lane — collaboration, communication, and people craft.",
       },
       {
         id: "diamond",
         glyph: "♦",
-        label: "Diamonds",
-        sub: "Rare light gathered beyond home",
-        desc: "Languages, borders crossed, programs abroad — small bright facets.",
+        label: "International",
+        sub: "Bright as stones—miles and tongues from away.",
+        desc: "Diamond lane — abroad, languages, precious keepsakes like small gems.",
       },
       {
         id: "club",
         glyph: "♣",
         label: "Clubs",
-        sub: "Side clubs, detours, the rest of me",
-        desc: "Broadcast cameos, sport, streaks — curiosity over polish.",
+        sub: "One stem, many leaves—extras that round me out.",
+        desc: "Club lane — clover-shaped curiosity: cameos, fencing, streaks, small side quests.",
       },
     ] as const,
   },
@@ -479,9 +485,9 @@ export const site = {
   cheshire: {
     /** Lead + Alice’s hinge line so the pull quote lands; then a short steadiness beat. */
     bodyHtml:
-      '<p class="mx-auto mb-4 max-w-md text-[1rem] leading-relaxed text-black/50">You&rsquo;ve come this far—past the garden, the shelf, the tea. Small steps, still a real journey.</p>' +
-      '<div class="mx-auto mb-4 max-w-md border-l-2 border-black/15 pl-4 text-left text-[0.9rem] leading-relaxed text-black/50"><p><span class="mr-2 font-semibold text-black/35">Alice</span>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>' +
-      '<p class="mx-auto max-w-md text-[0.95rem] leading-relaxed text-black/44">The map won&rsquo;t always be clear. Keep walking steady enough, and you&rsquo;ll still fetch up somewhere that matters.</p>',
+      '<p class="mx-auto mb-4 max-w-md text-[1rem] leading-relaxed text-black/65">You&rsquo;ve come this far—past the garden, the shelf, the tea. Small steps, still a real journey.</p>' +
+      '<div class="mx-auto mb-4 max-w-md border-l-2 border-black/20 pl-4 text-left text-[0.9rem] leading-relaxed text-black/65"><p><span class="mr-2 font-semibold text-black/55">Alice</span>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>' +
+      '<p class="mx-auto max-w-md text-[0.95rem] leading-relaxed text-black/62">The map won&rsquo;t always be clear. Keep walking steady enough, and you&rsquo;ll still fetch up somewhere that matters.</p>',
     /** Carroll line — same “walk long enough” promise, less prose around it. */
     quote: "\u201cOh, you're sure to do that, if only you walk long enough.\u201d",
     attribution: "\u2014 The Cheshire Cat, Alice's Adventures in Wonderland",

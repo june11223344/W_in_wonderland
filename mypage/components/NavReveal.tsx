@@ -51,8 +51,8 @@ export function NavReveal({
 
   const textCls =
     size === "xs"
-      ? `${row} border-0 bg-transparent px-2 text-xs tracking-wider text-black/48 transition-colors hover:text-black/75 sm:px-1`
-      : `${row} border-0 bg-transparent px-2 text-sm tracking-wide text-black/52 transition-colors hover:text-black/85 sm:px-1`;
+      ? `${row} border-0 bg-transparent px-2 text-xs tracking-wider text-black/58 transition-colors hover:text-black/82 sm:px-1`
+      : `${row} border-0 bg-transparent px-2 text-sm tracking-wide text-black/62 transition-colors hover:text-black/90 sm:px-1`;
 
   const outlineCls =
     size === "xs"
@@ -88,7 +88,7 @@ export function NavReveal({
           className={`absolute z-[60] min-w-[260px] max-w-[min(100vw-2rem,320px)] rounded-md border bg-white px-3 py-2.5 text-left shadow-md ${panelPos}`}
           style={{ borderColor: "rgba(0,0,0,0.12)" }}
         >
-          <p className="mb-1 text-[10px] uppercase tracking-widest text-black/45">{panelTitle}</p>
+          <p className="mb-1 text-[10px] uppercase tracking-widest text-black/55">{panelTitle}</p>
 
           {kind === "mailto" ? (
             <>
@@ -98,14 +98,14 @@ export function NavReveal({
               >
                 {mailtoAddress(href)}
               </a>
-              <p className="mt-2 text-[10px] text-black/40">Tap the address to open your mail app.</p>
+              <p className="mt-2 text-[10px] text-black/52">Tap the address to open your mail app.</p>
             </>
           ) : null}
 
           {kind === "external" ? (
             <>
               {description ? (
-                <p className="mb-2 text-xs leading-relaxed text-black/45">{description}</p>
+                <p className="mb-2 text-xs leading-relaxed text-black/58">{description}</p>
               ) : null}
               <a
                 href={href}
@@ -115,14 +115,14 @@ export function NavReveal({
               >
                 {href}
               </a>
-              <p className="mt-2 text-[10px] text-black/40">Tap the link to open in a new tab.</p>
+              <p className="mt-2 text-[10px] text-black/52">Tap the link to open in a new tab.</p>
             </>
           ) : null}
 
           {kind === "anchor" ? (
             <>
               {description ? (
-                <p className="mb-2 text-xs leading-relaxed text-black/45">{description}</p>
+                <p className="mb-2 text-xs leading-relaxed text-black/58">{description}</p>
               ) : null}
               <Link
                 href={href}
@@ -131,7 +131,7 @@ export function NavReveal({
               >
                 Go to section <span aria-hidden>→</span>
               </Link>
-              <p className="mt-2 text-[10px] text-black/40">Scrolls to a section on this page.</p>
+              <p className="mt-2 text-[10px] text-black/52">Scrolls to a section on this page.</p>
             </>
           ) : null}
         </div>

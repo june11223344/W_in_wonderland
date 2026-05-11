@@ -219,7 +219,7 @@ function SpotlightProjectLink({ href, className = "" }: { href: string; classNam
       onPointerDown={(e) => e.stopPropagation()}
     >
       {host}
-      <span className="translate-y-[0.5px] text-[9px] font-normal text-neutral-500" aria-hidden>
+      <span className="translate-y-[0.5px] text-[9px] font-normal text-neutral-700" aria-hidden>
         ↗
       </span>
     </a>
@@ -343,7 +343,7 @@ function IdeaCard({
             >
               &ldquo;{idea.title}&rdquo;
             </h3>
-            <p className="mb-2 shrink-0 text-[11px] font-medium uppercase tracking-wider text-neutral-600">{idea.category}</p>
+            <p className="mb-2 shrink-0 text-[11px] font-medium uppercase tracking-wider text-neutral-700">{idea.category}</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div
               className={[
@@ -372,20 +372,20 @@ function IdeaCard({
                   ) : null}
             <div className="mb-3 min-h-0 w-full max-w-[95%] flex-1 space-y-2 overflow-hidden border-t border-black/18 pt-2.5 text-left">
               <div>
-                <p className="text-[8px] uppercase tracking-[0.22em] text-black/40">{site.cardUi.roleLabel}</p>
+                <p className="text-[8px] uppercase tracking-[0.22em] text-black/72">{site.cardUi.roleLabel}</p>
                 <p className="mt-0.5 line-clamp-2 font-serif text-[10px] leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
                   {idea.roleLine}
                 </p>
               </div>
               <div className="border-t border-black/10 pt-2">
-                <p className="text-[8px] uppercase tracking-[0.22em] text-black/40">{site.cardUi.impactLabel}</p>
+                <p className="text-[8px] uppercase tracking-[0.22em] text-black/72">{site.cardUi.impactLabel}</p>
                 <p className="mt-0.5 line-clamp-2 font-serif text-[10px] leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
                   {idea.impactLine}
                 </p>
               </div>
                 </div>
 
-            <p className="mt-auto shrink-0 pt-1 text-[9px] font-semibold uppercase tracking-wider text-neutral-600">{site.cardUi.hintClosed}</p>
+            <p className="mt-auto shrink-0 pt-1 text-[9px] font-semibold uppercase tracking-wider text-neutral-700">{site.cardUi.hintClosed}</p>
                   </div>
                   </div>
                 </div>
@@ -447,7 +447,7 @@ function IdeaCard({
                             <h3 className="mb-2 max-w-[98%] font-serif text-base leading-snug text-neutral-900" style={{ fontFamily: "'Playfair Display', serif" }}>
                               &ldquo;{idea.title}&rdquo;
                             </h3>
-                            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-neutral-500">{idea.category}</p>
+                            <p className="mb-4 text-[11px] font-medium uppercase tracking-wider text-neutral-700">{idea.category}</p>
             </div>
           </div>
         </div>
@@ -482,9 +482,9 @@ function IdeaCard({
                               )}
                             </AnimatePresence>
 
-                            <p className="mx-auto mb-6 max-w-sm border-b border-black/10 pb-3 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-600">
+                            <p className="mx-auto mb-6 max-w-sm border-b border-black/10 pb-3 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-700">
                               {idea.trend}
-                              <span className="text-black/20">&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                              <span className="text-black/60">&nbsp;&nbsp;·&nbsp;&nbsp;</span>
                               {idea.category}
                             </p>
 
@@ -518,7 +518,7 @@ function IdeaCard({
 
                             <div className="mx-auto w-full max-w-sm space-y-6">
                               <div>
-                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/40">{site.cardUi.roleLabel}</p>
+                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/72">{site.cardUi.roleLabel}</p>
                                 <p
                                   className="mt-2 font-serif text-[15px] leading-snug text-neutral-950 sm:text-base"
                                   style={{ fontFamily: "'Playfair Display', serif" }}
@@ -527,7 +527,7 @@ function IdeaCard({
                                 </p>
                               </div>
                               <div className="border-t border-black/10 pt-6">
-                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/40">{site.cardUi.impactLabel}</p>
+                                <p className="text-[9px] uppercase tracking-[0.28em] text-black/72">{site.cardUi.impactLabel}</p>
                                 <p
                                   className="mt-2 font-serif text-[15px] leading-snug text-neutral-950 sm:text-base"
                                   style={{ fontFamily: "'Playfair Display', serif" }}
@@ -547,25 +547,25 @@ function IdeaCard({
                               onClick={advanceRose}
                               className="mx-auto mt-8 flex max-w-full flex-col items-center gap-2 border-t border-black/10 px-3 pt-8 text-center transition-colors hover:bg-black/[0.02]"
                             >
-                              <div className="relative h-10 w-7 text-neutral-600">
+                              <div className="relative h-10 w-7 text-neutral-700">
                                 <RoseStageIcon stage={stage} className="absolute inset-0" />
         </div>
                               <span
-                                className="text-[9px] uppercase tracking-wider text-neutral-500"
+                                className="text-[9px] uppercase tracking-wider text-neutral-700"
                                 style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
                               >
                                 {site.cardUi.hintBack}
                               </span>
                             </button>
 
-                            <p className="mt-6 text-center text-[9px] uppercase tracking-wider text-black/35">{site.cardUi.hintModalClose}</p>
+                            <p className="mt-6 text-center text-[9px] uppercase tracking-wider text-black/78">{site.cardUi.hintModalClose}</p>
                         </div>
 
                         <div className="relative z-20 flex shrink-0 justify-center border-t border-black/10 bg-[#fafaf9] px-4 py-3 sm:px-6">
                           <button
                             type="button"
                             onClick={() => setExpanded(false)}
-                            className="text-[11px] font-medium tracking-wide text-neutral-600 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-900 hover:decoration-neutral-500"
+                            className="text-[11px] font-medium tracking-wide text-neutral-700 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-900 hover:decoration-neutral-500"
                           >
                             {site.cardUi.closeDetail}
                           </button>
@@ -812,13 +812,13 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
       className="mx-auto mb-14 mt-2 max-w-5xl px-1"
     >
       <p
-        className="mb-2 text-center text-[10px] uppercase tracking-[0.42em] text-black/25"
+        className="mb-2 text-center text-[10px] uppercase tracking-[0.42em] text-black/60"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         {copy.sectionEyebrow}
       </p>
       <h3
-        className="mb-8 text-center font-serif text-[1.35rem] leading-snug text-black/58 md:text-2xl md:leading-snug"
+        className="mb-8 text-center font-serif text-[1.35rem] leading-snug text-black/72 md:text-2xl md:leading-snug"
         style={{ fontFamily: SERIF, fontWeight: 300 }}
         dangerouslySetInnerHTML={{ __html: copy.sectionTitleHtml }}
       />
@@ -833,7 +833,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
             <img src={copy.growImageSrc} alt={copy.growImageAlt} draggable={false} style={imgStyle} />
           </div>
           <div className="flex min-w-0 flex-col text-center md:flex-1 md:justify-center md:text-left">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/38">{copy.growLabel}</p>
+            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/60">{copy.growLabel}</p>
             <h4
               className="mb-2 font-serif text-lg text-black/78 sm:text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -841,7 +841,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
               {copy.growTitle}
             </h4>
             <div
-              className="text-sm leading-relaxed text-black/45"
+              className="text-sm leading-relaxed text-black/70"
               dangerouslySetInnerHTML={{ __html: copy.growBodyHtml }}
             />
           </div>
@@ -853,7 +853,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
             <img src={copy.shrinkImageSrc} alt={copy.shrinkImageAlt} draggable={false} style={imgStyle} />
           </div>
           <div className="flex min-w-0 flex-col text-center md:flex-1 md:justify-center md:text-left">
-            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/38">{copy.shrinkLabel}</p>
+            <p className="mb-1 text-[10px] uppercase tracking-[0.32em] text-black/60">{copy.shrinkLabel}</p>
             <h4
               className="mb-2 font-serif text-lg text-black/78 sm:text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -861,7 +861,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
               {copy.shrinkTitle}
             </h4>
             <div
-              className="text-sm leading-relaxed text-black/45"
+              className="text-sm leading-relaxed text-black/70"
               dangerouslySetInnerHTML={{ __html: copy.shrinkBodyHtml }}
             />
           </div>
@@ -938,15 +938,15 @@ function ShelfMediaGrid({
             <h4 className="font-serif text-lg leading-tight text-black sm:text-xl" style={{ fontFamily: SERIF }}>
               {item.title}
             </h4>
-            <p className="mt-0.5 text-[11px] uppercase tracking-wider text-black/40">
+            <p className="mt-0.5 text-[11px] uppercase tracking-wider text-black/72">
               {item.year} · {item.director}
             </p>
             <div className="mt-3 border-t border-black/[0.08] pt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-black/38">{enLabel}</p>
-              <p className="mt-1 text-sm leading-relaxed text-black/60" lang="en">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-black/60">{enLabel}</p>
+              <p className="mt-1 text-sm leading-relaxed text-black/74" lang="en">
                 {item.lineEn}
               </p>
-              <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-black/38">{koLabel}</p>
+              <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-black/60">{koLabel}</p>
               <p className="mt-1 text-sm leading-relaxed text-black/82" lang="ko">
                 {item.lineKo}
               </p>
@@ -978,7 +978,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
           className="mb-10 text-center md:mb-14"
         >
           <p
-            className="mb-2 text-[10px] uppercase tracking-[0.42em] text-black/30"
+            className="mb-2 text-[10px] uppercase tracking-[0.42em] text-black/72"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {copy.sectionEyebrow}
@@ -990,7 +990,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
             {copy.sectionTitle}
           </h2>
           <p
-            className="mx-auto max-w-2xl text-sm leading-relaxed text-black/45"
+            className="mx-auto max-w-2xl text-sm leading-relaxed text-black/70"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {copy.sectionSub}
@@ -1025,12 +1025,18 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
               </div>
 
               <div className="flex w-full shrink-0 flex-col items-center gap-3.5 lg:w-auto">
-                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/30">
+                <p className="text-center text-[10px] uppercase tracking-[0.32em] text-black/72">
                   {copy.spineRowCue}
                 </p>
-                <div className="flex w-full flex-wrap justify-center gap-x-0 gap-y-2 sm:gap-x-0.5 sm:gap-y-2 md:gap-x-0.5">
+                <div
+                  className={[
+                    "flex w-full flex-nowrap items-stretch justify-start gap-x-1.5 overflow-x-auto overflow-y-visible pb-1 [-webkit-overflow-scrolling:touch]",
+                    "max-sm:snap-x max-sm:snap-mandatory max-sm:scroll-pl-2 max-sm:scroll-pr-3 max-sm:px-1 max-sm:pl-2 max-sm:pr-3",
+                    "sm:mx-0 sm:justify-center sm:gap-x-0.5 sm:overflow-visible sm:px-0 sm:pb-0 sm:pl-0 sm:pr-0 sm:snap-none md:gap-x-0.5",
+                  ].join(" ")}
+                >
                   {copy.categories.map((cat) => (
-                    <div key={cat.id} className="flex touch-manipulation justify-center">
+                    <div key={cat.id} className="flex max-sm:snap-center shrink-0 touch-manipulation justify-center">
                     <button
                       type="button"
                       onClick={() => setActiveCategory(cat.id)}
@@ -1047,7 +1053,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       aria-label={`${cat.spineFoot}: ${cat.spineBlurb}. ${cat.spineTitle}`}
                     >
                       <span
-                        className="px-1.5 pb-0.5 pt-2.5 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/68"
+                        className="px-1.5 pb-0.5 pt-2.5 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/75"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
                       >
                         {cat.spineFoot}
@@ -1062,7 +1068,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                         {cat.spineTitle}
                       </span>
                       <span
-                        className="px-1.5 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/62 sm:text-[8px]"
+                        className="px-1.5 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/76 sm:text-[8px]"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
                       >
                         {cat.spineBlurb}
@@ -1112,13 +1118,13 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                     ].join(" ")}
                   >
                     <span
-                      className="pointer-events-none absolute left-4 top-3 select-none font-serif text-2xl leading-none text-black/[0.11] sm:left-5 sm:top-4 sm:text-3xl"
+                      className="pointer-events-none absolute left-4 top-3 select-none font-serif text-2xl leading-none text-black/[0.2] sm:left-5 sm:top-4 sm:text-3xl"
                       aria-hidden
                     >
                       ♦
                     </span>
                     <span
-                      className="pointer-events-none absolute bottom-3 right-4 rotate-180 select-none font-serif text-2xl leading-none text-black/[0.11] sm:bottom-4 sm:right-5 sm:text-3xl"
+                      className="pointer-events-none absolute bottom-3 right-4 rotate-180 select-none font-serif text-2xl leading-none text-black/[0.2] sm:bottom-4 sm:right-5 sm:text-3xl"
                       aria-hidden
                     >
                       ♦
@@ -1128,7 +1134,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       <h3 className="font-serif text-xl text-black/85 sm:text-2xl md:text-[1.65rem]" style={{ fontFamily: SERIF }}>
                         {activeMeta?.spineTitle}
                       </h3>
-                      <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/38">{activeMeta?.spineFoot}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/60">{activeMeta?.spineFoot}</p>
                     </div>
 
                     {activeCategory === "films" ? (
@@ -1146,11 +1152,11 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       <ShelfMediaGrid items={copy.dramas} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
                     ) : (
                       <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-white/80 px-8 py-12 text-center">
-                        <p className="font-serif text-lg text-black/70" style={{ fontFamily: SERIF }}>
+                        <p className="font-serif text-lg text-black/78" style={{ fontFamily: SERIF }}>
                           {copy.emptyShelfTitle}
                         </p>
                         <p
-                          className="mt-3 text-sm leading-relaxed text-black/45"
+                          className="mt-3 text-sm leading-relaxed text-black/70"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                           {copy.emptyShelfBody}
@@ -1162,7 +1168,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       <button
                         type="button"
                         onClick={() => setActiveCategory(null)}
-                        className="border-b-2 border-black/20 pb-2 text-center text-base font-medium tracking-[0.14em] text-black/55 transition-colors hover:border-black/45 hover:text-black/80 sm:text-lg md:text-xl md:pb-2.5 md:tracking-[0.18em]"
+                        className="border-b-2 border-black/20 pb-2 text-center text-base font-medium tracking-[0.14em] text-black/73 transition-colors hover:border-black/45 hover:text-black/80 sm:text-lg md:text-xl md:pb-2.5 md:tracking-[0.18em]"
                       >
                         {copy.backToShelf}
                       </button>
@@ -1208,14 +1214,14 @@ function TeaPartyInviteSection({
           className="text-center"
         >
           <p
-            className="mb-2 text-[10px] uppercase tracking-[0.38em] text-black/30"
+            className="mb-2 text-[10px] uppercase tracking-[0.38em] text-black/72"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {invite.eyebrow}
           </p>
           <h2
-            lang="ko"
-            className="mb-8 font-serif text-xl text-black/70 md:text-2xl"
+            lang="en"
+            className="mb-8 font-serif text-xl text-black/78 md:text-2xl"
             style={{ fontFamily: SERIF }}
           >
             {invite.title}
@@ -1251,18 +1257,18 @@ function TeaPartyInviteSection({
                     target="_blank"
                     rel="noopener noreferrer"
                 title={linkedinLine}
-                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/60 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
+                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/74 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
                 aria-label={`${invite.linkCtaLinkedin} ${linkedinLine}, opens in new tab`}
               >
                 {invite.linkCtaLinkedin}
               </a>
-              <span className="hidden text-black/25 sm:inline" aria-hidden>
+              <span className="hidden text-black/60 sm:inline" aria-hidden>
                 ·
               </span>
               <a
                 href={links.contactMailto}
                 title={emailPlain}
-                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/60 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
+                className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/74 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
                 aria-label={`${invite.linkCtaEmail} ${emailPlain}`}
               >
                 {invite.linkCtaEmail}
@@ -1335,7 +1341,12 @@ export default function HomePage() {
       >
         <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/rabbit.png" alt={brand.rabbitAlt} style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }} />
+          <img
+            src="/rabbit.png"
+            alt={brand.rabbitAlt}
+            className="-scale-x-100"
+            style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }}
+          />
           <span className="font-serif text-black/80 tracking-wide text-lg"
             style={{ fontFamily: SERIF }}>{brand.navTitle}</span>
         </div>
@@ -1370,7 +1381,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="mb-6 text-xs uppercase tracking-[0.4em] text-black/30"
+              className="mb-6 text-xs uppercase tracking-[0.4em] text-black/72"
             >
               {hero.eyebrow}
             </motion.p>
@@ -1407,7 +1418,7 @@ export default function HomePage() {
             className="mx-auto mb-12 max-w-xl border-b border-black/[0.07] pb-12 text-center sm:mb-14 sm:pb-14"
           >
             <p
-              className="mb-3 text-[10px] uppercase tracking-[0.42em] text-black/35"
+              className="mb-3 text-[10px] uppercase tracking-[0.42em] text-black/78"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.sectionGateEyebrow}
@@ -1419,7 +1430,7 @@ export default function HomePage() {
               {garden.sectionGateTitle}
             </p>
             <p
-              className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-black/50"
+              className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-black/75"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.sectionGateSub}
@@ -1445,12 +1456,12 @@ export default function HomePage() {
               />
               <div className="min-w-0 max-w-md sm:text-left">
                 <p
-                  className="text-base leading-relaxed text-black/42 sm:text-lg"
+                  className="text-base leading-relaxed text-black/74 sm:text-lg"
                   style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
                   dangerouslySetInnerHTML={{ __html: garden.rabbitCalloutHtml }}
                 />
                 <p
-                  className="mt-3 text-[11px] tracking-wide text-black/30 sm:text-xs"
+                  className="mt-3 text-[11px] tracking-wide text-black/72 sm:text-xs"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {garden.rabbitSignoff}
@@ -1458,29 +1469,29 @@ export default function HomePage() {
               </div>
             </motion.div>
             <p
-              className="mb-4 text-[10px] uppercase tracking-[0.35em] text-black/28"
+              className="mb-4 text-[10px] uppercase tracking-[0.35em] text-black/56"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.suitPickerTitle}
             </p>
-            <p className="mb-4 text-xs leading-relaxed text-black/32">{garden.suitPickerHint}</p>
+            <p className="mb-4 text-xs leading-relaxed text-black/75">{garden.suitPickerHint}</p>
             {gardenSuit === null ? (
               <div className="mb-5 flex flex-col items-center gap-1">
                 <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
                   <span
-                    className="font-serif text-xl leading-none tracking-[0.35em] text-black/35 sm:text-2xl sm:tracking-[0.4em]"
+                    className="font-serif text-xl leading-none tracking-[0.35em] text-black/78 sm:text-2xl sm:tracking-[0.4em]"
                     style={{ fontFamily: SERIF }}
                     aria-hidden
                   >
                     {garden.suits.map((s) => s.glyph).join("")}
                   </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black/48">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black/72">
                     {garden.tapSuitsCue}
                   </span>
           </div>
                 {!gardenHintMotion ? (
                   <motion.span
-                    className="select-none text-lg text-black/28"
+                    className="select-none text-lg text-black/56"
                     animate={{ y: [0, 6, 0] }}
                     transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
                     aria-hidden
@@ -1530,8 +1541,8 @@ export default function HomePage() {
                       {s.glyph}
                     </motion.span>
                     <div className="flex max-w-[11.5rem] flex-col items-center gap-1 px-0.5">
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/52">{s.label}</span>
-                      <span className="text-[11px] font-medium leading-snug text-black/62">{s.sub}</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-black/78">{s.label}</span>
+                      <span className="text-[11px] font-medium leading-snug text-black/76">{s.sub}</span>
                     </div>
                   </button>
                 );
@@ -1554,34 +1565,29 @@ export default function HomePage() {
               aria-hidden
             />
             <div
-              className="mx-auto flex w-full max-w-6xl justify-center overflow-x-auto overflow-y-visible px-6 py-10 pb-4 pt-2 sm:px-10 md:px-14"
-                    style={{
-                scrollSnapType: "x mandatory",
-                WebkitOverflowScrolling: "touch",
-                overscrollBehaviorX: "contain",
-              }}
+              className="mx-auto flex w-full max-w-6xl justify-start overflow-x-auto overflow-y-visible overscroll-x-contain px-6 py-10 pb-4 pt-2 [-webkit-overflow-scrolling:touch] [scroll-snap-type:x_mandatory] [scroll-padding-inline:max(1.25rem,calc(50vw-clamp(110px,26vw,134px)))] touch-pan-x sm:px-10 md:px-14"
+              style={{ overscrollBehaviorX: "contain" }}
               onWheel={onGardenCardStripWheel}
             >
               {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).length === 0 ? (
                 <div className="flex min-h-[min(280px,calc(100dvh-16rem))] w-full max-w-md flex-col items-center justify-center px-6 py-16 text-center">
-                  <p className="font-serif text-lg text-black/60 sm:text-xl" style={{ fontFamily: SERIF }}>
+                  <p className="font-serif text-lg text-black/74 sm:text-xl" style={{ fontFamily: SERIF }}>
                     {garden.emptySuitTitle}
                   </p>
                   <p
-                    className="mt-3 max-w-sm text-sm leading-relaxed text-black/40"
+                    className="mt-3 max-w-sm text-sm leading-relaxed text-black/72"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
                     {garden.emptySuitBody}
                   </p>
                 </div>
               ) : (
-                <div className="inline-flex items-stretch gap-4 sm:gap-5">
+                <div className="inline-flex items-stretch gap-4 px-[max(0.75rem,calc(50vw-clamp(110px,26vw,134px)))] sm:gap-5 sm:px-[max(1rem,calc(50%-8.375rem))]">
                   {SPOTLIGHT.filter((idea) => idea.suit === gardenSuit).map((idea, i) => {
                     return (
                       <motion.div
                         key={idea.title}
-                        className="flex h-[min(404px,calc(100dvh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 flex-col"
-                        style={{ scrollSnapAlign: "center" }}
+                        className="flex h-[min(404px,calc(100dvh-12rem))] min-h-0 w-[clamp(220px,52vw,268px)] shrink-0 snap-center flex-col"
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.04, duration: 0.35, ease: "easeOut" }}
@@ -1598,7 +1604,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setGardenSuit(null)}
-                className="border-b border-black/20 pb-0.5 text-xs tracking-wider text-black/40 transition-colors hover:border-black/40 hover:text-black/65"
+                className="border-b border-black/20 pb-0.5 text-xs tracking-wider text-black/72 transition-colors hover:border-black/40 hover:text-black/88"
               >
                 {garden.changeSuit}
               </button>
@@ -1626,7 +1632,7 @@ export default function HomePage() {
             <motion.p
                   initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.7 }} viewport={{ once: true }}
-                  className="text-black/22 text-[10px] tracking-[0.45em] uppercase mb-5"
+                  className="text-black/74 text-[10px] tracking-[0.45em] uppercase mb-5"
                 >
                   {processIntro.eyebrow}
             </motion.p>
@@ -1636,12 +1642,12 @@ export default function HomePage() {
                   transition={{ duration: 0.8, delay: 0.08 }} viewport={{ once: true }}
                 >
                   <h2
-                    className="text-3xl md:text-[2.15rem] lg:text-4xl font-serif text-black/70 leading-snug"
+                    className="text-3xl md:text-[2.15rem] lg:text-4xl font-serif text-black/78 leading-snug"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                     dangerouslySetInnerHTML={{ __html: processIntro.titleHtml }}
                   />
                   <p
-                    className="text-black/32 mt-4 text-sm leading-relaxed tracking-wide md:max-w-xl"
+                    className="text-black/75 mt-4 text-sm leading-relaxed tracking-wide md:max-w-xl"
                     dangerouslySetInnerHTML={{ __html: processIntro.subHtml }}
                   />
                 </motion.div>
@@ -1705,6 +1711,10 @@ export default function HomePage() {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           transition={{ duration: 1.2 }} viewport={{ once: true }}
           className="max-w-3xl mx-auto">
+          <div
+            className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-black/70 sm:mb-12"
+            dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
+          />
           <div className="mb-10 flex justify-center sm:mb-12">
             <motion.img
               src="/chat.png"
@@ -1716,33 +1726,29 @@ export default function HomePage() {
               animate={
                 cheshireImageReduced
                   ? { opacity: 0.82 }
-                  : { opacity: [0.18, 0.92, 0.18] }
+                  : { opacity: [0.14, 0.96, 0.14] }
               }
               transition={
                 cheshireImageReduced
                   ? { duration: 0 }
-                  : { duration: 9, repeat: Infinity, ease: "easeInOut", times: [0, 0.5, 1] }
+                  : { duration: 5, repeat: Infinity, ease: "easeInOut", times: [0, 0.5, 1] }
               }
             />
           </div>
-          <div
-            className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
-            dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
-          />
           <blockquote
-            className="mb-6 text-2xl font-serif italic leading-snug text-black/50 md:text-3xl lg:text-[2.1rem] lg:leading-snug"
+            className="mb-6 text-2xl font-serif italic leading-snug text-black/78 md:text-3xl lg:text-[2.1rem] lg:leading-snug"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {cheshire.quote}
           </blockquote>
           <p
-            className={`text-sm tracking-wider text-black/30 ${cheshire.codaHtml.trim() ? "mb-10" : "mb-12"}`}
+            className={`text-sm tracking-wider text-black/72 ${cheshire.codaHtml.trim() ? "mb-10" : "mb-12"}`}
           >
             {cheshire.attribution}
           </p>
           {cheshire.codaHtml.trim() ? (
             <div
-              className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/45"
+              className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-black/70"
               dangerouslySetInnerHTML={{ __html: cheshire.codaHtml }}
             />
           ) : null}
@@ -1760,19 +1766,19 @@ export default function HomePage() {
             <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.14)" }} />
             <div className="h-px w-16" style={{ background: "rgba(0,0,0,0.14)" }} />
           </div>
-          <p className="text-black/45 text-xs tracking-widest"
+          <p className="text-black/70 text-xs tracking-widest"
             style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", letterSpacing: "0.18em" }}>
             {footer.colophonLine1}
           </p>
           <div className="flex items-center justify-center gap-2 mt-1.5">
-            <span className="text-black/50 text-xs font-serif tracking-widest"
+            <span className="text-black/75 text-xs font-serif tracking-widest"
               style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
         </div>
 
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-black/55 text-sm font-serif"
+            <span className="text-black/73 text-sm font-serif"
               style={{ fontFamily: "'Playfair Display', serif" }}>{footer.colophonName}</span>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-1">
@@ -1794,7 +1800,7 @@ export default function HomePage() {
               panel="above"
             />
           </div>
-          <p className="text-black/40 text-xs">{footer.copyright}</p>
+          <p className="text-black/78 text-xs">{footer.copyright}</p>
         </div>
       </footer>
     </div>
