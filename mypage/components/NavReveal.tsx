@@ -92,6 +92,9 @@ export function NavReveal({
 
           {kind === "mailto" ? (
             <>
+              {description ? (
+                <p className="mb-2 text-xs leading-relaxed text-black/58">{description}</p>
+              ) : null}
               <a
                 href={href}
                 className="block break-all text-sm text-black/75 hover:text-black underline-offset-2 hover:underline"

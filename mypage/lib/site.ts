@@ -38,6 +38,8 @@ export const site = {
     boardDescription:
       "Under the hero: tap ♠ ♥ ♦ ♣ — hard skills, soft skills, international, and clubs (side quests: broadcast cameo, sport, language streaks, and more to come).",
     linkedinDescription: "Public LinkedIn profile.",
+    /** Shown above the address in the Email panel (same pattern as LinkedIn). */
+    emailDescription: "Tap the address below to compose a message in your mail app.",
   },
 
   hero: {
@@ -227,7 +229,7 @@ export const site = {
     {
       title: "Background extra — Shin's Project & more",
       category: "Just for fun · on-camera cameo",
-      trend: "Ongoing",
+      trend: "2025",
       suit: "club",
       imageSrc: "/spotlight/club-tvn-broadcast-extra.png",
       imageAlt:
@@ -242,7 +244,7 @@ export const site = {
     {
       title: "Club fencing (épée)",
       category: "Just for fun · sport",
-      trend: "Ongoing",
+      trend: "2024",
       suit: "club",
       imageSrc: "/spotlight/club-fencing-class.png",
       imageAlt:

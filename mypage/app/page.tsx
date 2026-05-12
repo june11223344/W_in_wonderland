@@ -345,7 +345,7 @@ function IdeaCard({
 
         <div className="relative flex h-full min-h-0 flex-1 flex-col bg-[#f6f5f2] px-5 pb-4 pt-10 sm:px-6 sm:pb-5 sm:pt-11">
               <QueenCroquetMosaic cardIndex={index} />
-          <div className="pointer-events-none absolute inset-0 z-[1] bg-white/50" aria-hidden />
+          <div className="pointer-events-none absolute inset-0 z-[1] bg-[#f3f2ee]/55" aria-hidden />
               <div className="pointer-events-none absolute inset-0 z-[1]" style={{ background: scrim }} />
 
           <div className="relative z-[2] flex min-h-0 flex-1 flex-col items-center text-center">
@@ -361,8 +361,8 @@ function IdeaCard({
               className={[
                 "mb-3 w-full max-w-[95%] shrink-0 rounded-md",
                 imageFitContain
-                  ? "relative aspect-[5/3] overflow-hidden bg-[#f0efec] ring-1 ring-black/10"
-                  : "overflow-hidden ring-1 ring-black/18",
+                  ? "relative aspect-[5/3] overflow-hidden bg-[#ebe8e1] ring-1 ring-black/10"
+                  : "relative aspect-[5/3] overflow-hidden bg-[#ebe8e1] ring-1 ring-black/18",
               ].join(" ")}
             >
               {spotlightHasProjectUrl(idea) ? (
@@ -469,7 +469,7 @@ function IdeaCard({
                     >
                       {/* Modal front — minimal flip preview */}
                       <div
-                        className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
+                        className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#f7f5f1]"
                         style={{
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
@@ -490,7 +490,7 @@ function IdeaCard({
 
                       {/* Modal back: scrollable column + footer close; wheel on card chrome forwards to body */}
         <div
-                        className="absolute inset-0 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf9]"
+                        className="absolute inset-0 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#f7f5f1]"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -541,7 +541,7 @@ function IdeaCard({
                                 <div
                                   className={
                                     imageFitContain
-                                      ? "relative aspect-[5/3] bg-[#f0efec]"
+                                      ? "relative aspect-[5/3] bg-[#ebe8e1]"
                                       : ""
                                   }
                                 >
@@ -557,7 +557,7 @@ function IdeaCard({
                                     style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
                                   />
                                 </div>
-                                <div className="flex justify-center border-t border-black/10 bg-[#f8f8f6] px-3 py-2.5 sm:py-3">
+                                <div className="flex justify-center border-t border-black/10 bg-[#f3f1ec] px-3 py-2.5 sm:py-3">
                                   <span className="inline-flex items-center gap-1 text-xs font-semibold tracking-wide text-neutral-800 underline decoration-neutral-400 underline-offset-[3px] sm:text-[13px]">
                                     {spotlightProjectHost(idea.projectUrl)}
                                     <span className="translate-y-[0.5px] text-[9px] font-normal text-neutral-700" aria-hidden>
@@ -571,7 +571,7 @@ function IdeaCard({
                                 className={[
                                   "mx-auto mb-6 max-w-sm overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
                                   imageFitContain
-                                    ? "relative aspect-[5/3] border-black/10 bg-[#f0efec]"
+                                    ? "relative aspect-[5/3] border-black/10 bg-[#ebe8e1]"
                                     : "border-black/12",
                                 ].join(" ")}
                               >
@@ -634,7 +634,7 @@ function IdeaCard({
                             <p className="mt-6 text-center text-[9px] uppercase tracking-wider text-black/78">{site.cardUi.hintModalClose}</p>
                         </div>
 
-                        <div className="relative z-20 flex shrink-0 justify-center border-t border-black/10 bg-[#fafaf9] px-4 py-3 sm:px-6">
+                        <div className="relative z-20 flex shrink-0 justify-center border-t border-black/10 bg-[#f5f3ef] px-4 py-3 sm:px-6">
                           <button
                             type="button"
                             onClick={() => setExpanded(false)}
@@ -862,9 +862,11 @@ function HeroWonderlandIntro({
 }
 
 function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
-  /** Same box on both sides so labels + titles line up across the split */
-  const imgWrapClass =
-    "flex h-[148px] w-full shrink-0 items-center justify-center sm:h-[160px] md:h-auto md:w-[140px] md:shrink-0 md:self-center";
+  /** Same box on both sides so labels + titles line up across the split — pad matches each column so multiply images never flash white. */
+  const imgWrapGrow =
+    "flex h-[148px] w-full shrink-0 items-center justify-center rounded-lg bg-stone-50 sm:h-[160px] md:h-auto md:w-[140px] md:shrink-0 md:self-center";
+  const imgWrapShrink =
+    "flex h-[148px] w-full shrink-0 items-center justify-center rounded-lg bg-slate-50 sm:h-[160px] md:h-auto md:w-[140px] md:shrink-0 md:self-center";
   const imgStyle: CSSProperties = {
     maxHeight: "132px",
     width: "auto",
@@ -901,7 +903,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
         style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.85) inset" }}
       >
         <div className="flex min-h-0 flex-col gap-5 bg-stone-50 p-7 sm:p-8 md:h-full md:flex-row md:items-center md:gap-8 md:border-r md:border-black/[0.06]">
-          <div className={imgWrapClass}>
+          <div className={imgWrapGrow}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={copy.growImageSrc} alt={copy.growImageAlt} draggable={false} style={imgStyle} />
           </div>
@@ -921,7 +923,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
         </div>
 
         <div className="flex min-h-0 flex-col gap-5 border-t border-black/[0.06] bg-slate-50 p-7 sm:p-8 md:h-full md:flex-row md:items-center md:border-t-0 md:gap-8">
-          <div className={imgWrapClass}>
+          <div className={imgWrapShrink}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={copy.shrinkImageSrc} alt={copy.shrinkImageAlt} draggable={false} style={imgStyle} />
           </div>
@@ -981,7 +983,7 @@ function ShelfMediaGrid({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.04 + i * 0.05 }}
           className={[
-            "flex shrink-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]",
+            "flex shrink-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-[#faf9f6] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]",
             /* Mobile: slightly narrower strip cards; sm+: cap width so 2:3 posters don’t tower on wide grids */
             "w-[min(16rem,calc(100vw-2.75rem))] snap-center sm:w-full sm:min-w-0 sm:max-w-[15rem] sm:shrink sm:snap-align-none md:max-w-[15.5rem]",
           ].join(" ")}
@@ -989,8 +991,8 @@ function ShelfMediaGrid({
           <div
             className={
               albumLayout
-                ? "relative mx-auto flex w-full max-w-[min(88vw,240px)] justify-center bg-neutral-100 sm:max-w-[min(100%,260px)]"
-                : "relative aspect-[2/3] w-full bg-neutral-100"
+                ? "relative mx-auto flex w-full max-w-[min(88vw,240px)] justify-center bg-[#e8e4dc] sm:max-w-[min(100%,260px)]"
+                : "relative aspect-[2/3] w-full bg-[#e8e4dc]"
             }
           >
             <div className={albumLayout ? "relative aspect-square w-full" : "absolute inset-0"}>
@@ -1084,8 +1086,9 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.55 }}
-                  className="flex justify-center"
+                  className="flex justify-center rounded-lg bg-[#f6f4ee]"
                 >
+                  {/* Match section bg so decode / letterboxing never flashes white before multiply blends. */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={copy.caterpillarSrc}
@@ -1206,7 +1209,8 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                   <div
                     className={[
                       "relative rounded-2xl border border-black/[0.14] p-5 shadow-[0_14px_0_rgba(0,0,0,0.04),0_28px_56px_rgba(0,0,0,0.11)] sm:p-7 md:p-8",
-                      "bg-gradient-to-b from-white via-[#faf9f6] to-[#f0ebe3]",
+                      /* Avoid pure-white top: reads as a floating box against #f6f4ee until the spring settles. */
+                      "bg-gradient-to-b from-[#f6f4ee] via-[#faf9f6] to-[#f0ebe3]",
                     ].join(" ")}
                   >
                     <span
@@ -1245,7 +1249,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                     ) : activeCategory === "dramas" ? (
                       <ShelfMediaGrid items={copy.dramas} enLabel={copy.stackBodyEnLabel} koLabel={copy.stackBodyKoLabel} />
                     ) : (
-                      <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-white/80 px-8 py-12 text-center">
+                      <div className="mx-auto max-w-md rounded-2xl border border-black/10 bg-[#faf9f6]/90 px-8 py-12 text-center">
                         <p className="font-serif text-lg text-black/78" style={{ fontFamily: SERIF }}>
                           {copy.emptyShelfTitle}
                         </p>
@@ -1320,27 +1324,45 @@ function TeaPartyInviteSection({
           >
             {invite.title}
           </h2>
+        </motion.div>
 
+        {/* Art + links: same paper color as section from first paint — no lighter “card” panel. */}
+        <div className="text-center">
           <div className="mx-auto max-w-[min(100%,640px)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={invite.imageSrc}
-              alt={invite.imageAlt}
-              draggable={false}
-              className="w-full select-none rounded-lg border border-black/10 bg-white shadow-[0_8px_28px_rgba(0,0,0,0.06)]"
-              style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
-            />
-            <div className="mt-4 flex justify-center sm:mt-5" aria-hidden>
+            {/*
+              Frame uses the exact section fill (#f5f2ea) so nothing reads as a white box.
+              multiply knocks out opaque white in the PNGs against that same tone.
+            */}
+            <div
+              className="overflow-hidden rounded-lg bg-[#f5f2ea]"
+              style={{ aspectRatio: "16 / 10" }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={invite.teacupSrc}
-                alt=""
-                width={88}
-                height={72}
+                src={invite.imageSrc}
+                alt={invite.imageAlt}
                 draggable={false}
-                className="h-12 w-auto max-w-[min(5.5rem,22vw)] select-none opacity-[0.92] sm:h-14"
+                loading="eager"
+                decoding="async"
+                className="block h-full w-full select-none object-contain object-center"
                 style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
               />
+            </div>
+            <div className="mt-4 flex justify-center sm:mt-5" aria-hidden>
+              <div className="inline-flex items-center justify-center rounded-lg bg-[#f5f2ea] px-2 py-1.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={invite.teacupSrc}
+                  alt=""
+                  width={88}
+                  height={72}
+                  draggable={false}
+                  loading="eager"
+                  decoding="async"
+                  className="h-12 w-auto max-w-[min(5.5rem,22vw)] select-none opacity-[0.92] sm:h-14"
+                  style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
+                />
+              </div>
             </div>
             <div
               className="mt-4 flex flex-col items-center justify-center gap-3 sm:mt-5 sm:flex-row sm:gap-10"
@@ -1348,8 +1370,8 @@ function TeaPartyInviteSection({
             >
               <a
                 href={links.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                target="_blank"
+                rel="noopener noreferrer"
                 title={linkedinLine}
                 className="max-w-[min(100%,20rem)] text-center text-[13px] leading-snug text-black/74 underline decoration-black/20 underline-offset-[3px] transition-colors hover:text-black/85 hover:decoration-black/45 sm:max-w-[min(100%,14rem)] sm:text-left sm:text-sm"
                 aria-label={`${invite.linkCtaLinkedin} ${linkedinLine}, opens in new tab`}
@@ -1369,7 +1391,15 @@ function TeaPartyInviteSection({
               </a>
             </div>
           </div>
+        </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center"
+        >
           <p className="mx-auto mt-10 max-w-lg text-base leading-relaxed text-black/78" lang="en">
             {invite.bodyLine1}
           </p>
@@ -1383,10 +1413,6 @@ function TeaPartyInviteSection({
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-
-/** Nav / footer text link — matches NavReveal `text` trigger (sm). */
-const NAV_TEXT_LINK_ROW =
-  "inline-flex min-h-[44px] min-w-[44px] items-center justify-center border-0 bg-transparent px-2 text-sm tracking-wide text-black/62 underline-offset-4 transition-colors hover:text-black/90 hover:underline sm:min-w-0 sm:px-1";
 
 export default function HomePage() {
   const [gardenSuit, setGardenSuit] = useState<GardenSuit | null>(null);
@@ -1524,12 +1550,17 @@ export default function HomePage() {
       >
         <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/rabbit.png"
-            alt={brand.rabbitAlt}
-            className="-scale-x-100"
-            style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }}
-          />
+          <div
+            className="flex shrink-0 items-center justify-center rounded-md"
+            style={{ background: "rgba(255,255,255,0.92)" }}
+          >
+            <img
+              src="/rabbit.png"
+              alt={brand.rabbitAlt}
+              className="-scale-x-100"
+              style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }}
+            />
+          </div>
           <span className="font-serif text-black/80 tracking-wide text-lg"
             style={{ fontFamily: SERIF }}>{brand.navTitle}</span>
         </div>
@@ -1543,9 +1574,15 @@ export default function HomePage() {
             size="sm"
             panel="below"
           />
-          <a href={links.contactMailto} className={NAV_TEXT_LINK_ROW}>
-            {nav.email}
-          </a>
+          <NavReveal
+            label={nav.email}
+            kind="mailto"
+            href={links.contactMailto}
+            panelTitle="Email"
+            description={navReveal.emailDescription}
+            size="sm"
+            panel="below"
+          />
         </div>
       </nav>
 
@@ -1640,14 +1677,16 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="mb-6 flex flex-col items-center gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-center sm:gap-6 md:gap-8"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={garden.cardRabbitSrc}
-                alt={garden.cardRabbitAlt}
-                draggable={false}
-                className="h-[clamp(200px,48vw,280px)] w-auto shrink-0 object-contain sm:h-[clamp(220px,36vw,300px)] md:h-[min(340px,38vw)]"
-                style={{ filter: "grayscale(100%) contrast(1.15)", mixBlendMode: "multiply", opacity: 0.95 }}
-              />
+              <div className="flex shrink-0 justify-center rounded-xl bg-[#faf9f6] px-2 py-1 sm:px-3 sm:py-1.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={garden.cardRabbitSrc}
+                  alt={garden.cardRabbitAlt}
+                  draggable={false}
+                  className="h-[clamp(200px,48vw,280px)] w-auto shrink-0 object-contain sm:h-[clamp(220px,36vw,300px)] md:h-[min(340px,38vw)]"
+                  style={{ filter: "grayscale(100%) contrast(1.15)", mixBlendMode: "multiply", opacity: 0.95 }}
+                />
+              </div>
               <div className="min-w-0 max-w-md sm:text-left">
                 <p
                   className="text-base leading-relaxed text-black/74 sm:text-lg"
@@ -1897,7 +1936,7 @@ export default function HomePage() {
           <motion.div
                 initial={{ opacity: 0, x: 14 }} whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.85, delay: 0.12 }} viewport={{ once: true }}
-                className="flex shrink-0 justify-center md:justify-end md:pl-2"
+                className="flex shrink-0 justify-center rounded-2xl bg-[#f8f6f2] px-3 py-2 md:justify-end md:pl-2"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -1959,7 +1998,7 @@ export default function HomePage() {
           <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-black/55">
             Cheshire replies
           </p>
-          <div className="mb-8 flex justify-center sm:mb-10">
+          <div className="mb-8 flex justify-center rounded-2xl bg-[#f3efe6] px-4 py-3 sm:mb-10 sm:px-5 sm:py-4">
             <motion.img
               src="/chat.png"
               alt="Cheshire Cat"
@@ -2036,12 +2075,15 @@ export default function HomePage() {
               size="xs"
               panel="above"
             />
-            <a
+            <NavReveal
+              label={nav.email}
+              kind="mailto"
               href={links.contactMailto}
-              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center border-0 bg-transparent px-2 text-xs tracking-wide text-black/65 underline-offset-4 transition-colors hover:text-black/88 hover:underline sm:min-w-0 sm:px-1"
-            >
-              {nav.email}
-            </a>
+              panelTitle="Email"
+              description={navReveal.emailDescription}
+              size="xs"
+              panel="above"
+            />
           </div>
           <p className="text-black/78 text-xs">{footer.copyright}</p>
         </div>

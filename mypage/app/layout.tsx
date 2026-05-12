@@ -18,6 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Tea section art: load early so the frame never flashes white before pixels paint. */}
+        <link rel="preload" href="/tea-party-invite.png" as="image" />
+        <link rel="preload" href="/tea-cup.png" as="image" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
