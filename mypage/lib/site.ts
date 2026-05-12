@@ -1,14 +1,14 @@
 /**
  * Personal intro site — edit this file to change all English copy and links.
  *
- * Narrative north star: the visitor is Alice; this site is Wonjun’s world to explore.
- * Keep curiosity-first tone while the garden stays the clear “evidence” trail.
+ * Narrative north star: the visitor is Alice; Wonjun hosts the site; the White Rabbit guides;
+ * the garden is the evidence trail. Keep curiosity-first tone.
  */
 export const site = {
   meta: {
     title: "A little wonderland",
     description:
-      "Wonjun — Data Science & full-stack builder: AI products (eLe, Point), leadership (D&A, hackathons), and international programs. Garden cards = proof.",
+      "Wonjun — Data Science & full-stack builder: AI products (eLe English reading from live news, Point), leadership (D&A, hackathons), and international programs. Garden cards = proof.",
   },
 
   brand: {
@@ -62,9 +62,9 @@ export const site = {
   processIntro: {
     eyebrow: "About me",
     titleHtml: "You followed a rabbit — <em>the way Alice did.</em>",
-    /** Main intro (HTML: line breaks, emphasis). Visitor = Alice; site = hole; author = rabbit. */
+    /** Main intro (HTML: line breaks, emphasis). Visitor = Alice; light invitation to stay. */
     subHtml:
-      "You got here the way Alice did — a little curiosity, a few clicks. I'm the rabbit: Data Science, messy questions into clean models, proof in the garden.<br/><br/><em>Stay for a minute?</em>",
+      "You got here the way Alice did — a little curiosity, a few clicks.<br/><br/><em>Stay for a minute?</em>",
   },
 
   /**
@@ -94,31 +94,35 @@ export const site = {
    */
   spotlight: [
     {
-      title: "eLe — live news into leveled English dialogues",
+      title: "eLe — easy English reading from live news",
       category: "Hard skills · AI product",
       trend: "Mar 2026",
       suit: "spade",
       imageSrc: "/spotlight/ele-english-education.png",
       imageAlt:
-        "eLe English education graphic: easy plus live equals english, with try-it cue and QR — Presented by Wonjun Lee",
+        "eLe product graphic: easy English reading from live news, with try-it cue and QR — Presented by Wonjun Lee",
       projectUrl: "https://juns007-ele-frontend.static.hf.space/",
-      roleLine: "Led product direction and built a flow from fresh news to classroom-ready dialogues.",
-      impactLine: "Teachers spend less time on prep; learners get dialogues that match their level.",
+      roleLine:
+        "Built a student-first flow: news turned into chat-style lines at the right level, with summaries that match each story.",
+      impactLine:
+        "Learners practice reading in bite-sized English while staying close to what is happening in the world today.",
       detailHtml:
-        "<p><strong>eLe</strong> is an English-study product that turns <strong>live news</strong> into short dialogues matched to the learner’s level.</p><p>I focused on <strong>auto-building lesson material</strong> so the work is lighter for teachers, and on keeping the content feeling <strong>new each week</strong>.</p>",
+        "<p><strong>eLe</strong> helps students <strong>practice English reading</strong> without fighting the news. Each piece is rebuilt as a <strong>chat-style thread</strong> so the tone feels light and the lines match <strong>level and interest</strong>.</p><p>The app also serves a <strong>clear summary</strong> of the article body. If someone wants to go deeper, they can open a <strong>longer paragraph</strong> for more detail—same story, more room to read.</p><p>So the loop is simple: <strong>reading practice</strong> plus <strong>fresh headlines</strong> in one place.</p>",
     },
     {
       title: "Point — live presentation coach",
       category: "Hard skills · real-time AI",
-      trend: "Mar 2026 →",
+      trend: "Mar 2026 – Now",
       suit: "spade",
       imageSrc: "/spotlight/point-landing.png",
       imageAlt: "Point landing page: Your AI presentation coach, lined paper background and Start with Point button",
       projectUrl: "https://pointpresent.com/",
-      roleLine: "Built the live practice screen and kept heavy work on the user’s device when possible.",
-      impactLine: "Learners get quicker tips during a talk, without waiting on a distant server.",
+      roleLine:
+        "Owned overall development: practice UI, on-device inference, and turning speech logs into live coaching cues.",
+      impactLine:
+        "Tone checks, persona-style delivery fixes, filler-word flags from logged speech, and audience video so rehearsal feels like a real room.",
       detailHtml:
-        "<p><strong>Point</strong> gives <strong>live feedback</strong> on voice and body language while someone rehearses a talk.</p><p>I designed it so <strong>most processing runs on the device</strong>, which keeps delay low and the coach feeling present.</p>",
+        "<p>I led <strong>end-to-end development</strong> for <strong>Point</strong> — the live rehearsal screen, the coaching logic, and the pipeline that ingests <strong>speech log data</strong> from each run.</p><p>The product tracks the speaker’s <strong>voice tone</strong>, runs <strong>persona-based coaching</strong> (think “talk like this public figure” as a style anchor), and applies <strong>speech correction</strong> that matches that persona instead of generic textbook rules.</p><p>Because we store structured speech logs, the coach also surfaces <strong>filler words and verbal crutches</strong> (“um,” “like,” “you know”) with clear timing. Finally, we can <strong>drop in audience video</strong> behind the speaker so practice feels closer to stepping in front of a real crowd.</p>",
     },
     {
       title: "ML class work and a campus AI reading circle",
@@ -130,14 +134,14 @@ export const site = {
       imageFit: "contain",
       imageAlt:
         "Kookmin University circular seal: KMU wordmark with ring text Kookmin University / 국민대학교",
-      roleLine: "Course projects in deep learning, speech, text, and analytics; ran a small on-campus AI paper circle.",
+      roleLine: "Course projects in deep learning, speech, text, and analytics; joined a small on-campus AI paper-reading circle.",
       impactLine: "Built course models and reports; learned to read research faster and ask better questions.",
       detailHtml:
-        "<p><strong>Deep learning</strong> — Used a fish-farm detection brief to think through real-world object detection.</p><p><strong>Advanced AI (speech)</strong> — Built an end-to-end speech flow for a shopping task and tuned a small voice model.</p><p><strong>Text analytics</strong> — Worked with airline reviews, word clouds, and simple topic views.</p><p><strong>X:AI Base (Spring 2025)</strong> — Joined a <strong>weekly paper-reading circle</strong> at Kookmin: present, debate, and take notes with peers.</p><p>Takeaway: know when to <strong>skim</strong> a paper and when to <strong>go deep</strong>, and always check the methods and assumptions.</p>",
+        "<p><strong>Deep learning</strong> — Used a fish-farm detection brief to think through real-world object detection.</p><p><strong>Advanced AI (speech)</strong> — Built an end-to-end speech flow for a shopping task and tuned a small voice model.</p><p><strong>Text analytics</strong> — Worked with airline reviews, word clouds, and simple topic views.</p><p><strong>X:AI Base (Spring 2025)</strong> — Joined a <strong>weekly paper-reading circle</strong> at Kookmin: present, debate, and take notes with peers.</p>",
     },
     {
       title: "HUSS hackathon — vision, roadmap, main pitch",
-      category: "Soft skills · leadership",
+      category: "Soft skills · presenting",
       trend: "Aug 2025",
       suit: "heart",
       imageSrc: "/spotlight/huss-convergence-presentation.png",
@@ -149,43 +153,49 @@ export const site = {
         "<p><strong>HUSS Idea Hackathon</strong> — Our team built an idea for an <strong>environmental data app</strong>.</p><p>I led the <strong>vision</strong>, shaped the <strong>roadmap</strong>, and pitched to <strong>200+</strong> people. We won the <strong>Grand Prize</strong>. The best lesson was turning dense tech into a <strong>simple story</strong> people could follow in one sitting.</p>",
     },
     {
-      title: "Capstone — from team problem to team solution",
+      title: "Steady over time — Airbnb capstone",
       category: "Soft skills · teamwork",
       trend: "Spring 2025",
       suit: "heart",
       imageSrc: "/spotlight/capstone-outlier-accommodations.png",
       imageAlt:
         "Capstone slide: final definition of outlier Airbnb listings — scatter of model-predicted vs actual booking rate with high and low outlier clusters",
-      roleLine: "Worked with students from other majors from first question to final delivery.",
-      impactLine: "Shipped a full project path, not only charts in a notebook.",
+      roleLine:
+        "Framed fixes on raw Airbnb data: ML split similar listings into two booking bands, clustered like-with-like, then read descriptions and reviews for concrete changes.",
+      impactLine:
+        "Preprocessing edge cases taught me steadiness; working with business students taught me to explain results in clear, public-friendly language.",
       detailHtml:
-        "<p><strong>Airbnb capstone</strong> — We moved from a clear problem to a shared solution as a team.</p><p>We split roles, met often, and handled the messy parts of <strong>real group work</strong>.</p><p>We also studied <strong>outlier listings</strong> by comparing <strong>model guesses vs real booking rates</strong> to find stays the model missed—then we tightened what to improve next.</p>",
+        "<p>We used <strong>raw Airbnb data</strong> to spot two groups of stays that looked similar but booked differently. An <strong>ML prediction model</strong> and <strong>clustering</strong> helped separate comparable listings; we then studied <strong>descriptions and reviews</strong> to turn patterns into actionable ideas.</p><p>Handling messy exceptions in prep showed why <strong>steady, detail-first work</strong> matters. Alongside <strong>business-admin teammates</strong>, I learned that strong projects need more than metrics—you have to <strong>name and explain</strong> them in ways a general audience can follow.</p>",
     },
     {
-      title: "D&A society — year plan and member seminars",
-      category: "Soft skills · community lead",
+      title: "Metaphor — the wrapper for easy communication",
+      category: "Soft skills · teaching",
       trend: "Jan–Nov 2025",
       suit: "heart",
       imageSrc: "/spotlight/da-bagging-seminar.png",
       imageAlt:
-        "D&A seminar in session: presenter beside screen explaining Bagging — bootstrap sampling, multiple models, and aggregating predictions (vote or average)",
-      roleLine: "Set the year plan for 50+ members and led seminars on harder ML topics.",
-      impactLine: "Helped members level up on RNNs, LSTMs, and hands-on practice.",
+        "D&A club session: presenter at screen with seminar slides explaining ML ideas with simple metaphors",
+      roleLine:
+        "Served on the D&A (Data & Analysis) executive board; co-led sessions and unpacked ML/DL with metaphors for members new to the field.",
+      impactLine:
+        "Framed vanishing gradients as the Whisper Challenge and hyperparameter tuning as catching mosquitoes—clarity before equations.",
       detailHtml:
-        "<p><strong>D&amp;A (Big Data Analysis Society)</strong> — I helped run the club for a year with <strong>50+</strong> members.</p><p>I wrote the <strong>roadmap</strong>, ran <strong>seminars</strong>, and taught topics like RNNs and LSTMs in plain steps.</p><p>One example: <strong>Bagging</strong> — train many small models on random samples, then <strong>vote</strong> (for labels) or <strong>average</strong> (for numbers) so the group is stronger than any single model.</p>",
+        "<p>I lean on <strong>metaphors</strong> when hard ideas need to travel to an unfamiliar room—it is an extra layer of translation so everyone can ride along.</p><p>As a <strong>D&amp;A club executive</strong>, I helped run the year with <strong>50+</strong> members and led sessions beside other leaders. On stage I linked the <strong>vanishing gradient problem</strong> to the <strong>Whisper Challenge</strong>, and <strong>hyperparameter optimization</strong> to <strong>catching mosquitoes</strong>: vivid hooks, then the real definitions.</p>",
     },
     {
-      title: "Netherlands exchange — civic site with local partners",
+      title: "Netherlands exchange — gamified civic reporting",
       category: "International · exchange",
       trend: "Fall 2024",
       suit: "diamond",
       imageSrc: "/spotlight/netherlands-exchange-team.png",
       imageAlt:
-        "Netherlands exchange: team photo on campus with civic-tech project posters (democracy / gamification) in the background",
-      roleLine: "Built a small community website with local partners; used English every day.",
-      impactLine: "Shipped a real site and grew more comfortable outside my home context.",
+        "Netherlands exchange team with civic gamification posters: location-based issues, egg metaphor, municipality monster",
+      roleLine:
+        "Co-built a location-based civic game: repeat reports grow an egg-shaped issue until a municipality monster clears it—stakeholder meetings, copy, and delivery with local partners.",
+      impactLine:
+        "Shipped a playful loop that made shared neighborhood pain visible; practiced facilitation and trust in a new city.",
       detailHtml:
-        "<p><strong>Netherlands exchange (Fall 2024)</strong> — Our team made a <strong>civic-tech style site</strong> with local partners.</p><p>I gathered needs, wrote copy, and coordinated in <strong>English daily</strong>. It was a strong stretch for listening, writing, and earning trust in a new place.</p>",
+        "<p><strong>Netherlands exchange (Fall 2024)</strong> — Residents flag problems by <strong>place</strong>. At first each thread looks like a small <strong>egg</strong>; when more people report the same pain, the egg <strong>grows</strong>, and a playful <strong>local municipality monster</strong> steps in to <strong>clear the pile</strong>—game rules on top of real civic attention.</p><p>I joined <strong>stakeholder meetings</strong>, turned needs into <strong>UI copy</strong>, and coordinated workshops and handoffs so Dutch partners and our class could ship one coherent prototype.</p><p>Strong stretch for listening, writing, and earning trust outside my home context.</p>",
     },
     {
       title: "Climate field study — Georgia and Uzbekistan",
@@ -196,14 +206,15 @@ export const site = {
       imageAlt:
         "Climate field program meeting room: round table with Uzbekistan desk flag and partners in discussion",
       roleLine: "Did field visits and expert talks; turned notes into one clear written report.",
-      impactLine: "Helped set up a ministry meeting with GGGI support; compared regions in plain language.",
+      impactLine:
+        "Helped set up a ministry meeting with GGGI (Global Green Growth Institute) support; compared regions in plain language.",
       detailHtml:
-        "<p><strong>Global Climate Change Response</strong> (Kookmin) — Field work in <strong>Georgia and Uzbekistan</strong> to see how two regions handle climate work.</p><p>I met experts (for example in Tashkent), joined local meetings, and helped a GGGI partner prepare talks at the <strong>Ministry of Ecology</strong>.</p><p>I wrote <strong>one report</strong> that pulled the voices together on partners and project flow. Main tools: <strong>English</strong> and <strong>interview notes</strong>.</p>",
+        "<p><strong>Global Climate Change Response</strong> (Kookmin) — Field work in <strong>Georgia and Uzbekistan</strong> to see how two regions handle climate work.</p><p>I met experts (for example in Tashkent), joined local meetings, and helped a <strong>GGGI (Global Green Growth Institute)</strong> partner prepare talks at the <strong>Ministry of Ecology</strong>.</p><p>I wrote <strong>one report</strong> that pulled the voices together on partners and project flow. Main tools: <strong>English</strong> and <strong>interview notes</strong>.</p>",
     },
     {
       title: "Global PBL — six months in Irvine, CA",
       category: "International · study abroad",
-      trend: "Mar–Aug 2026",
+      trend: "Mar–Aug 2026 (planned)",
       suit: "diamond",
       imageSrc: "/spotlight/global-pbl-presentation.png",
       imageAlt:
@@ -214,22 +225,24 @@ export const site = {
         "<p><strong>Global PBL</strong> (Kookmin) — <strong>Six months in Irvine, California</strong> (planned window on the card).</p><p>Focus areas: <strong>applied AI</strong>, <strong>full-stack apps</strong>, <strong>cloud builds</strong>, and learning how <strong>startups</strong> move from idea to launch.</p><p>Tools in view: <strong>AI agents</strong> and <strong>AWS</strong>.</p>",
     },
     {
-      title: "TV crowd extra — Boss Project (tvN)",
-      category: "Clubs · on-camera cameo",
-      trend: "Side quest",
+      title: "Background extra — Shin's Project & more",
+      category: "Just for fun · on-camera cameo",
+      trend: "Ongoing",
       suit: "club",
       imageSrc: "/spotlight/club-tvn-broadcast-extra.png",
       imageAlt:
-        "tvN drama still from Boss Project (신사장 프로젝트): night crowd scene; arrows mark background extra in light jacket",
-      roleLine: "Stood in the crowd behind the leads; was asked to look plain and blend in.",
-      impactLine: "Saw how many people and resets it takes to make one night scene feel real.",
+        "Drama still from Shin's Project / Boss Project (tvN): night crowd scene; one of several background-extra credits",
+      roleLine:
+        "Filled crowd and street shots on multiple dramas—not only one title. Same brief each time: plain clothes, tight spacing, fast resets.",
+      impactLine:
+        "Felt how many extras and retakes it takes before one night scene reads as real on camera.",
       detailHtml:
-        "<p><strong>tvN <em>Boss Project</em></strong> (신사장 프로젝트) — I was a <strong>background extra</strong> in a night crowd shot.</p><p>The job was to <strong>match spacing and tone</strong>, not to stand out. From the back you notice the <strong>pace on set</strong> and how many small moves keep a scene believable.</p>",
+        "<p><strong>Shin's Project</strong> (<em>Boss Project</em> / 신사장 프로젝트 on tvN) is the card photo, but I have stepped in as a <strong>background extra</strong> on <strong>other dramas</strong> too—night crowds, sidewalks, and similar group shots.</p><p>Each call is about <strong>matching spacing and tone</strong>, not standing out, and snapping back into place after every <strong>reset</strong>.</p><p>Watching from the back row, you notice the <strong>pace on set</strong> and how small, repeated fixes keep a scene believable.</p>",
     },
     {
       title: "Club fencing (épée)",
-      category: "Clubs · sport",
-      trend: "Side quest",
+      category: "Just for fun · sport",
+      trend: "Ongoing",
       suit: "club",
       imageSrc: "/spotlight/club-fencing-class.png",
       imageAlt:
@@ -241,8 +254,8 @@ export const site = {
     },
     {
       title: "Spanish on Duolingo — daily streak",
-      category: "Clubs · daily language",
-      trend: "440+ days",
+      category: "Just for fun · daily language",
+      trend: "Ongoing (440+ days)",
       suit: "club",
       imageSrc: "/spotlight/club-duolingo-spanish-streak.png",
       imageAlt:
@@ -268,7 +281,7 @@ export const site = {
       "<strong>Pick a track.</strong> Each suit is a different slice — tap a card for the full note.",
     rabbitSignoff: "— The White Rabbit (in a hurry)",
     suitPickerTitle: "Pick a suit",
-    suitPickerHint: "Tap a suit, then a card — details open on a dimmed stage.",
+    suitPickerHint: "Tap a suit, then a card — details open on a stage.",
     /** Shown under the hint while no suit is selected — makes the glyphs the obvious target */
     tapSuitsCue: "Tap a suit symbol",
     /** Shown above the horizontal card strip when a suit is selected (scroll affordance). */
@@ -317,7 +330,7 @@ export const site = {
   shelf: {
     sectionEyebrow: "The Caterpillar's shelf",
     sectionTitle: "The Caterpillar's shelf — a small study in comfort and spark",
-    sectionSub: "Films, albums, pages, and drama I keep like pictures on the wall.",
+    sectionSub: "Film, music, books, and drama I keep like pictures on the wall.",
     spineRowCue: "Four spines — tap to open",
     caterpillarSrc: "/caterpillar.png",
     caterpillarAlt: "The Caterpillar on a mushroom (illustration)",
@@ -330,37 +343,35 @@ export const site = {
     stackBodyKoLabel: "한국어",
     /**
      * Order: films → music → books → drama.
-     * spineFoot = category · spineBlurb = what’s inside · spineTitle = vertical spine label.
-     * spineClass: light pastel solids (readable with dark spine type in page.tsx).
+     * spineFoot = small caps on spine top · spineTitle = vertical spine center (same word) · spineBlurb optional (hidden when empty).
      */
     categories: [
       {
         id: "films",
-        spineTitle: "Movies",
-        spineFoot: "Films",
-        /** Narrow no-break hyphen in “one‑line” so spine labels don’t split mid-word. */
-        spineBlurb: "Posters · one\u2011line notes",
+        spineTitle: "Film",
+        spineFoot: "Film",
+        spineBlurb: "",
         spineClass: "bg-[#ddbfbc]",
       },
       {
         id: "music",
-        spineTitle: "Sound",
+        spineTitle: "Music",
         spineFoot: "Music",
-        spineBlurb: "Albums · tracks",
+        spineBlurb: "",
         spineClass: "bg-[#edd0b8]",
       },
       {
         id: "books",
-        spineTitle: "Reading",
-        spineFoot: "Books",
-        spineBlurb: "Reads · quotes",
+        spineTitle: "Book",
+        spineFoot: "Book",
+        spineBlurb: "",
         spineClass: "bg-[#b8c9bc]",
       },
       {
         id: "dramas",
-        spineTitle: "Series",
+        spineTitle: "Drama",
         spineFoot: "Drama",
-        spineBlurb: "Series · picks",
+        spineBlurb: "",
         spineClass: "bg-[#d6cfc0]",
       },
     ] as const,
@@ -397,7 +408,7 @@ export const site = {
         director: "Lorde · Pure Heroine",
         posterSrc: "/shelf/music-lorde-pure-heroine.png",
         lineEn: "Freer days rush back—and it all turns bittersweet.",
-        lineKo: "자유롭던 시절이 떠오르면서 달콤씁쓸해진다",
+        lineKo: "자유롭던 시절이 떠오르면서 달콤씁쓸해진다.",
       },
       {
         title: "You're On Your Own, Kid",
@@ -405,7 +416,7 @@ export const site = {
         director: "Taylor Swift · Midnights",
         posterSrc: "/shelf/music-taylor-swift-midnights.png",
         lineEn: "What I owe myself is what makes me stronger.",
-        lineKo: "내 책임이라는 것은 나를 강하게 만든다",
+        lineKo: "내 책임이라는 것은 나를 강하게 만든다.",
       },
       {
         title: "The Maybe Man",
@@ -413,7 +424,7 @@ export const site = {
         director: "AJR · The Maybe Man",
         posterSrc: "/shelf/music-ajr-the-maybe-man.png",
         lineEn: "Comfort when I don't know myself and just want to run.",
-        lineKo: "나도 나를 모르겠고 도망치고 싶을 때 위로가 됩니다",
+        lineKo: "나도 나를 모르겠고 도망치고 싶을 때 위로가 됩니다.",
       },
     ],
     books: [
@@ -423,7 +434,7 @@ export const site = {
         director: "한강 · 소설집",
         posterSrc: "/shelf/book-norang-munui-yeongwon.png",
         lineEn: "When fragility becomes mutual comfort.",
-        lineKo: "연약함이 서로의 위로가 될 때",
+        lineKo: "연약함이 서로의 위로가 될 때.",
       },
       {
         title: "시선으로부터,",
@@ -431,7 +442,7 @@ export const site = {
         director: "정세랑 · 장편소설",
         posterSrc: "/shelf/book-siseon-eurobuto.png",
         lineEn: "A smooth way to digest tradition.",
-        lineKo: "전통을 매끈하게 소화하는 방법",
+        lineKo: "전통을 매끈하게 소화하는 방법.",
       },
       {
         title: "재수사",
@@ -439,7 +450,7 @@ export const site = {
         director: "장강명 · 장편소설",
         posterSrc: "/shelf/book-jaesusa.png",
         lineEn: "Following the circuitry of being human, step by step.",
-        lineKo: "사람이라는 회로를 찬찬히 따라간다",
+        lineKo: "사람이라는 회로를 찬찬히 따라간다.",
       },
     ],
     dramas: [
@@ -449,7 +460,7 @@ export const site = {
         director: "R. Scott Gemmill",
         posterSrc: "/shelf/the-pitt.png",
         lineEn: "The push-pull between characters is so precise you fall in before you know it.",
-        lineKo: "인물의 역학 관계가 정교하고 그래서 빠져들게 됩니다",
+        lineKo: "인물의 역학 관계가 정교하고 그래서 빠져들게 됩니다.",
       },
       {
         title: "Succession",
@@ -457,7 +468,7 @@ export const site = {
         director: "Jesse Armstrong",
         posterSrc: "/shelf/succession.png",
         lineEn: "Cruelty, I felt, arrives trailing loneliness.",
-        lineKo: "잔인함은 외로움에서 온다고 느꼈어요",
+        lineKo: "잔인함은 외로움에서 온다고 느꼈어요.",
       },
       {
         title: "Severance",
@@ -465,7 +476,7 @@ export const site = {
         director: "Dan Erickson",
         posterSrc: "/shelf/severance.png",
         lineEn: "I don't want to cut myself off from the pride work gives me.",
-        lineKo: "노동을 통한 뿌듯함과 단절되고 싶지 않아요",
+        lineKo: "노동을 통한 뿌듯함과 단절되고 싶지 않아요.",
       },
     ],
     /** Below the shelf — Tenniel tea-party art + contact “on the table”. */
@@ -488,15 +499,18 @@ export const site = {
   },
 
   cheshire: {
-    /** Lead + Alice’s hinge line so the pull quote lands; then a short steadiness beat. */
+    /**
+     * Two-beat lead-in that frames the section as a small dialogue:
+     *   1) quiet prose lead-in (lighter weight),
+     *   2) Alice's question — the cue the Cheshire pull quote will answer.
+     */
     bodyHtml:
-      '<p class="mx-auto mb-4 max-w-md text-[1rem] leading-relaxed text-black/65">You&rsquo;ve come this far—past the garden, the shelf, the tea. Small steps, still a real journey.</p>' +
-      '<div class="mx-auto mb-4 max-w-md border-l-2 border-black/20 pl-4 text-left text-[0.9rem] leading-relaxed text-black/65"><p><span class="mr-2 font-semibold text-black/55">Alice</span>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>' +
-      '<p class="mx-auto max-w-md text-[0.95rem] leading-relaxed text-black/62">The map won&rsquo;t always be clear. Keep walking steady enough, and you&rsquo;ll still fetch up somewhere that matters.</p>',
-    /** Carroll line — same “walk long enough” promise, less prose around it. */
+      '<p class="mx-auto mb-6 max-w-sm text-[0.875rem] leading-relaxed text-black/55">You&rsquo;ve come this far&mdash;past the garden, the shelf, the tea.</p>' +
+      '<div class="mx-auto max-w-sm border-l-2 border-black/30 pl-4 text-left text-[0.95rem] leading-relaxed text-black/78"><p class="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-black/55">Alice asks</p><p>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>',
+    /** Carroll line — Cheshire's reply to Alice's question above. */
     quote: "\u201cOh, you're sure to do that, if only you walk long enough.\u201d",
     attribution: "\u2014 The Cheshire Cat, Alice's Adventures in Wonderland",
-    /** Optional closing after the pull quote; leave empty when the lead already says it. */
+    /** Optional closing after the pull quote; leave empty so the exchange stays tight. */
     codaHtml: "",
   },
 

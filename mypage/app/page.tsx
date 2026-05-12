@@ -206,13 +206,16 @@ function spotlightImageFitContain(idea: SpotlightItem): boolean {
   return "imageFit" in idea && idea.imageFit === "contain";
 }
 
-function SpotlightProjectLink({ href, className = "" }: { href: string; className?: string }) {
-  let host = href;
+function spotlightProjectHost(href: string) {
   try {
-    host = new URL(href).hostname.replace(/^www\./, "");
+    return new URL(href).hostname.replace(/^www\./, "");
   } catch {
-    /* keep full href if parse fails */
+    return href;
   }
+}
+
+function SpotlightProjectLink({ href, className = "" }: { href: string; className?: string }) {
+  const host = spotlightProjectHost(href);
   return (
     <a
       href={href}
@@ -362,17 +365,41 @@ function IdeaCard({
                   : "overflow-hidden ring-1 ring-black/18",
               ].join(" ")}
             >
-              <img
-                src={idea.imageSrc}
-                alt={idea.imageAlt}
-                draggable={false}
-                className={
-                  imageFitContain
-                    ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
-                    : "aspect-[5/3] w-full object-cover"
-                }
-                style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
-              />
+              {spotlightHasProjectUrl(idea) ? (
+                <a
+                  href={idea.projectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative z-20 block h-full w-full outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-1"
+                  aria-label="Open project site in a new tab"
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                >
+                  <img
+                    src={idea.imageSrc}
+                    alt={idea.imageAlt}
+                    draggable={false}
+                    className={
+                      imageFitContain
+                        ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
+                        : "aspect-[5/3] w-full object-cover"
+                    }
+                    style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
+                  />
+                </a>
+              ) : (
+                <img
+                  src={idea.imageSrc}
+                  alt={idea.imageAlt}
+                  draggable={false}
+                  className={
+                    imageFitContain
+                      ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
+                      : "aspect-[5/3] w-full object-cover"
+                  }
+                  style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
+                />
+              )}
                   </div>
             {spotlightHasProjectUrl(idea) ? (
               <div className="relative z-20 mb-2 flex w-full max-w-[95%] shrink-0 justify-center px-1">
@@ -498,32 +525,69 @@ function IdeaCard({
                             </p>
 
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <div
-                              className={[
-                                "mx-auto mb-6 max-w-sm overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
-                                imageFitContain
-                                  ? "relative aspect-[5/3] border-black/10 bg-[#f0efec]"
-                                  : "border-black/12",
-                              ].join(" ")}
-                            >
-                              <img
-                                src={idea.imageSrc}
-                                alt={idea.imageAlt}
-                                draggable={false}
-                                className={
-                                  imageFitContain
-                                    ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
-                                    : "max-h-48 w-full object-cover sm:max-h-52"
-                                }
-                                style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
-                              />
-              </div>
-
                             {spotlightHasProjectUrl(idea) ? (
-                              <div className="relative z-20 mx-auto mb-6 flex max-w-sm justify-center px-1">
-                                <SpotlightProjectLink href={idea.projectUrl} className="text-xs sm:text-[13px]" />
-              </div>
-                            ) : null}
+                              <a
+                                href={idea.projectUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={[
+                                  "mx-auto mb-6 block max-w-sm overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.06)] outline-none ring-0 transition-[box-shadow,opacity] hover:opacity-[0.97] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2",
+                                  imageFitContain ? "border-black/10" : "border-black/12",
+                                ].join(" ")}
+                                aria-label={`Open project site: ${spotlightProjectHost(idea.projectUrl)}`}
+                                onClick={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                              >
+                                <div
+                                  className={
+                                    imageFitContain
+                                      ? "relative aspect-[5/3] bg-[#f0efec]"
+                                      : ""
+                                  }
+                                >
+                                  <img
+                                    src={idea.imageSrc}
+                                    alt={idea.imageAlt}
+                                    draggable={false}
+                                    className={
+                                      imageFitContain
+                                        ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
+                                        : "max-h-48 w-full object-cover sm:max-h-52"
+                                    }
+                                    style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
+                                  />
+                                </div>
+                                <div className="flex justify-center border-t border-black/10 bg-[#f8f8f6] px-3 py-2.5 sm:py-3">
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold tracking-wide text-neutral-800 underline decoration-neutral-400 underline-offset-[3px] sm:text-[13px]">
+                                    {spotlightProjectHost(idea.projectUrl)}
+                                    <span className="translate-y-[0.5px] text-[9px] font-normal text-neutral-700" aria-hidden>
+                                      ↗
+                                    </span>
+                                  </span>
+                                </div>
+                              </a>
+                            ) : (
+                              <div
+                                className={[
+                                  "mx-auto mb-6 max-w-sm overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.06)]",
+                                  imageFitContain
+                                    ? "relative aspect-[5/3] border-black/10 bg-[#f0efec]"
+                                    : "border-black/12",
+                                ].join(" ")}
+                              >
+                                <img
+                                  src={idea.imageSrc}
+                                  alt={idea.imageAlt}
+                                  draggable={false}
+                                  className={
+                                    imageFitContain
+                                      ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
+                                      : "max-h-48 w-full object-cover sm:max-h-52"
+                                  }
+                                  style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
+                                />
+                              </div>
+                            )}
 
                             <div className="mx-auto w-full max-w-sm space-y-6">
                               <div>
@@ -1051,7 +1115,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       onClick={() => setActiveCategory(cat.id)}
                       aria-pressed={activeCategory === cat.id}
                       className={[
-                        "group flex h-[210px] min-h-[210px] w-[5.45rem] min-w-[5.45rem] max-w-[6rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-[transform,box-shadow,ring]",
+                        "group relative flex h-[210px] min-h-[210px] w-[5.45rem] min-w-[5.45rem] max-w-[6rem] shrink-0 flex-col rounded-sm border border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-[transform,box-shadow,ring]",
                         "sm:h-[228px] sm:min-h-[228px] sm:w-[5.55rem] sm:min-w-[5.55rem] md:h-[236px] md:w-[5.65rem] md:min-w-[5.65rem]",
                         "hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-1 active:scale-[0.98]",
                         activeCategory === cat.id
@@ -1059,16 +1123,21 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                           : "",
                         cat.spineClass,
                       ].join(" ")}
-                      aria-label={`${cat.spineFoot}: ${cat.spineBlurb}. ${cat.spineTitle}`}
+                      aria-label={cat.spineBlurb.trim() ? `Open ${cat.spineFoot}: ${cat.spineBlurb}` : `Open ${cat.spineFoot}`}
                     >
+                      {/* top rule */}
+                      <div
+                        className="mx-2 mt-2.5 h-px shrink-0 bg-gradient-to-r from-transparent via-black/30 to-transparent"
+                        aria-hidden
+                      />
                       <span
-                        className="px-1.5 pb-0.5 pt-2.5 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/75"
+                        className="shrink-0 px-1.5 pb-1 pt-1.5 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/75"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
                       >
                         {cat.spineFoot}
                       </span>
                       <span
-                        className="flex min-h-0 flex-1 items-center justify-center px-1 py-1 text-center font-serif text-sm font-semibold leading-tight tracking-wide text-black/78 sm:text-[0.95rem]"
+                        className="flex min-h-0 flex-1 items-center justify-center px-1 py-2 text-center font-serif text-sm font-semibold leading-tight tracking-wide text-black/78 sm:text-[0.95rem]"
                         style={{
                           fontFamily: SERIF,
                           textShadow: "0 1px 0 rgba(255,255,255,0.4)",
@@ -1076,11 +1145,25 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       >
                         {cat.spineTitle}
                       </span>
+                      {cat.spineBlurb.trim() ? (
+                        <span
+                          className="shrink-0 px-1.5 pb-1 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/76 sm:text-[8px]"
+                          style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
+                        >
+                          {cat.spineBlurb}
+                        </span>
+                      ) : null}
+                      {/* bottom rule + mirrored label */}
+                      <div
+                        className="mx-2 h-px shrink-0 bg-gradient-to-r from-transparent via-black/26 to-transparent"
+                        aria-hidden
+                      />
                       <span
-                        className="px-1.5 pb-2.5 pt-0.5 text-center text-[7px] font-medium leading-snug text-black/76 sm:text-[8px]"
+                        className="shrink-0 rotate-180 px-1.5 pb-1.5 pt-1 text-center text-[8px] font-bold leading-tight tracking-[0.12em] text-black/60"
                         style={{ textShadow: "0 1px 0 rgba(255,255,255,0.45)" }}
+                        aria-hidden
                       >
-                        {cat.spineBlurb}
+                        {cat.spineFoot}
                       </span>
                     </button>
                     </div>
@@ -1143,7 +1226,9 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                       <h3 className="font-serif text-xl text-black/85 sm:text-2xl md:text-[1.65rem]" style={{ fontFamily: SERIF }}>
                         {activeMeta?.spineTitle}
                       </h3>
-                      <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/60">{activeMeta?.spineFoot}</p>
+                      {activeMeta && activeMeta.spineFoot !== activeMeta.spineTitle ? (
+                        <p className="mt-1 text-[10px] uppercase tracking-[0.35em] text-black/60">{activeMeta.spineFoot}</p>
+                      ) : null}
                     </div>
 
                     {activeCategory === "films" ? (
@@ -1871,12 +1956,15 @@ export default function HomePage() {
             className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-black/70 sm:mb-12"
             dangerouslySetInnerHTML={{ __html: cheshire.bodyHtml }}
           />
-          <div className="mb-10 flex justify-center sm:mb-12">
+          <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-black/55">
+            Cheshire replies
+          </p>
+          <div className="mb-8 flex justify-center sm:mb-10">
             <motion.img
               src="/chat.png"
               alt="Cheshire Cat"
               draggable={false}
-              className="h-auto max-h-[200px] w-auto max-w-[min(72vw,220px)] object-contain sm:max-h-[240px]"
+              className="h-auto max-h-[160px] w-auto max-w-[min(58vw,180px)] object-contain sm:max-h-[180px]"
               style={{ filter: "grayscale(100%) contrast(1.4)", mixBlendMode: "multiply", userSelect: "none" }}
               initial={{ opacity: 0.82 }}
               animate={
@@ -1892,7 +1980,7 @@ export default function HomePage() {
             />
           </div>
           <blockquote
-            className="mb-6 text-2xl font-serif italic leading-snug text-black/78 md:text-3xl lg:text-[2.1rem] lg:leading-snug"
+            className="mx-auto mb-5 max-w-2xl text-2xl font-serif italic leading-snug text-black/82 md:text-[1.875rem] md:leading-[1.25] lg:text-[2.15rem] lg:leading-[1.22]"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {cheshire.quote}
