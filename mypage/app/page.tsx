@@ -688,79 +688,103 @@ function IdeaCard({
 // ── Shared font constant ──────────────────────────────────────────────────
 const SERIF = "'Cormorant Garamond', 'Playfair Display', serif";
 
-function resolveMorphStem(morphFrom: string, morphStem: string | undefined): string {
-  const trimmed = morphStem?.trim();
-  if (trimmed) return trimmed;
-  const word = morphFrom.replace(/\?+$/, "");
-  return word.slice(0, 3);
-}
-
-/** Letters typed after stem so line 2 ends as nameLine (handles shared “W”, etc.). */
-function suffixAfterMorphStem(stem: string, nameLine: string): string {
-  const n = nameLine.replace(/^\s+/, "");
-  if (n.startsWith(stem)) return n.slice(stem.length);
-  const last = stem.slice(-1);
-  if (last && n.startsWith(last)) return n.slice(1);
-  return n;
-}
-
-/** Relative times (ms from cycle start) and line-2 text for one hero morph pass. */
-function buildHeroMorphTimeline(
-  morphFrom: string,
-  nameLine: string,
-  helloTyping: string,
-  morphStem: string | undefined,
-): { at: number; text: string }[] {
-  const stem = resolveMorphStem(morphFrom, morphStem);
-  const suffixChars = suffixAfterMorphStem(stem, nameLine);
-
-  const items: { at: number; text: string }[] = [];
-  let t = 520;
-  items.push({ at: t, text: morphFrom });
-  t += 780;
-
-  let cur = morphFrom;
-  while (cur.length > stem.length) {
-    t += 68;
-    cur = cur.slice(0, -1);
-    items.push({ at: t, text: cur });
-  }
-
-  let acc = stem;
-  for (const ch of suffixChars) {
-    t += 78;
-    acc += ch;
-    items.push({ at: t, text: acc });
-  }
-
-  t += 200;
-  for (const ch of helloTyping) {
-    t += 78;
-    acc += ch;
-    items.push({ at: t, text: acc });
-  }
-
-  return items;
-}
-
-/** Line 1 fixed; line 2 loops: I’m Wonderland → … → I’m Wonjun. → Hello! → pause → repeat. */
-function HeroWonderlandIntro({
+/** Line 1 fixed; line 2 row1 = prefix + typing loop + optional closing; row2 = fixed suffix. */
+function HeroTwoLineIntro({
   line1,
-  morphFrom,
-  morphStem,
-  nameLine,
-  helloTyping,
+  line2Prefix,
+  line2TypedPhrase,
+  line2AfterTyped,
+  line2StaticSuffix,
 }: {
   line1: string;
-  morphFrom: string;
-  morphStem?: string;
-  nameLine: string;
-  helloTyping: string;
+  line2Prefix: string;
+  line2TypedPhrase: string;
+  line2AfterTyped: string;
+  line2StaticSuffix: string;
 }) {
   const reduceMotion = useReducedMotion();
-  const stemResolved = resolveMorphStem(morphFrom, morphStem);
-  const line2Complete = `${stemResolved}${suffixAfterMorphStem(stemResolved, nameLine)}${helloTyping}`;
-  const [line2, setLine2] = useState(reduceMotion ? line2Complete : "");
+  const phrase = line2TypedPhrase;
+  const fullLine2 = `${line2Prefix}${phrase}${line2AfterTyped} ${line2StaticSuffix}`.replace(/\s+/g, " ").trim();
+  const [typedLen, setTypedLen] = useState(reduceMotion ? phrase.length : 0);
+  const [caretOn, setCaretOn] = useState(!reduceMotion);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setTypedLen(phrase.length);
+      setCaretOn(false);
+      return;
+    }
+
+    let dead = false;
+    const timerIds: number[] = [];
+
+    const TYPE_MS = 98;
+    const DEL_MS = 68;
+    const HOLD_FULL_MS = 2600;
+    const CARET_OFF_MS = 480;
+    const PAUSE_EMPTY_MS = 780;
+
+    const after = (ms: number, fn: () => void) => {
+      const id = window.setTimeout(() => {
+        if (!dead) fn();
+      }, ms);
+      timerIds.push(id);
+    };
+
+    const runTypeForward = (i: number) => {
+      if (dead) return;
+      if (i > phrase.length) {
+        after(HOLD_FULL_MS, () => {
+          if (dead) return;
+          setCaretOn(false);
+          after(CARET_OFF_MS, () => {
+            if (dead) return;
+            setCaretOn(true);
+            if (phrase.length > 0) runDeleteBackward(phrase.length - 1);
+            else {
+              setTypedLen(0);
+              setCaretOn(false);
+              after(PAUSE_EMPTY_MS, () => {
+                if (dead) return;
+                setCaretOn(true);
+                after(TYPE_MS, () => runTypeForward(1));
+              });
+            }
+          });
+        });
+        return;
+      }
+      setTypedLen(i);
+      setCaretOn(true);
+      after(TYPE_MS, () => runTypeForward(i + 1));
+    };
+
+    const runDeleteBackward = (i: number) => {
+      if (dead) return;
+      if (i < 0) {
+        setTypedLen(0);
+        setCaretOn(false);
+        after(PAUSE_EMPTY_MS, () => {
+          if (dead) return;
+          setCaretOn(true);
+          after(TYPE_MS, () => runTypeForward(1));
+        });
+        return;
+      }
+      setTypedLen(i);
+      setCaretOn(true);
+      after(DEL_MS, () => runDeleteBackward(i - 1));
+    };
+
+    setTypedLen(0);
+    setCaretOn(true);
+    after(TYPE_MS, () => runTypeForward(1));
+
+    return () => {
+      dead = true;
+      timerIds.forEach((id) => window.clearTimeout(id));
+    };
+  }, [line2TypedPhrase, reduceMotion]);
 
   const h1Style: CSSProperties = {
     fontFamily: SERIF,
@@ -769,48 +793,7 @@ function HeroWonderlandIntro({
     fontStyle: "italic",
   };
 
-  const morphTimeoutIds = useRef<number[]>([]);
-
-  useEffect(() => {
-    if (reduceMotion) return;
-
-    const HOLD_FULL_MS = 2200;
-    const BLANK_MS = 900;
-
-    const events = buildHeroMorphTimeline(morphFrom, nameLine, helloTyping, morphStem);
-    const lastAt = events.length > 0 ? events[events.length - 1].at : 0;
-
-    let dead = false;
-
-    const clearCycleTimeouts = () => {
-      morphTimeoutIds.current.forEach((id) => window.clearTimeout(id));
-      morphTimeoutIds.current = [];
-    };
-
-    const run = (fn: () => void, delay: number) => {
-      const id = window.setTimeout(() => {
-        if (!dead) fn();
-      }, delay);
-      morphTimeoutIds.current.push(id);
-    };
-
-    const cycle = () => {
-      if (dead) return;
-      clearCycleTimeouts();
-      events.forEach(({ at, text }) => {
-        run(() => setLine2(text), at);
-      });
-      run(() => setLine2(""), lastAt + HOLD_FULL_MS);
-      run(() => cycle(), lastAt + HOLD_FULL_MS + BLANK_MS);
-    };
-
-    cycle();
-
-    return () => {
-      dead = true;
-      clearCycleTimeouts();
-    };
-  }, [reduceMotion, morphFrom, morphStem, nameLine, helloTyping]);
+  const typedVisible = phrase.slice(0, typedLen);
 
   if (reduceMotion) {
     return (
@@ -825,21 +808,26 @@ function HeroWonderlandIntro({
           {line1}
         </motion.p>
         <motion.h1
-          className="mx-auto max-w-[min(96vw,56rem)] px-1 text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black text-balance sm:text-5xl md:text-7xl md:leading-none lg:text-8xl"
+          className="mx-auto flex w-full max-w-[min(96vw,48rem)] flex-col items-center gap-y-1 px-2 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black sm:gap-y-1.5 sm:text-5xl md:text-7xl md:leading-none lg:text-8xl"
           style={h1Style}
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.38 }}
-          aria-label={line2Complete}
+          aria-label={fullLine2}
         >
-          {line2Complete}
+          <span className="block min-h-[1.2em] whitespace-pre leading-tight">
+            {line2Prefix}
+            {phrase}
+            {line2AfterTyped}
+          </span>
+          <span className="block whitespace-pre leading-tight">{line2StaticSuffix}</span>
         </motion.h1>
       </div>
     );
   }
 
   return (
-    <div className="relative mb-10 min-h-[8.5rem] sm:min-h-[9rem] md:min-h-[12rem]">
+    <div className="relative mb-10 min-h-[9.5rem] sm:min-h-[10.5rem] md:min-h-[13rem]">
       <motion.p
         className="mx-auto mb-4 max-w-3xl text-[clamp(1.05rem,3.4vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black md:leading-snug"
         style={h1Style}
@@ -850,12 +838,31 @@ function HeroWonderlandIntro({
         {line1}
       </motion.p>
       <h1
-        className="mx-auto min-h-[2.85rem] max-w-[min(96vw,56rem)] px-1 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black text-balance sm:min-h-[3.2rem] sm:text-5xl md:min-h-[4.5rem] md:text-7xl md:leading-none lg:text-8xl"
+        className="mx-auto flex min-h-[3.2rem] w-full max-w-[min(96vw,48rem)] flex-col items-center gap-y-1 px-2 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black sm:min-h-[3.6rem] sm:gap-y-1.5 sm:text-5xl md:min-h-[5rem] md:text-7xl md:leading-none lg:text-8xl"
         style={h1Style}
-        aria-live="polite"
-        aria-label={line2Complete}
+        aria-label={fullLine2}
       >
-        {line2 || "\u00a0"}
+        {/* Row 1: typing + caret — row 2: fixed (sketch layout). */}
+        <span className="flex min-h-[1.2em] min-w-0 flex-nowrap items-baseline justify-center gap-x-0 leading-tight">
+          <span aria-hidden="true" className="whitespace-pre">
+            {line2Prefix}
+          </span>
+          <span aria-hidden="true" className="whitespace-pre">
+            {typedVisible}
+          </span>
+          {caretOn ? (
+            <span
+              aria-hidden
+              className="inline-block w-[0.45ch] shrink-0 translate-y-[-0.06em] animate-pulse select-none text-black/85"
+              style={{ fontStyle: "normal" }}
+            >
+              |
+            </span>
+          ) : null}
+        </span>
+        <span aria-hidden className="block whitespace-pre leading-tight">
+          {line2StaticSuffix}
+        </span>
       </h1>
     </div>
   );
@@ -1608,12 +1615,12 @@ export default function HomePage() {
             </motion.p>
           ) : null}
 
-          <HeroWonderlandIntro
+          <HeroTwoLineIntro
             line1={hero.introLine1}
-            morphFrom={hero.wonderlandMorph}
-            morphStem={hero.morphStem}
-            nameLine={hero.nameLine}
-            helloTyping={hero.helloTyping}
+            line2Prefix={hero.line2Prefix}
+            line2TypedPhrase={hero.line2TypedPhrase}
+            line2AfterTyped={hero.line2AfterTyped}
+            line2StaticSuffix={hero.line2StaticSuffix}
           />
 
         <motion.p

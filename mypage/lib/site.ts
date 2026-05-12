@@ -6,7 +6,7 @@
  */
 export const site = {
   meta: {
-    title: "A little wonderland",
+    title: "Wonjunland",
     description:
       "Wonjun — Data Science & full-stack builder: AI products (eLe English reading from live news, Point), leadership (D&A, hackathons), and international programs. Garden cards = proof.",
   },
@@ -45,16 +45,16 @@ export const site = {
   hero: {
     /** Optional small caps above the main headline (leave empty to skip). */
     eyebrow: "",
-    /** Hero line 1 — stays visible; line 2 morphs from wonderlandMorph into nameLine. */
-    introLine1: "Welcome to the little wonderland",
-    /** Line 2 opens here (“I’m Wonderland…”), then backspaces toward morphStem, then finishes nameLine. */
-    wonderlandMorph: "I'm Wonderland",
-    /** After deletions stop (must be a prefix of wonderlandMorph). Then the rest of the name is typed. */
-    morphStem: "I'm W",
-    /** Final surname line (capital W); shared “W” with morphStem is not re-typed. */
-    nameLine: "Wonjun.",
-    /** Appended after nameLine (e.g. space + greeting). */
-    helloTyping: " Hello!",
+    /** Line 1 — fixed. */
+    introLine1: "You in Wonjunland",
+    /** Line 2 — fixed start of row 1 (only line2TypedPhrase animates). */
+    line2Prefix: "Hello, ",
+    /** Line 2 — typing / delete loop only this segment. */
+    line2TypedPhrase: "I'm Wonjun",
+    /** Line 2 — optional fixed tail after the typed segment (e.g. punctuation); leave empty to skip. */
+    line2AfterTyped: "",
+    /** Line 2 — fixed second row. */
+    line2StaticSuffix: "in Wonjunland",
     subHtml: "Curious? Follow the rabbit — the garden and cards carry the rest.",
     /** Plain bridge after the hero: who this is and why the garden comes next (first-visit clarity). */
     summaryHtml:
