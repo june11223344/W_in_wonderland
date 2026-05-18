@@ -85,7 +85,7 @@ export const site = {
     shrinkLabel: "DRINK ME",
     shrinkTitle: "What I want to shrink",
     shrinkBodyHtml:
-      "<p>I tend to <strong>overthink</strong> things — following every possibility until even small decisions start to feel risky.</p><p>Some lessons can only be learned by <strong>trying</strong>. I want to get more comfortable <strong>taking small steps</strong> instead of waiting for a <strong>perfect plan</strong>.</p>",
+      "<p>I tend to <strong>overthink</strong> things — some lessons can only be learned by <strong>trying</strong>. I want to get more comfortable <strong>taking small steps</strong> instead of waiting for a <strong>perfect plan</strong>.</p>",
     shrinkImageSrc: "/drink-removebg-preview.png",
     shrinkImageAlt: "DRINK ME bottle",
   },
