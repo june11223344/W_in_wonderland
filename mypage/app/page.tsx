@@ -1653,22 +1653,22 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mx-auto mb-12 max-w-xl border-b border-black/[0.07] pb-12 text-center sm:mb-14 sm:pb-14"
+            className="mx-auto mb-12 max-w-2xl border-b border-black/[0.07] pb-12 text-center sm:mb-14 sm:pb-14"
           >
             <p
-              className="mb-3 text-[11px] tracking-[0.12em] text-black/78"
+              className="mb-2 text-[10px] tracking-[0.14em] text-black/72"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.sectionGateEyebrow}
             </p>
-            <p
-              className="font-serif text-xl leading-snug text-black sm:text-2xl"
-              style={{ fontFamily: SERIF, fontWeight: 400, fontStyle: "italic" }}
+            <h2
+              className="mb-3 font-serif text-2xl leading-snug text-black/75 md:text-3xl md:leading-snug"
+              style={{ fontFamily: SERIF, fontWeight: 400 }}
             >
               {garden.sectionGateTitle}
-            </p>
+            </h2>
             <p
-              className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-black/75"
+              className="mx-auto max-w-2xl text-sm leading-relaxed text-black/70"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {garden.sectionGateSub}

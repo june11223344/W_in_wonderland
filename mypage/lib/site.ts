@@ -79,7 +79,7 @@ export const site = {
     growLabel: "EAT ME",
     growTitle: "What I want to grow",
     growBodyHtml:
-      "<p>I value <strong>logic, consistency, and solid work</strong> — clear thinking, steady standards, and building things that can handle <strong>feedback and problems</strong>.</p><p>When difficult choices come up, I want my reasoning to <strong>make sense to myself first</strong>. That personal standard is something I've developed over time.</p>",
+      "<p>I value <strong>logic, consistency, and solid work</strong> — clear thinking, steady standards, and building things that can handle <strong>feedback and problems</strong>.</p>",
     growImageSrc: "/eattme.png",
     growImageAlt: "EAT ME cake",
     shrinkLabel: "DRINK ME",
