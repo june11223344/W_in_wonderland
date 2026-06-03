@@ -75,17 +75,17 @@ export const site = {
         {
           letter: "W",
           label: "Whole",
-          body: "End-to-end builds (eLe, Point): concept, interface, and live products you can try.",
+          body: "Concept, UI, and technical builds through live products<br />(eLe, Point).",
         },
         {
           letter: "O",
           label: "Open",
-          body: "Abroad and mixed teams (Netherlands exchange, field work): listen, write, and ship with partners.",
+          body: "Mixed teams abroad: listen, write, ship<br />(Netherlands, field study).",
         },
         {
           letter: "W",
           label: "Well-structured",
-          body: "Stage stories that land (HUSS Grand Prize): one clear arc for a crowded room.",
+          body: "Dense ideas into one clear stage story<br />(HUSS, Grand Prize).",
         },
       ],
       footHtml:

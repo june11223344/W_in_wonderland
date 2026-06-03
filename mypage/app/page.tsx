@@ -852,9 +852,10 @@ function HeroWowSummary({ copy }: { copy: (typeof site)["hero"]["wowSummary"] })
             <span className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-black/62">
               {pillar.label}
             </span>
-            <p className="text-[11px] font-medium leading-snug text-black/76 sm:text-xs sm:leading-snug">
-              {pillar.body}
-            </p>
+            <p
+              className="text-[11px] font-medium leading-snug text-black/76 sm:text-xs sm:leading-snug"
+              dangerouslySetInnerHTML={{ __html: pillar.body }}
+            />
           </li>
         ))}
       </ul>
