@@ -2,13 +2,13 @@
  * Personal intro site — edit this file to change all English copy and links.
  *
  * Narrative north star: the visitor is Alice; Wonjun hosts the site; the White Rabbit guides;
- * the garden is the evidence trail. Keep curiosity-first tone.
+ * the garden is the evidence trail. Positioning: concept designer (worlds, visuals, story-led product).
  */
 export const site = {
   meta: {
     title: "Wonjunland",
     description:
-      "Wonjun: Data Science & full-stack builder. AI products (eLe English reading from live news, Point), leadership (D&A, hackathons), and international programs. Garden cards = proof.",
+      "Wonjun: concept designer. Product worlds and interfaces (eLe, Point), story-led pitches and teaching visuals, and field projects abroad. Garden cards = proof.",
   },
 
   brand: {
@@ -36,7 +36,7 @@ export const site = {
   /** Short lines inside NavReveal panels (edit anytime) */
   navReveal: {
     boardDescription:
-      "Under the hero: tap ♠ ♥ ♦ ♣ for hard skills, soft skills, international, and clubs (side quests: broadcast cameo, sport, language streaks, and more to come).",
+      "Under the hero: tap ♠ ♥ ♦ ♣ for concept craft, story & pitch, worlds abroad, and side quests (set cameos, sport, language streaks, and more to come).",
     linkedinDescription: "Public LinkedIn profile.",
     /** Shown above the address in the Email panel (same pattern as LinkedIn). */
     emailDescription: "Tap the address below to compose a message in your mail app.",
@@ -45,20 +45,52 @@ export const site = {
   hero: {
     /** Optional small caps above the main headline (leave empty to skip). */
     eyebrow: "",
-    /** Line 1 — fixed. */
+    /** Line 1 — large headline (fade-in). */
     introLine1: "You in Wonjunland",
-    /** Line 2 — fixed start of row 1 (only line2TypedPhrase animates). */
+    /** Line 2 — first row (fade-in after line 1). */
     line2Prefix: "Hello, ",
-    /** Line 2 — typing / delete loop only this segment. */
+    /** Line 2 — second row. */
     line2TypedPhrase: "I'm Wonjun",
     /** Line 2 — optional fixed tail after the typed segment (e.g. punctuation); leave empty to skip. */
     line2AfterTyped: "",
-    /** Line 2 — fixed second row. */
-    line2StaticSuffix: "in Wonjunland",
-    subHtml: "Curious? Follow the rabbit. The garden and cards carry the rest.",
-    /** Plain bridge after the hero: who this is and why the garden comes next (first-visit clarity). */
-    summaryHtml:
-      "<p><strong>Wonjun</strong>: Data Science and AI product builder (live apps, ML, and team leadership). The <strong>garden</strong> below is the proof deck: each playing card is a real project or chapter, sorted by suit.</p>",
+    /** Line 2 — optional fixed second row (empty = single-line hello). */
+    line2StaticSuffix: "",
+    /** Homophone tagline under the hello line (e.g. or One June.). */
+    line2Homophone: "or One June.",
+    subHtml: "Curious? Follow the rabbit.<br />The garden and cards carry the rest.",
+    /** Tenniel White Rabbit between sub copy and WOW block (pocket-watch pose). */
+    rabbitGuide: {
+      src: "/rabbit.png",
+      alt: "White Rabbit with pocket watch, glancing downward",
+    },
+    /**
+     * Hero proof block: lead line + W·O·W pillars + garden bridge.
+     * Rendered as a three-column grid in the hero (see HeroWowSummary in page.tsx).
+     */
+    wowSummary: {
+      sectionEyebrow: "Wonjun in Wonderland",
+      leadHtml:
+        "<p><strong>Wonjun</strong> is a concept designer. I care about <strong>logic and story</strong> as much as the visuals, then shape the <strong>product world</strong> around the concept.</p>",
+      pillars: [
+        {
+          letter: "W",
+          label: "Whole",
+          body: "End-to-end builds (eLe, Point): concept, interface, and live products you can try.",
+        },
+        {
+          letter: "O",
+          label: "Open",
+          body: "Abroad and mixed teams (Netherlands exchange, field work): listen, write, and ship with partners.",
+        },
+        {
+          letter: "W",
+          label: "Well-structured",
+          body: "Stage stories that land (HUSS Grand Prize): one clear arc for a crowded room.",
+        },
+      ],
+      footHtml:
+        "<p>The <strong>garden</strong> below is the proof deck: one card per chapter, sorted by suit.</p>",
+    },
   },
 
   processIntro: {
@@ -79,25 +111,25 @@ export const site = {
     growLabel: "EAT ME",
     growTitle: "What I want to grow",
     growBodyHtml:
-      "<p>I value <strong>logic, consistency, and solid work</strong>: clear thinking, steady standards, and building things that can handle <strong>feedback and problems</strong>.</p>",
+      "<p>I value <strong>clear worlds</strong>: a coherent mood, readable hierarchy, and visuals that still make sense after <strong>feedback and revision</strong>.</p>",
     growImageSrc: "/eattme.png",
     growImageAlt: "EAT ME cake",
     shrinkLabel: "DRINK ME",
     shrinkTitle: "What I want to shrink",
     shrinkBodyHtml:
-      "<p>I tend to <strong>overthink</strong> things. Some lessons can only be learned by <strong>trying</strong>. I want to get more comfortable <strong>taking small steps</strong> instead of waiting for a <strong>perfect plan</strong>.</p>",
+      "<p>I tend to <strong>overthink before I sketch</strong>. Some lessons only show up when you <strong>put lines on the page</strong>. I want to trust <strong>quick studies</strong> instead of waiting for a <strong>finished concept</strong> in my head.</p>",
     shrinkImageSrc: "/drink-removebg-preview.png",
     shrinkImageAlt: "DRINK ME bottle",
   },
 
   /**
    * Playing-card grid — grouped by suit.
-   * Spades: eLe, Point, ML (+ X:AI Base at school in the ML card) · Hearts · Diamonds · Clubs: side quests (extras, sport, habits — expandable)
+   * Spades: concept craft (eLe, Point, campus visual study) · Hearts: story & pitch · Diamonds: worlds abroad · Clubs: side quests
    */
   spotlight: [
     {
       title: "eLe: easy English reading from live news",
-      category: "Hard skills · AI product",
+      category: "Concept craft · product world",
       trend: "Mar 2026",
       suit: "spade",
       imageSrc: "/spotlight/ele-english-education.png",
@@ -105,30 +137,30 @@ export const site = {
         "eLe product graphic: easy English reading from live news, with try-it cue and QR. Presented by Wonjun Lee",
       projectUrl: "https://juns007-ele-frontend.static.hf.space/",
       roleLine:
-        "Built a student-first flow: news turned into chat-style lines at the right level, with summaries that match each story.",
+        "Shaped the product world: key visual, student-first layout, and chat-style reading that matches level and tone.",
       impactLine:
-        "Learners practice reading in bite-sized English while staying close to what is happening in the world today.",
+        "Headlines feel approachable: light thread UI, clear summaries, and a longer read when someone wants depth.",
       detailHtml:
-        "<p><strong>eLe</strong> helps students <strong>practice English reading</strong> without fighting the news. Each piece is rebuilt as a <strong>chat-style thread</strong> so the tone feels light and the lines match <strong>level and interest</strong>.</p><p>The app also serves a <strong>clear summary</strong> of the article body. If someone wants to go deeper, they can open a <strong>longer paragraph</strong> for more detail. Same story, more room to read.</p><p>So the loop is simple: <strong>reading practice</strong> plus <strong>fresh headlines</strong> in one place.</p>",
+        "<p><strong>eLe</strong> is a reading world built around the news. I cared about <strong>tone</strong>: each story becomes a <strong>chat-style thread</strong> so the screen feels friendly, not like a textbook wall.</p><p>The <strong>product graphic</strong> and flow keep one clear loop: headline → short lines → <strong>summary</strong> → optional <strong>longer paragraph</strong>. Same story, more room when the learner is ready.</p><p>For me this was concept work: <strong>who it is for</strong>, <strong>how it should feel</strong>, and <strong>what stays on screen</strong> at each step.</p>",
     },
     {
       title: "Point: live presentation coach",
-      category: "Hard skills · real-time AI",
+      category: "Concept craft · interface",
       trend: "Mar 2026 – Now",
       suit: "spade",
       imageSrc: "/spotlight/point-landing.png",
       imageAlt: "Point landing page: Your AI presentation coach, lined paper background and Start with Point button",
       projectUrl: "https://pointpresent.com/",
       roleLine:
-        "Owned overall development: practice UI, on-device inference, and turning speech logs into live coaching cues.",
+        "Defined the rehearsal world: lined-paper landing, live practice screen, and an audience layer so the room feels real.",
       impactLine:
-        "Tone checks, persona-style delivery fixes, filler-word flags from logged speech, and audience video so rehearsal feels like a real room.",
+        "Coaching cues sit on a calm UI; persona tone, filler timing, and background crowd read at a glance.",
       detailHtml:
-        "<p>I led <strong>end-to-end development</strong> for <strong>Point</strong>: the live rehearsal screen, the coaching logic, and the pipeline that ingests <strong>speech log data</strong> from each run.</p><p>The product tracks the speaker’s <strong>voice tone</strong>, runs <strong>persona-based coaching</strong> (think “talk like this public figure” as a style anchor), and applies <strong>speech correction</strong> that matches that persona instead of generic textbook rules.</p><p>Because we store structured speech logs, the coach also surfaces <strong>filler words and verbal crutches</strong> (“um,” “like,” “you know”) with clear timing. Finally, we can <strong>drop in audience video</strong> behind the speaker so practice feels closer to stepping in front of a real crowd.</p>",
+        "<p><strong>Point</strong> is a presentation coach with a deliberate <strong>visual mood</strong>: the landing uses <strong>lined paper</strong> and a single clear call to start.</p><p>On the rehearsal screen I wanted <strong>hierarchy</strong>: voice tone, <strong>persona-style</strong> delivery notes, and <strong>filler words</strong> timed where the speaker can actually fix them.</p><p>The <strong>audience video</strong> layer is a spatial concept: practice is not a floating widget, it is you in front of people. I built the product end to end, but the card is about the <strong>world on screen</strong>.</p>",
     },
     {
-      title: "ML class work and a campus AI reading circle",
-      category: "Hard skills · ML & analytics",
+      title: "Campus studio: visuals that carry hard ideas",
+      category: "Concept craft · visual study",
       trend: "2025",
       suit: "spade",
       imageSrc: "/spotlight/kookmin-university-logo.png",
@@ -136,95 +168,102 @@ export const site = {
       imageFit: "contain",
       imageAlt:
         "Kookmin University circular seal: KMU wordmark with ring text Kookmin University / 국민대학교",
-      roleLine: "Course projects in deep learning, speech, text, and analytics; joined a small on-campus AI paper-reading circle.",
-      impactLine: "Built course models and reports; learned to read research faster and ask better questions.",
+      roleLine:
+        "Turned dense course topics into charts, word clouds, and slides people could read without the jargon first.",
+      impactLine:
+        "Learned to sketch the story before the equation; joined a weekly campus circle to debate papers out loud.",
       detailHtml:
-        "<p><strong>Deep learning</strong>: Used a fish-farm detection brief to think through real-world object detection.</p><p><strong>Advanced AI (speech)</strong>: Built an end-to-end speech flow for a shopping task and tuned a small voice model.</p><p><strong>Text analytics</strong>: Worked with airline reviews, word clouds, and simple topic views.</p><p><strong>X:AI Base (Spring 2025)</strong>: Joined a <strong>weekly paper-reading circle</strong> at Kookmin: present, debate, and take notes with peers.</p>",
+        "<p>In class I kept asking: <strong>what should the room see first?</strong> Text analytics became <strong>word clouds and topic views</strong> on airline reviews. Other briefs pushed me to frame real tasks (detection, speech flows) as <strong>clear problem stories</strong>, not only notebooks.</p><p><strong>X:AI Base (Spring 2025)</strong> was a small <strong>paper-reading circle</strong> at Kookmin: present, argue, and sketch what mattered on a slide. Good training for concept work: compress a paper into a <strong>single visual beat</strong>.</p>",
     },
     {
       title: "HUSS hackathon: vision, roadmap, main pitch",
-      category: "Soft skills · presenting",
+      category: "Story & pitch · concept vision",
       trend: "Aug 2025",
       suit: "heart",
       imageSrc: "/spotlight/huss-convergence-presentation.png",
       imageAlt:
         "HUSS stage pitch: presenter with slide on government macro data versus neighbourhood micro data for an environmental data app",
-      roleLine: "Owned the product vision and roadmap; delivered the main stage pitch for our team.",
-      impactLine: "Won Grand Prize; learned to explain hard tech clearly to a large crowd.",
+      roleLine:
+        "Owned the product story, slide arc, and main-stage pitch for an environmental civic app concept.",
+      impactLine:
+        "Grand Prize; proved a tight visual narrative can carry a technical idea across a big room.",
       detailHtml:
-        "<p><strong>HUSS Idea Hackathon</strong>: Our team built an idea for an <strong>environmental data app</strong>.</p><p>I led the <strong>vision</strong>, shaped the <strong>roadmap</strong>, and pitched to <strong>200+</strong> people. We won the <strong>Grand Prize</strong>. The best lesson was turning dense tech into a <strong>simple story</strong> people could follow in one sitting.</p>",
+        "<p><strong>HUSS Idea Hackathon</strong>: our team pitched an <strong>environmental data app</strong> as a world citizens could picture: macro government data versus <strong>neighbourhood micro stories</strong> on one slide arc.</p><p>I led <strong>vision</strong>, <strong>roadmap</strong>, and the <strong>200+</strong> seat pitch. The win mattered, but the craft lesson was design-led: <strong>one clear story</strong> beats a dense stack of features.</p>",
     },
     {
       title: "Steady over time: Airbnb capstone",
-      category: "Soft skills · teamwork",
+      category: "Story & pitch · capstone narrative",
       trend: "Spring 2025",
       suit: "heart",
       imageSrc: "/spotlight/capstone-outlier-accommodations.png",
       imageAlt:
         "Capstone slide: final definition of outlier Airbnb listings, scatter of model-predicted vs actual booking rate with high and low outlier clusters",
       roleLine:
-        "Framed fixes on raw Airbnb data: ML split similar listings into two booking bands, clustered like-with-like, then read descriptions and reviews for concrete changes.",
+        "Built the capstone story deck: scatter plot as the hero visual, then human language from listings and reviews.",
       impactLine:
-        "Preprocessing edge cases taught me steadiness; working with business students taught me to explain results in clear, public-friendly language.",
+        "Learned to translate messy data into slides and sentences a general audience could trust.",
       detailHtml:
-        "<p>We used <strong>raw Airbnb data</strong> to spot two groups of stays that looked similar but booked differently. An <strong>ML prediction model</strong> and <strong>clustering</strong> helped separate comparable listings; we then studied <strong>descriptions and reviews</strong> to turn patterns into actionable ideas.</p><p>Handling messy exceptions in prep showed why <strong>steady, detail-first work</strong> matters. Alongside <strong>business-admin teammates</strong>, I learned that strong projects need more than metrics. You have to <strong>name and explain</strong> them in ways a general audience can follow.</p>",
+        "<p>Our capstone asked why similar Airbnb stays <strong>book differently</strong>. Behind the scenes we clustered listings, but on stage the concept was visual: a <strong>scatter of predicted vs actual booking</strong> with outlier bands you could point to.</p><p>We then mined <strong>descriptions and reviews</strong> for the “why” in plain words. With <strong>business-admin teammates</strong> I practiced what concept designers need: <strong>name the pattern</strong>, <strong>show the chart</strong>, <strong>tell the consequence</strong>.</p>",
     },
     {
       title: "Metaphor: the wrapper for easy communication",
-      category: "Soft skills · teaching",
+      category: "Story & pitch · stage visuals",
       trend: "Jan–Nov 2025",
       suit: "heart",
       imageSrc: "/spotlight/da-bagging-seminar.png",
       imageAlt:
         "D&A club session: presenter at screen with seminar slides explaining ML ideas with simple metaphors",
       roleLine:
-        "Served on the D&A (Data & Analysis) executive board; co-led sessions and unpacked ML/DL with metaphors for members new to the field.",
+        "Co-led D&A club sessions: slide metaphors and hooks so newcomers could see the idea before the math.",
       impactLine:
-        "Framed vanishing gradients as the Whisper Challenge and hyperparameter tuning as catching mosquitoes: clarity before equations.",
+        "Whisper Challenge and mosquito-catching frames became visual anchors; definitions followed the picture.",
       detailHtml:
-        "<p>I lean on <strong>metaphors</strong> when hard ideas need to travel to an unfamiliar room. It is an extra layer of translation so everyone can ride along.</p><p>As a <strong>D&amp;A club executive</strong>, I helped run the year with <strong>50+</strong> members and led sessions beside other leaders. On stage I linked the <strong>vanishing gradient problem</strong> to the <strong>Whisper Challenge</strong>, and <strong>hyperparameter optimization</strong> to <strong>catching mosquitoes</strong>: vivid hooks, then the real definitions.</p>",
+        "<p>I treat teaching slides like <strong>concept boards</strong>: one metaphor, one image in the mind, then the formal term.</p><p>On the <strong>D&amp;A</strong> executive board I helped run a year with <strong>50+</strong> members. On stage I paired the <strong>vanishing gradient problem</strong> with the <strong>Whisper Challenge</strong>, and <strong>hyperparameter tuning</strong> with <strong>catching mosquitoes</strong>. The room laughed, then leaned in. That rhythm is the same as product concept work: <strong>hook → world → detail</strong>.</p>",
     },
     {
       title: "Netherlands exchange: gamified civic reporting",
-      category: "International · exchange",
+      category: "Worlds abroad · civic metaphor",
       trend: "Fall 2024",
       suit: "diamond",
       imageSrc: "/spotlight/netherlands-exchange-team.png",
       imageAlt:
         "Netherlands exchange team with civic gamification posters: location-based issues, egg metaphor, municipality monster",
       roleLine:
-        "Co-built a location-based civic game: repeat reports grow an egg-shaped issue until a municipality monster clears it. Stakeholder meetings, copy, and delivery with local partners.",
+        "Co-created a civic game world: egg issues, municipality monster, posters, and UI copy with Dutch partners.",
       impactLine:
-        "Shipped a playful loop that made shared neighborhood pain visible; practiced facilitation and trust in a new city.",
+        "A playful visual loop made shared neighborhood pain legible; facilitation in a new city.",
       detailHtml:
-        "<p><strong>Netherlands exchange (Fall 2024)</strong>: Residents flag problems by <strong>place</strong>. At first each thread looks like a small <strong>egg</strong>; when more people report the same pain, the egg <strong>grows</strong>, and a playful <strong>local municipality monster</strong> steps in to <strong>clear the pile</strong>. Game rules on top of real civic attention.</p><p>I joined <strong>stakeholder meetings</strong>, turned needs into <strong>UI copy</strong>, and coordinated workshops and handoffs so Dutch partners and our class could ship one coherent prototype.</p><p>Strong stretch for listening, writing, and earning trust outside my home context.</p>",
+        "<p><strong>Netherlands exchange (Fall 2024)</strong> was world-building for civic life. Reports attach to <strong>place</strong>. One thread starts as a small <strong>egg</strong>; as more people echo the pain, the egg <strong>grows</strong> until a <strong>municipality monster</strong> clears the pile. Posters and prototypes carried the same metaphor system.</p><p>I joined <strong>stakeholder meetings</strong>, wrote <strong>UI copy</strong>, and helped workshops land as <strong>one coherent visual story</strong> our class and local partners could share.</p>",
     },
     {
       title: "Climate field study: Georgia and Uzbekistan",
-      category: "International · field research",
+      category: "Worlds abroad · field narrative",
       trend: "Jul 2025",
       suit: "diamond",
       imageSrc: "/spotlight/climate-field-meeting.png",
       imageAlt:
         "Climate field program meeting room: round table with Uzbekistan desk flag and partners in discussion",
-      roleLine: "Did field visits and expert talks; turned notes into one clear written report.",
+      roleLine:
+        "Field visits in Georgia and Uzbekistan; one written report that threaded voices, partners, and flow.",
       impactLine:
-        "Helped set up a ministry meeting with GGGI (Global Green Growth Institute) support; compared regions in plain language.",
+        "Ministry meeting prep with GGGI support; compared two regions in language a general reader could follow.",
       detailHtml:
-        "<p><strong>Global Climate Change Response</strong> (Kookmin): Field work in <strong>Georgia and Uzbekistan</strong> to see how two regions handle climate work.</p><p>I met experts (for example in Tashkent), joined local meetings, and helped a <strong>GGGI (Global Green Growth Institute)</strong> partner prepare talks at the <strong>Ministry of Ecology</strong>.</p><p>I wrote <strong>one report</strong> that pulled the voices together on partners and project flow. Main tools: <strong>English</strong> and <strong>interview notes</strong>.</p>",
+        "<p><strong>Global Climate Change Response</strong> (Kookmin) was narrative design in the field: how do <strong>Georgia</strong> and <strong>Uzbekistan</strong> tell climate work differently?</p><p>I joined meetings (including Tashkent), helped a <strong>GGGI</strong> partner shape talks for the <strong>Ministry of Ecology</strong>, and wrote <strong>one report</strong> that braided interviews into a single readable arc. Tools: <strong>listening</strong>, <strong>notes</strong>, and <strong>plain English structure</strong>.</p>",
     },
     {
       title: "Global PBL: six months in Irvine, CA",
-      category: "International · study abroad",
+      category: "Worlds abroad · study track",
       trend: "Mar–Aug 2026 (planned)",
       suit: "diamond",
       imageSrc: "/spotlight/global-pbl-presentation.png",
       imageAlt:
         "Global PBL presentation: full-length photo of speaker in black tee between two projection screens, laptop on stand, classroom lighting",
-      roleLine: "Six-month track: applied AI, AWS, full-stack work, and time around local startups.",
-      impactLine: "US classes plus project work in a region with many early-stage companies.",
+      roleLine:
+        "Planned Irvine term: product concepts, visual systems, and studio time near local startups.",
+      impactLine:
+        "US coursework plus building in a region full of early-stage product worlds.",
       detailHtml:
-        "<p><strong>Global PBL</strong> (Kookmin): <strong>Six months in Irvine, California</strong> (planned window on the card).</p><p>Focus areas: <strong>applied AI</strong>, <strong>full-stack apps</strong>, <strong>cloud builds</strong>, and learning how <strong>startups</strong> move from idea to launch.</p><p>Tools in view: <strong>AI agents</strong> and <strong>AWS</strong>.</p>",
+        "<p><strong>Global PBL</strong> (Kookmin): <strong>six months in Irvine, California</strong> (planned on the card).</p><p>I am aiming this track at <strong>concept craft in the wild</strong>: sharper visual systems, full product builds, and weeks around <strong>startups</strong> where the story and the screen change every month.</p><p>Tools in view: prototyping, <strong>cloud builds</strong>, and <strong>AI-assisted</strong> workflows when they speed iteration, not when they replace the sketch.</p>",
     },
     {
       title: "Background extra: Shin's Project & more",
@@ -235,11 +274,11 @@ export const site = {
       imageAlt:
         "Drama still from Shin's Project / Boss Project (tvN): night crowd scene; one of several background-extra credits",
       roleLine:
-        "Filled crowd and street shots on multiple dramas, not only one title. Same brief each time: plain clothes, tight spacing, fast resets.",
+        "Background extra on dramas: match wardrobe, spacing, and mood so the frame reads true.",
       impactLine:
-        "Felt how many extras and retakes it takes before one night scene reads as real on camera.",
+        "Learned set rhythm: retakes, blocking, and how tiny fixes sell a night scene.",
       detailHtml:
-        "<p><strong>Shin's Project</strong> (<em>Boss Project</em> / 신사장 프로젝트 on tvN) is the card photo, but I have stepped in as a <strong>background extra</strong> on <strong>other dramas</strong> too: night crowds, sidewalks, and similar group shots.</p><p>Each call is about <strong>matching spacing and tone</strong>, not standing out, and snapping back into place after every <strong>reset</strong>.</p><p>Watching from the back row, you notice the <strong>pace on set</strong> and how small, repeated fixes keep a scene believable.</p>",
+        "<p><strong>Shin's Project</strong> (<em>Boss Project</em> / 신사장 프로젝트 on tvN) is the card still, but I have filled <strong>crowd and street</strong> shots on other dramas too.</p><p>Each call is concept-adjacent discipline: <strong>do not break the world</strong>. Plain clothes, tight spacing, reset, repeat until the director’s frame holds.</p><p>From the back row you see how <strong>visual continuity</strong> is built take by take.</p>",
     },
     {
       title: "Club fencing (épée)",
@@ -297,29 +336,29 @@ export const site = {
       {
         id: "spade",
         glyph: "♠",
-        label: "Hard skills",
-        sub: "A spade's edge: craft kept trim and sharp",
-        desc: "Spade lane: ML, AI products, analytics, and the building side.",
+        label: "Concept craft",
+        sub: "A spade's edge:<br />worlds drawn trim and clear",
+        desc: "Spade lane: product visuals, interfaces, and campus visual studies.",
       },
       {
         id: "heart",
         glyph: "♥",
-        label: "Soft skills",
-        sub: "A heart's warmth: calm craft beside people",
-        desc: "Heart lane: collaboration, communication, and people craft.",
+        label: "Story & pitch",
+        sub: "A heart's warmth:<br />narrative beside people",
+        desc: "Heart lane: decks, metaphors, capstone stories, and stage craft.",
       },
       {
         id: "diamond",
         glyph: "♦",
-        label: "International",
-        sub: "Bright as stones: miles and new tongues",
-        desc: "Diamond lane: abroad, languages, precious keepsakes like small gems.",
+        label: "Worlds abroad",
+        sub: "Bright as stones:<br />miles and new tongues",
+        desc: "Diamond lane: exchange worlds, field narratives, and study tracks.",
       },
       {
         id: "club",
         glyph: "♣",
         label: "just for fun",
-        sub: "One stem, three leaves: bits that round me out",
+        sub: "One stem, three leaves:<br />bits that round me out",
         desc: "Just-for-fun lane: clover-shaped curiosity: cameos, fencing, streaks, small side quests.",
       },
     ] as const,
@@ -332,7 +371,7 @@ export const site = {
   shelf: {
     sectionEyebrow: "The Caterpillar's shelf",
     sectionTitle: "The Caterpillar's shelf: a small study in comfort and spark",
-    sectionSub: "Film, music, books, and drama I keep like pictures on the wall.",
+    sectionSub: "Film, music, books, and drama I keep like reference boards on the wall.",
     spineRowCue: "Four spines. Tap to open.",
     caterpillarSrc: "/caterpillar.png",
     caterpillarAlt: "The Caterpillar on a mushroom (illustration)",
@@ -510,7 +549,8 @@ export const site = {
       '<p class="mx-auto mb-6 max-w-sm text-[0.875rem] leading-relaxed text-black/55">You&rsquo;ve come this far, past the garden, the shelf, the tea.</p>' +
       '<div class="mx-auto max-w-sm border-l-2 border-black/30 pl-4 text-left text-[0.95rem] leading-relaxed text-black/78"><p class="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-black/55">Alice asks</p><p>&ldquo;I don&rsquo;t much care where&mdash;so long as I get <em>somewhere</em>.&rdquo;</p></div>',
     /** Carroll line — Cheshire's reply to Alice's question above. */
-    quote: "\u201cOh, you're sure to do that, if only you walk long enough.\u201d",
+    quote:
+      "\u201cOh, you\u2019re sure to do that,<br />if only you walk long enough.\u201d",
     attribution: "\u2014 The Cheshire Cat, Alice's Adventures in Wonderland",
     /** Optional closing after the pull quote; leave empty so the exchange stays tight. */
     codaHtml: "",

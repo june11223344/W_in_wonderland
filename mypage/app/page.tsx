@@ -15,6 +15,26 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { NavReveal } from "@/components/NavReveal";
 import { site, type SpotlightItem } from "@/lib/site";
 
+/** Image tone: illustration (strong mono + multiply on cream). */
+const IMG_FILTER_ILLUSTRATION = "grayscale(100%) contrast(1.2)";
+const IMG_STYLE_ILLUSTRATION: CSSProperties = {
+  filter: IMG_FILTER_ILLUSTRATION,
+  mixBlendMode: "multiply",
+  userSelect: "none",
+};
+
+/** Image tone: project proof (~80% gray + light sepia; UI stays readable). */
+const IMG_FILTER_EVIDENCE = "grayscale(78%) sepia(14%) contrast(1.1) saturate(0.88)";
+const IMG_STYLE_EVIDENCE: CSSProperties = {
+  filter: IMG_FILTER_EVIDENCE,
+};
+
+/** Image tone: shelf reference board (full mono, slight warmth). */
+const IMG_FILTER_SHELF = "grayscale(100%) sepia(10%) contrast(1.12)";
+const IMG_STYLE_SHELF: CSSProperties = {
+  filter: IMG_FILTER_SHELF,
+};
+
 // ── Tenniel SVGs ──────────────────────────────────────────────────────────
 
 
@@ -132,7 +152,7 @@ function QueenCroquetMosaic({ cardIndex }: { cardIndex: number }) {
               backgroundRepeat: "no-repeat",
               opacity: 0.1,
               mixBlendMode: "multiply",
-              filter: "grayscale(100%) contrast(1.12)",
+              filter: IMG_FILTER_ILLUSTRATION,
             }}
           />
         );
@@ -330,7 +350,12 @@ function IdeaCard({
         aria-hidden
         draggable={false}
             className="pointer-events-none absolute inset-0 h-full w-full select-none rounded-2xl object-cover"
-        style={{ objectPosition: "center center", opacity: 0.08, mixBlendMode: "multiply", filter: "grayscale(100%) contrast(1.2)" }}
+        style={{
+          objectPosition: "center center",
+          opacity: 0.08,
+          mixBlendMode: "multiply",
+          filter: IMG_FILTER_ILLUSTRATION,
+        }}
           />
 
           <div
@@ -384,7 +409,10 @@ function IdeaCard({
                         ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
                         : "aspect-[5/3] w-full object-cover"
                     }
-                    style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
+                    style={{
+                      ...IMG_STYLE_EVIDENCE,
+                      objectPosition: imageFitContain ? "center center" : "center 40%",
+                    }}
                   />
                 </a>
               ) : (
@@ -397,7 +425,10 @@ function IdeaCard({
                       ? "absolute inset-0 m-auto h-full w-full object-contain p-2 sm:p-2.5"
                       : "aspect-[5/3] w-full object-cover"
                   }
-                  style={{ objectPosition: imageFitContain ? "center center" : "center 40%" }}
+                  style={{
+                    ...IMG_STYLE_EVIDENCE,
+                    objectPosition: imageFitContain ? "center center" : "center 40%",
+                  }}
                 />
               )}
                   </div>
@@ -554,7 +585,10 @@ function IdeaCard({
                                         ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
                                         : "max-h-48 w-full object-cover sm:max-h-52"
                                     }
-                                    style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
+                                    style={{
+                                      ...IMG_STYLE_EVIDENCE,
+                                      objectPosition: imageFitContain ? "center center" : "center 38%",
+                                    }}
                                   />
                                 </div>
                                 <div className="flex justify-center border-t border-black/10 bg-[#f3f1ec] px-3 py-2.5 sm:py-3">
@@ -584,7 +618,10 @@ function IdeaCard({
                                       ? "absolute inset-0 m-auto h-full w-full object-contain p-4 sm:p-5"
                                       : "max-h-48 w-full object-cover sm:max-h-52"
                                   }
-                                  style={{ objectPosition: imageFitContain ? "center center" : "center 38%" }}
+                                  style={{
+                                    ...IMG_STYLE_EVIDENCE,
+                                    objectPosition: imageFitContain ? "center center" : "center 38%",
+                                  }}
                                 />
                               </div>
                             )}
@@ -688,103 +725,31 @@ function IdeaCard({
 // ── Shared font constant ──────────────────────────────────────────────────
 const SERIF = "'Cormorant Garamond', 'Playfair Display', serif";
 
-/** Line 1 fixed; line 2 row1 = prefix + typing loop + optional closing; row2 = fixed suffix. */
-function HeroTwoLineIntro({
+/** Hero: small line 1, large two-line hello; slow fade-in (no typing caret). */
+function HeroIntro({
   line1,
   line2Prefix,
   line2TypedPhrase,
   line2AfterTyped,
   line2StaticSuffix,
+  line2Homophone,
 }: {
   line1: string;
   line2Prefix: string;
   line2TypedPhrase: string;
   line2AfterTyped: string;
   line2StaticSuffix: string;
+  line2Homophone: string;
 }) {
   const reduceMotion = useReducedMotion();
   const phrase = line2TypedPhrase;
-  const fullLine2 = `${line2Prefix}${phrase}${line2AfterTyped} ${line2StaticSuffix}`.replace(/\s+/g, " ").trim();
-  const [typedLen, setTypedLen] = useState(reduceMotion ? phrase.length : 0);
-  const [caretOn, setCaretOn] = useState(!reduceMotion);
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setTypedLen(phrase.length);
-      setCaretOn(false);
-      return;
-    }
-
-    let dead = false;
-    const timerIds: number[] = [];
-
-    const TYPE_MS = 98;
-    const DEL_MS = 68;
-    const HOLD_FULL_MS = 2600;
-    const CARET_OFF_MS = 480;
-    const PAUSE_EMPTY_MS = 780;
-
-    const after = (ms: number, fn: () => void) => {
-      const id = window.setTimeout(() => {
-        if (!dead) fn();
-      }, ms);
-      timerIds.push(id);
-    };
-
-    const runTypeForward = (i: number) => {
-      if (dead) return;
-      if (i > phrase.length) {
-        after(HOLD_FULL_MS, () => {
-          if (dead) return;
-          setCaretOn(false);
-          after(CARET_OFF_MS, () => {
-            if (dead) return;
-            setCaretOn(true);
-            if (phrase.length > 0) runDeleteBackward(phrase.length - 1);
-            else {
-              setTypedLen(0);
-              setCaretOn(false);
-              after(PAUSE_EMPTY_MS, () => {
-                if (dead) return;
-                setCaretOn(true);
-                after(TYPE_MS, () => runTypeForward(1));
-              });
-            }
-          });
-        });
-        return;
-      }
-      setTypedLen(i);
-      setCaretOn(true);
-      after(TYPE_MS, () => runTypeForward(i + 1));
-    };
-
-    const runDeleteBackward = (i: number) => {
-      if (dead) return;
-      if (i < 0) {
-        setTypedLen(0);
-        setCaretOn(false);
-        after(PAUSE_EMPTY_MS, () => {
-          if (dead) return;
-          setCaretOn(true);
-          after(TYPE_MS, () => runTypeForward(1));
-        });
-        return;
-      }
-      setTypedLen(i);
-      setCaretOn(true);
-      after(DEL_MS, () => runDeleteBackward(i - 1));
-    };
-
-    setTypedLen(0);
-    setCaretOn(true);
-    after(TYPE_MS, () => runTypeForward(1));
-
-    return () => {
-      dead = true;
-      timerIds.forEach((id) => window.clearTimeout(id));
-    };
-  }, [line2TypedPhrase, reduceMotion]);
+  const hasSuffix = line2StaticSuffix.trim().length > 0;
+  const homophone = line2Homophone.trim();
+  const fullLine2 = [line2Prefix + phrase + line2AfterTyped, hasSuffix ? line2StaticSuffix : "", homophone]
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
 
   const h1Style: CSSProperties = {
     fontFamily: SERIF,
@@ -793,78 +758,162 @@ function HeroTwoLineIntro({
     fontStyle: "italic",
   };
 
-  const typedVisible = phrase.slice(0, typedLen);
+  const fadeLine1 = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    transition: reduceMotion
+      ? { duration: 0.01 }
+      : { duration: 1.15, delay: 0.12, ease: [0.22, 0.03, 0.26, 1] as const },
+  };
 
-  if (reduceMotion) {
-    return (
-      <div className="mb-10 text-center">
-        <motion.p
-          className="mx-auto mb-4 max-w-3xl text-[clamp(1.05rem,3.4vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black md:leading-snug"
-          style={h1Style}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.2 }}
-        >
-          {line1}
-        </motion.p>
-        <motion.h1
-          className="mx-auto flex w-full max-w-[min(96vw,48rem)] flex-col items-center gap-y-1 px-2 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black sm:gap-y-1.5 sm:text-5xl md:text-7xl md:leading-none lg:text-8xl"
-          style={h1Style}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.38 }}
-          aria-label={fullLine2}
-        >
-          <span className="block min-h-[1.2em] whitespace-pre leading-tight">
-            {line2Prefix}
-            {phrase}
-            {line2AfterTyped}
-          </span>
-          <span className="block whitespace-pre leading-tight">{line2StaticSuffix}</span>
-        </motion.h1>
-      </div>
-    );
-  }
+  const fadeHello = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    transition: reduceMotion
+      ? { duration: 0.01 }
+      : { duration: 1.35, delay: 0.42, ease: [0.22, 0.03, 0.26, 1] as const },
+  };
+
+  const fadeHomophone = {
+    initial: { opacity: 0, y: 6 },
+    animate: { opacity: 1, y: 0 },
+    transition: reduceMotion
+      ? { duration: 0.01 }
+      : { duration: 1.1, delay: 0.58, ease: [0.22, 0.03, 0.26, 1] as const },
+  };
 
   return (
-    <div className="relative mb-10 min-h-[9.5rem] sm:min-h-[10.5rem] md:min-h-[13rem]">
+    <div className="relative mb-10 text-center">
       <motion.p
-        className="mx-auto mb-4 max-w-3xl text-[clamp(1.05rem,3.4vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black md:leading-snug"
+        id="hero-scene-line"
+        className="mx-auto mb-4 max-w-3xl text-[clamp(1.35rem,4.5vw,2.35rem)] font-serif italic leading-snug tracking-tight text-black sm:text-3xl md:mb-5 md:text-4xl md:leading-snug lg:text-[2.65rem]"
         style={h1Style}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.65, delay: 0.2 }}
+        {...fadeLine1}
       >
         {line1}
       </motion.p>
-      <h1
-        className="mx-auto flex min-h-[3.2rem] w-full max-w-[min(96vw,48rem)] flex-col items-center gap-y-1 px-2 text-center text-[clamp(1.85rem,min(11vw,3rem),3rem)] font-serif italic leading-tight tracking-tight text-black sm:min-h-[3.6rem] sm:gap-y-1.5 sm:text-5xl md:min-h-[5rem] md:text-7xl md:leading-none lg:text-8xl"
+      <motion.h1
+        className="mx-auto flex w-full max-w-[min(96vw,48rem)] flex-col items-center gap-y-1 px-2 text-center font-serif italic leading-tight tracking-tight text-[clamp(1.85rem,min(11vw,3rem),3rem)] text-black sm:gap-y-1.5 sm:text-5xl md:text-7xl md:leading-none lg:text-8xl"
         style={h1Style}
+        aria-describedby="hero-scene-line"
         aria-label={fullLine2}
+        {...fadeHello}
       >
-        {/* Row 1: typing + caret — row 2: fixed (sketch layout). */}
-        <span className="flex min-h-[1.2em] min-w-0 flex-nowrap items-baseline justify-center gap-x-0 leading-tight">
-          <span aria-hidden="true" className="whitespace-pre">
-            {line2Prefix}
-          </span>
-          <span aria-hidden="true" className="whitespace-pre">
-            {typedVisible}
-          </span>
-          {caretOn ? (
-            <span
-              aria-hidden
-              className="inline-block w-[0.45ch] shrink-0 translate-y-[-0.06em] animate-pulse select-none text-black/85"
-              style={{ fontStyle: "normal" }}
-            >
-              |
-            </span>
-          ) : null}
+        <span className="block min-h-[1.2em] whitespace-pre leading-tight">
+          {line2Prefix}
+          {phrase}
+          {line2AfterTyped}
         </span>
-        <span aria-hidden className="block whitespace-pre leading-tight">
-          {line2StaticSuffix}
-        </span>
-      </h1>
+        {hasSuffix ? (
+          <span className="block whitespace-pre leading-tight">{line2StaticSuffix}</span>
+        ) : null}
+        {homophone ? (
+          <motion.span
+            className="mt-1 block text-[clamp(1.2rem,3.2vw,1.85rem)] font-serif italic leading-snug tracking-tight text-black/68 sm:mt-1.5 sm:text-3xl md:text-[2rem]"
+            style={h1Style}
+            {...fadeHomophone}
+          >
+            {homophone}
+          </motion.span>
+        ) : null}
+      </motion.h1>
     </div>
+  );
+}
+
+function HeroWowSummary({ copy }: { copy: (typeof site)["hero"]["wowSummary"] }) {
+  const SERIF = "'Playfair Display', serif";
+
+  return (
+    <div className="text-center">
+      <div
+        className="mx-auto mb-4 max-w-xl text-sm leading-relaxed text-black/88 sm:text-[0.9375rem]"
+        dangerouslySetInnerHTML={{ __html: copy.leadHtml }}
+      />
+      <p
+        className="mb-3 font-serif text-[1.05rem] italic leading-snug tracking-tight text-black/72 sm:text-lg"
+        style={{ fontFamily: SERIF }}
+      >
+        {copy.sectionEyebrow}
+      </p>
+      <ul className="grid list-none grid-cols-1 gap-2.5 p-0 sm:grid-cols-3 sm:gap-3" role="list">
+        {copy.pillars.map((pillar) => (
+          <li
+            key={`${pillar.letter}-${pillar.label}`}
+            className="flex flex-col items-center rounded-lg border border-black/[0.09] bg-white/75 px-3 py-3.5 text-center shadow-sm sm:px-3.5 sm:py-4"
+          >
+            <span
+              className="mb-1 font-serif text-[2.35rem] leading-none text-black/72 sm:text-[2.5rem]"
+              style={{ fontFamily: SERIF }}
+              aria-hidden
+            >
+              {pillar.letter}
+            </span>
+            <span className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-black/62">
+              {pillar.label}
+            </span>
+            <p className="text-[11px] font-medium leading-snug text-black/76 sm:text-xs sm:leading-snug">
+              {pillar.body}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div
+        className="mx-auto mt-4 max-w-xl border-t border-black/[0.06] pt-4 text-sm leading-relaxed text-black/82 sm:text-[0.9375rem]"
+        dangerouslySetInnerHTML={{ __html: copy.footHtml }}
+      />
+    </div>
+  );
+}
+
+function HeroSubRabbitRow({
+  subHtml,
+  rabbit,
+}: {
+  subHtml: string;
+  rabbit: (typeof site)["hero"]["rabbitGuide"];
+}) {
+  const trailDots = 3;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.95 }}
+      className={`mx-auto flex max-w-md flex-col items-center ${subHtml.trim() ? "mb-5 sm:mb-6" : "mb-0"}`}
+    >
+      <div className="flex items-center justify-center gap-2.5 sm:gap-3">
+        <p
+          className="min-w-0 text-left text-base leading-relaxed text-black"
+          dangerouslySetInnerHTML={{ __html: subHtml }}
+        />
+        <div className="flex shrink-0 items-center rounded-lg bg-[#fcfcfa] py-0.5 pl-1" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={rabbit.src}
+            alt=""
+            draggable={false}
+            className="h-auto w-[clamp(3.25rem,11vw,4.5rem)] select-none object-contain"
+            style={IMG_STYLE_ILLUSTRATION}
+          />
+        </div>
+      </div>
+      <span className="sr-only">{rabbit.alt}</span>
+      <div className="mt-2.5 flex flex-col items-center gap-1.5" aria-hidden>
+        {Array.from({ length: trailDots }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: 3,
+              height: 3,
+              borderRadius: "50%",
+              background: "rgba(0,0,0,0.14)",
+              opacity: 1 - i * 0.14,
+            }}
+          />
+        ))}
+      </div>
+    </motion.div>
   );
 }
 
@@ -880,9 +929,7 @@ function AliceScaleBand({ copy }: { copy: (typeof site)["aliceScale"] }) {
     maxWidth: "118px",
     height: "auto",
     objectFit: "contain",
-    filter: "grayscale(100%) contrast(1.2)",
-    mixBlendMode: "multiply",
-    userSelect: "none",
+    ...IMG_STYLE_ILLUSTRATION,
   };
 
   return (
@@ -1013,6 +1060,7 @@ function ShelfMediaGrid({
                     ? "absolute inset-0 h-full w-full object-contain p-3 sm:p-4"
                     : "absolute inset-0 h-full w-full object-cover"
                 }
+                style={IMG_STYLE_SHELF}
               />
             </div>
           </div>
@@ -1102,7 +1150,7 @@ function CaterpillarShelfSection({ copy }: { copy: (typeof site)["shelf"] }) {
                     alt={copy.caterpillarAlt}
                     draggable={false}
                     className="h-auto max-h-[min(52vw,300px)] w-auto max-w-[min(88vw,340px)] object-contain sm:max-h-[320px] lg:max-h-[min(34vw,360px)] lg:max-w-[min(36vw,320px)]"
-                    style={{ filter: "grayscale(100%) contrast(1.35) opacity(0.9)", mixBlendMode: "multiply", userSelect: "none" }}
+                    style={{ ...IMG_STYLE_ILLUSTRATION, opacity: 0.9 }}
                   />
                 </motion.div>
               </div>
@@ -1352,7 +1400,7 @@ function TeaPartyInviteSection({
                 loading="eager"
                 decoding="async"
                 className="block h-full w-full select-none object-contain object-center"
-                style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
+                style={IMG_STYLE_ILLUSTRATION}
               />
             </div>
             <div className="mt-4 flex justify-center sm:mt-5" aria-hidden>
@@ -1367,7 +1415,7 @@ function TeaPartyInviteSection({
                   loading="eager"
                   decoding="async"
                   className="h-12 w-auto max-w-[min(5.5rem,22vw)] select-none opacity-[0.92] sm:h-14"
-                  style={{ filter: "grayscale(100%) contrast(1.12)", mixBlendMode: "multiply" }}
+                  style={{ ...IMG_STYLE_ILLUSTRATION, opacity: 0.92 }}
                 />
               </div>
             </div>
@@ -1565,7 +1613,7 @@ export default function HomePage() {
               src="/rabbit.png"
               alt={brand.rabbitAlt}
               className="-scale-x-100"
-              style={{ width: 36, height: "auto", filter: "grayscale(100%) contrast(1.3)", mixBlendMode: "multiply" }}
+              style={{ width: 36, height: "auto", ...IMG_STYLE_ILLUSTRATION, filter: "grayscale(100%) contrast(1.3)" }}
             />
           </div>
           <span className="font-serif text-black/80 tracking-wide text-lg"
@@ -1615,28 +1663,26 @@ export default function HomePage() {
             </motion.p>
           ) : null}
 
-          <HeroTwoLineIntro
+          <HeroIntro
             line1={hero.introLine1}
             line2Prefix={hero.line2Prefix}
             line2TypedPhrase={hero.line2TypedPhrase}
             line2AfterTyped={hero.line2AfterTyped}
             line2StaticSuffix={hero.line2StaticSuffix}
+            line2Homophone={hero.line2Homophone}
           />
 
-        <motion.p
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
-          className={`mx-auto max-w-md text-base leading-relaxed text-black ${hero.summaryHtml.trim() ? "mb-6" : "mb-10"}`}
-          dangerouslySetInnerHTML={{ __html: hero.subHtml }}
-        />
+        <HeroSubRabbitRow subHtml={hero.subHtml} rabbit={hero.rabbitGuide} />
 
-        {hero.summaryHtml.trim() ? (
+        {hero.wowSummary.pillars.length > 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 1.05 }}
-            className="mx-auto mb-10 max-w-lg rounded-lg border border-black/[0.08] bg-white/60 px-5 py-4 text-left text-sm leading-relaxed text-black/88 shadow-sm sm:text-[0.9375rem] sm:leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: hero.summaryHtml }}
-          />
+            className="mx-auto mb-10 max-w-2xl rounded-xl border border-black/[0.08] bg-white/60 px-5 py-5 shadow-sm sm:px-6 sm:py-6"
+          >
+            <HeroWowSummary copy={hero.wowSummary} />
+          </motion.div>
         ) : null}
 
         </div>{/* /relative zIndex wrapper */}
@@ -1691,7 +1737,7 @@ export default function HomePage() {
                   alt={garden.cardRabbitAlt}
                   draggable={false}
                   className="h-[clamp(200px,48vw,280px)] w-auto shrink-0 object-contain sm:h-[clamp(220px,36vw,300px)] md:h-[min(340px,38vw)]"
-                  style={{ filter: "grayscale(100%) contrast(1.15)", mixBlendMode: "multiply", opacity: 0.95 }}
+                  style={{ ...IMG_STYLE_ILLUSTRATION, filter: "grayscale(100%) contrast(1.15)", opacity: 0.95 }}
                 />
               </div>
               <div className="min-w-0 max-w-md sm:text-left">
@@ -1758,7 +1804,7 @@ export default function HomePage() {
                       gardenSuit === null && !active ? "ring-2 ring-black/10 ring-offset-2 ring-offset-white" : "",
                     ].join(" ")}
                     aria-pressed={active}
-                    aria-label={`${s.label}: ${s.sub}. ${s.desc}`}
+                    aria-label={`${s.label}: ${s.sub.replace(/<br\s*\/?>/gi, " ")}. ${s.desc}`}
                   >
                     <motion.span
                       className="inline-block font-serif text-4xl leading-none sm:text-5xl"
@@ -1782,7 +1828,10 @@ export default function HomePage() {
                     </motion.span>
                     <div className="flex max-w-[11.5rem] flex-col items-center gap-1 px-0.5">
                       <span className="text-[10px] font-semibold tracking-wide text-black/78">{s.label}</span>
-                      <span className="text-[11px] font-medium leading-snug text-black/76">{s.sub}</span>
+                      <span
+                        className="text-[11px] font-medium leading-snug text-black/76"
+                        dangerouslySetInnerHTML={{ __html: s.sub }}
+                      />
                     </div>
                   </button>
                 );
@@ -1953,8 +2002,8 @@ export default function HomePage() {
               style={{
                     width: "clamp(180px, 36vw, 300px)",
                     height: "auto",
-                    filter: "grayscale(100%) contrast(1.5)",
-                mixBlendMode: "multiply",
+                    ...IMG_STYLE_ILLUSTRATION,
+                filter: "grayscale(100%) contrast(1.5)",
                 userSelect: "none",
               }}
             />
@@ -2011,7 +2060,7 @@ export default function HomePage() {
               alt="Cheshire Cat"
               draggable={false}
               className="h-auto max-h-[160px] w-auto max-w-[min(58vw,180px)] object-contain sm:max-h-[180px]"
-              style={{ filter: "grayscale(100%) contrast(1.4)", mixBlendMode: "multiply", userSelect: "none" }}
+              style={{ ...IMG_STYLE_ILLUSTRATION, filter: "grayscale(100%) contrast(1.4)" }}
               initial={{ opacity: 0.82 }}
               animate={
                 cheshireImageReduced
@@ -2028,9 +2077,8 @@ export default function HomePage() {
           <blockquote
             className="mx-auto mb-5 max-w-2xl text-2xl font-serif italic leading-snug text-black/82 md:text-[1.875rem] md:leading-[1.25] lg:text-[2.15rem] lg:leading-[1.22]"
             style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {cheshire.quote}
-          </blockquote>
+            dangerouslySetInnerHTML={{ __html: cheshire.quote }}
+          />
           <p
             className={`text-sm tracking-wider text-black/72 ${cheshire.codaHtml.trim() ? "mb-10" : "mb-12"}`}
           >
